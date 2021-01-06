@@ -1,9 +1,9 @@
 {
  "manifest_version": 2,
- "name": "Twitch_Container",
+ "name": "twitch_badge_collector",
  "version": "0.0.1",
- "description": "This is a sample description",
- "short_name": "Short Sample Name",
+ "description": "collect badge and point in twitch chat room",
+ "short_name": "TBC",
  "permissions": [
    "activeTab", 
    "declarativeContent", 
@@ -15,9 +15,6 @@
     "scripts": ["dist/js/extension_background.js"],
     "persistent" : false
  },
- "web_accessible_resources" : [
-   "dist/js/inject_background.js"
- ],
  "content_scripts": [
    {
      "matches": ["*://*.twitch.tv/*"],
@@ -26,7 +23,7 @@
    }
  ],
  "page_action": {
-   "default_title": "Does a thing when you do a thing",
+   "default_title": "Twitch Badge Collector",
    "default_popup": "public/popup.html",
    "default_icon": {
      "16": "public/icons/icon16.png"
