@@ -1,0 +1,94 @@
+*{
+    color : #efeff1;
+    background-color: #18181b;
+}
+h1{
+    white-space: nowrap;
+    margin: 1rem;
+    margin-bottom: 1.5rem;
+}
+button{
+    border: 0;
+    border-radius: 5px;
+    text-align: right;
+    padding: 2px;
+    background-color: #9147ff;
+}
+img{
+    margin-right : 3px;
+}
+
+/* Checkbox label Switch*/
+input[type=checkbox]{
+    position: absolute;
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+label {
+	cursor: pointer;
+	width: 46px;
+	height: 24px;
+	background: grey;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+label:after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 18px;
+	height: 18px;
+	background: #fff;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+input:checked + label {
+	background: #9147ff;
+}
+
+input:checked + label:after {
+	left: calc(100% - 3px);
+	transform: translateX(-100%);
+}
+label:active:after {
+	width: 22px;
+}
+/**************************************/
+
+.choose-badge{
+
+}
+.badge_container{
+    display: flex;
+}
+.badge_list{
+    display: flex;
+    flex-direction: column;
+    margin: .5rem;
+}
+.option{
+    display: grid;
+    align-items: center;
+    grid-template-columns : fit-content(5px) 5.5rem 3rem;
+    margin: .2rem;
+}
+.text{
+    align-self: center;
+}
+
+/*main title*/
+h2 {
+    width: 100%; 
+    text-align: left; 
+    border-bottom: 2px solid #26262c;
+    line-height: 0.1em;
+    margin: 10px 0 20px; 
+}
+h2 span {
+     padding:0 10px; 
+}
+
+

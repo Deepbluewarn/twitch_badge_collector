@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+    <script src="../dist/js/popup.js" defer></script>
+    <title>Twitch_Badge_Collector</title>
+</head>
+
+<body>
+    <h1>Twitch Badge Collector</h1>
+    <div class='choose-badge'>
+        <h2><span>Badges</span></h2>
+        <div class='badge_container'>
+            <div class='badge_list'>
+                <div class='option'>
+                    <img alt="스트리머" aria-label="스트리머 배지" class="chat-badge"
+                        src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
+                    <span class='text'>스트리머</span>
+                    <div class='switch'>
+                        <input id="streamer" type="checkbox" name='badge'>
+                        <label for="streamer"></label>
+                    </div>
+                </div>
+                <div class='option'>
+                    <img alt="매니저" aria-label="매니저 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
+                    <span class='text'>매니저</span>
+                    <div class='switch'>
+                        <input id="manager" type="checkbox" name='badge'>
+                        <label for="manager"></label>
+                    </div>
+                </div>
+                <div class='option'>
+                    <img alt="VIP" aria-label="VIP 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1">
+                    <span class='text'>VIP</span>
+                    <div class='switch'>
+                        <input id="vip" type="checkbox" name='badge'>
+                        <label for="vip"></label>
+                    </div>
+                </div>
+                <div class='option'>
+                    <img alt="인증 완료" aria-label="인증 완료 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
+                    <span class='text'>인증 완료</span>
+                    <div class='switch'>
+                        <input id="verified" type="checkbox" name='badge'>
+                        <label for="verified"></label>
+                    </div>
+                </div>
+                <div class='option'>
+                    <img alt="매니저" aria-label="매니저 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
+                    <span class='text'>정기구독자</span>
+                    <div class='switch'>
+                        <input id="subscriber" type="checkbox" name='badge'>
+                        <label for="subscriber"></label>
+                    </div>
+                </div>
+            </div>
+            <div class='badge_list'>
+                <!--<div class='option'>
+                        <span class='text'>예측</span>
+                        <div class='switch'>
+                            <input id="playground" type="checkbox" name='badge'>
+                            <label for="playground"></label>
+                        </div>
+                    </div>-->
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

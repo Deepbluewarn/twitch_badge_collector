@@ -1,0 +1,35 @@
+{
+ "manifest_version": 2,
+ "name": "Twitch_Container",
+ "version": "0.0.1",
+ "description": "This is a sample description",
+ "short_name": "Short Sample Name",
+ "permissions": [
+   "activeTab", 
+   "declarativeContent", 
+   "webNavigation", 
+   "*://*.twitch.tv/*",
+   "storage"
+  ],
+ "background":{
+    "scripts": ["dist/js/extension_background.js"],
+    "persistent" : false
+ },
+ "web_accessible_resources" : [
+   "dist/js/inject_background.js"
+ ],
+ "content_scripts": [
+   {
+     "matches": ["*://*.twitch.tv/*"],
+     "css": ["dist/css/inject_background.css"],
+     "js": ["dist/js/inject_background.js"]
+   }
+ ],
+ "page_action": {
+   "default_title": "Does a thing when you do a thing",
+   "default_popup": "public/popup.html",
+   "default_icon": {
+     "16": "public/icons/icon16.png"
+   }
+ }
+}

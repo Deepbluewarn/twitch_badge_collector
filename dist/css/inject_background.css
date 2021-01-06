@@ -1,0 +1,22 @@
+.scrollable-area.origin{
+    flex : 2;
+}
+.scrollable-area.clone{
+    flex : 1;
+    /*border-radius: 30px;*/
+    border-top: 2px solid var(--color-background-alt-2);
+    margin : 1rem;
+    /*background-color : var(--color-hinted-grey-14);*/
+}
+.filter_chat_paused{
+    position: absolute;
+    background-color: #772ce8;
+    opacity: 50%;
+    border-radius: 5px;
+    top: 5%;
+    right: 50%;
+    visibility: hidden;
+    transform: translateX(50%);
+    white-space: nowrap;
+    padding: 4px;
+}
