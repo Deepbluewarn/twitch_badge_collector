@@ -2,13 +2,15 @@
 let checkboxes = document.querySelectorAll('input[type=checkbox][name=badge]');
 chrome.storage.local.get(['badge_setting'], function (result) {
     console.log(JSON.stringify(result));
-    result.badge_setting.forEach((b) => {
-        let el = document.getElementById(b);
-        if (el) {
-            const element = el;
-            element.checked = true;
-        }
-    });
+    if (Object.keys(result).length != 0 && result.constructor === Object) {
+        result.badge_setting.forEach((b) => {
+            let el = document.getElementById(b);
+            if (el) {
+                const element = el;
+                element.checked = true;
+            }
+        });
+    }
 });
 checkboxes.forEach(ckbox => {
     ckbox.addEventListener('change', e => {
@@ -29,6 +31,61 @@ checkboxes.forEach(ckbox => {
             console.log('Value is set to ' + JSON.stringify({ badge_list: badge_list, badge_setting: badge_setting }));
         });
     });
+});
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log(sender.tab);
+    console.log(request);
+    if (request.type === 'point') {
+    }
+    //indexeddb, chart.js
+    if (request.greeting == "hello")
+        sendResponse({ farewell: "goodbye" });
+});
+var ctx = document.getElementById('pointChart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', '3', '4'],
+        datasets: [{
+                label: 'Point',
+                data: [
+                    { x: '2016-12-25', y: 4710 },
+                    { x: '2016-12-25', y: 90 },
+                    { x: '2016-12-26', y: 4770 },
+                    { x: '2016-12-25', y: 4830 }
+                ],
+                backgroundColor: [
+                    'rgba(221,71, 255, 0.2)',
+                    'rgba(221,71, 255, 0.2)',
+                    'rgba(221,71, 255, 0.2)',
+                    'rgba(221,71, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(221,71, 255, 1)',
+                    'rgba(221,71, 255, 1)',
+                    'rgba(221,71, 255, 1)',
+                    'rgba(221,71, 255, 1)'
+                ],
+                borderWidth: 1,
+                lineTension: 0
+            }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                    type: 'logarithmic',
+                    ticks: {
+                        callback: (value, index) => {
+                            const remain = value / (Math.pow(10, Math.floor(Chart.helpers.log10(value))));
+                            if (remain == 1 || remain == 2 || remain == 5 || index == 0) {
+                                return value.toLocaleString();
+                            }
+                            return '';
+                        }
+                    }
+                }]
+        }
+    }
 });
 const badge_lang = {
     ko: {

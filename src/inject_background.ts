@@ -1,6 +1,7 @@
 (function () {
     let chat_room_observer: MutationObserver | undefined;
     let chat_observer: MutationObserver | undefined;
+    let point_observer: MutationObserver | undefined;
 
     let badge_list: string[] = [];
     let chatIsAtBottom = true;
@@ -36,7 +37,7 @@
             if (chat_room.contains(chat_room.getElementsByClassName('scrollable-area clone')[0])) {
                 return false;
             }
-            
+
             let room_clone = <HTMLElement>room_origin.cloneNode(true);
             room_origin.classList.add('origin');
 
@@ -51,7 +52,7 @@
             filter_chat_paused.classList.add('filter_chat_paused');
             filter_chat_paused.innerText = '내려가기';
             room_clone.appendChild(filter_chat_paused);
-            
+
             room_clone.classList.add('clone');
             chat_room.appendChild(room_clone);
 
@@ -61,27 +62,22 @@
         }
     }
 
-    let StreamChatChallback: MutationCallback = function(mutationRecord: MutationRecord[]){
-        let stream_chat: Element;
-        let point_button:HTMLButtonElement;
-
-        try{
+    let StreamChatChallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+        let stream_chat: Element | undefined = undefined;
+        let point_textnode: Element | undefined = undefined;
+        try {
+            point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
             stream_chat = document.getElementsByClassName('stream-chat')[0];
-            point_button = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
-        }catch(e){
-            return;
+        } catch (e) {
+            //return;
         }
-
-        if(point_button){
-            console.log('+50 points');
-            point_button.click();
-        }
-        if(stream_chat){
-            if(chat_room_observer){
+        if (stream_chat && point_textnode) {
+            if (chat_room_observer) {
                 chat_room_observer.disconnect();
             }
             setup();
             observeChatRoom(stream_chat);
+            observeChannelPoint(point_textnode);
             return;
         }
     }
@@ -100,24 +96,25 @@
                 addedNodes.forEach(node => {
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
-                    let point_button : HTMLButtonElement;
-                    
-                    try{
+                    console.log('newChatCallback nodeElement : ', nodeElement);
+                    let point_button: HTMLButtonElement;
+
+                    try {
                         point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
-                    }catch(e){
+                    } catch (e) {
                         return;
                     }
-                    if(point_button){
+                    if (point_button) {
                         console.log('+50 points');
                         point_button.click();
                     }
-                    
+
                     if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
 
                         room_clone = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
                         if (!room_clone) return;
                         room_clone = room_clone.getElementsByClassName('scrollable-area clone')[0];
-    
+
                         message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
 
                         scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
@@ -149,22 +146,56 @@
         })
     }
 
-    let observeStreamChat = function() {
-        let doc = document.body || document.documentElement;
-        if(chat_room_observer){
-            chat_room_observer.observe(doc, {childList : true, subtree : true, attributeFilter: ['class']});
-        }else{
-            chat_room_observer = observeDOM(doc, {childList: true, subtree: true, attributeFilter: ['class']}, StreamChatChallback);
+    let PointChangeCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+        console.log('PointChangeCallback mutationRecord : ', mutationRecord);
+        let point_button: HTMLButtonElement | undefined = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
+        let point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
+        let point = mutationRecord[0].addedNodes[0];
+        if(point_observer && point){
+            point_observer.disconnect();
+            console.log('PointChangeCallback');
+            setTimeout(() => {
+                observeChannelPoint(point_textnode);
+            }, 3000);
+        }
+        //wait 3-4 sec, re-observe point_observer, record point number.
+
+        if (point_button) {
+            console.log('+50 points');
+            point_button.click();
         }
     }
 
-    let observeChatRoom = function (target : Element) {
+    let observeStreamChat = function () {
+        let doc = document.body || document.documentElement;
+        if (chat_room_observer) {
+            chat_room_observer.observe(doc, { childList: true, subtree: true, attributeFilter: ['class'] });
+        } else {
+            chat_room_observer = observeDOM(doc, { childList: true, subtree: true, attributeFilter: ['class'] }, StreamChatChallback);
+        }
+    }
+
+    let observeChatRoom = function (target: Element) {
         if (chat_observer) {
             chat_observer.observe(target, { childList: true, subtree: true });
         } else {
             chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
         }
     }
+
+    let observeChannelPoint = function (target: Element) {
+        console.log("observeChannelPoint");
+        if (point_observer) {
+            point_observer.observe(target, { childList: true, subtree: true });
+        } else {
+            point_observer = observeDOM(target, { childList: true, subtree: true }, PointChangeCallback);
+        }
+    }
+
+    let record_point_number = function (num: number) {
+        chrome.runtime.sendMessage({ type: 'point', time: Date.now(), point: num });
+    }
+    record_point_number(555);
 
     observeStreamChat();
 
@@ -177,7 +208,7 @@
             observeStreamChat();
         }
     });
-    
+
 })();
 
 

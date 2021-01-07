@@ -1,15 +1,14 @@
 "use strict";
 (function () {
-    let chatIsAtBottom = true;
     let chat_room_observer;
     let chat_observer;
     let point_observer;
     let badge_list = [];
+    let chatIsAtBottom = true;
     let observeDOM = (function () {
         let MutationObserver = window.MutationObserver;
         return function (obj, config, callback) {
             if (!obj || obj.nodeType !== 1) {
-                console.log('observeDOM not executed');
                 return;
             }
             ;
@@ -21,12 +20,10 @@
         };
     })();
     chrome.storage.local.get(['badge_list'], function (result) {
-        console.log('badge_list currently is ' + JSON.stringify(result));
         badge_list = result.badge_list;
     });
     function setup() {
         const chat_room = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
-        console.log('setup chat_room : ', chat_room);
         if (chat_room) {
             let room_origin = chat_room.getElementsByClassName('scrollable-area')[0]; //original chat area.
             if (chat_room.contains(chat_room.getElementsByClassName('scrollable-area clone')[0])) {
@@ -37,12 +34,12 @@
             //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our custom chat area.
             let scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
             let message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
+            message_container.textContent = ''; //remove all chat lines.
             let filter_chat_paused = document.createElement('button');
             filter_chat_paused.classList.add('filter_chat_paused');
             filter_chat_paused.innerText = '내려가기';
-            message_container.textContent = ''; //remove all chat lines.
-            room_clone.classList.add('clone');
             room_clone.appendChild(filter_chat_paused);
+            room_clone.classList.add('clone');
             chat_room.appendChild(room_clone);
             scroll_area.addEventListener("scroll", function () {
                 chatIsAtBottom = scroll_area.scrollTop + scroll_area.clientHeight >= scroll_area.scrollHeight;
@@ -50,27 +47,22 @@
         }
     }
     let StreamChatChallback = function (mutationRecord) {
-        let stream_chat;
-        let point_button;
+        let stream_chat = undefined;
+        let point_textnode = undefined;
         try {
+            point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
             stream_chat = document.getElementsByClassName('stream-chat')[0];
-            point_button = document.getElementsByClassName('tw-button--success')[0];
         }
         catch (e) {
-            console.log('StreamChatChallback return');
-            return;
+            //return;
         }
-        if (point_button) {
-            console.log('tw-button--success found.', point_button);
-            console.log('+50 points');
-            point_button.click();
-        }
-        if (stream_chat) {
+        if (stream_chat && point_textnode) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
             }
             setup();
             observeChatRoom(stream_chat);
+            observeChannelPoint(point_textnode);
             return;
         }
     };
@@ -87,6 +79,7 @@
                 addedNodes.forEach(node => {
                     var _a;
                     let nodeElement = node;
+                    console.log('newChatCallback nodeElement : ', nodeElement);
                     let point_button;
                     try {
                         point_button = nodeElement.getElementsByClassName('tw-button--success')[0];
@@ -95,7 +88,6 @@
                         return;
                     }
                     if (point_button) {
-                        console.log('tw-button--success found.', point_button);
                         console.log('+50 points');
                         point_button.click();
                     }
@@ -107,15 +99,10 @@
                         message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
                         scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
                         chat_clone = nodeElement.cloneNode(true);
-                        /*chat_clone.addEventListener('click',e=>{
-                            e.preventDefault();
-                            chat.scrollIntoView({behavior : 'smooth'});
-                        })*/
                         badges = chat_clone.getElementsByClassName('chat-badge');
                         Array.from(badges).some((badge) => {
                             let alt = badge.getAttribute('alt');
                             if (badge_list.some(el => alt.includes(el))) {
-                                console.log(badge.getAttribute('alt'));
                                 if (message_container && chat_clone) {
                                     message_container.appendChild(chat_clone);
                                     if (message_container.childElementCount > 100) {
@@ -123,7 +110,6 @@
                                     }
                                 }
                                 if (chatIsAtBottom) {
-                                    //scroll_area.scrollTop = chat_clone.offsetTop;
                                     scroll_area.scrollTop = scroll_area.scrollHeight;
                                 }
                             }
@@ -136,15 +122,30 @@
             }
         });
     };
+    let PointChangeCallback = function (mutationRecord) {
+        console.log('PointChangeCallback mutationRecord : ', mutationRecord);
+        let point_button = document.getElementsByClassName('tw-button--success')[0];
+        let point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
+        let point = mutationRecord[0].addedNodes[0];
+        if (point_observer && point) {
+            point_observer.disconnect();
+            console.log('PointChangeCallback');
+            setTimeout(() => {
+                observeChannelPoint(point_textnode);
+            }, 3000);
+        }
+        //wait 3-4 sec, re-observe point_observer, record point number.
+        if (point_button) {
+            console.log('+50 points');
+            point_button.click();
+        }
+    };
     let observeStreamChat = function () {
-        let doc = document.body;
-        console.log('observeStreamChat doc : ', doc);
+        let doc = document.body || document.documentElement;
         if (chat_room_observer) {
-            console.log('observeStreamChat re-observe');
             chat_room_observer.observe(doc, { childList: true, subtree: true, attributeFilter: ['class'] });
         }
         else {
-            console.log('observeStreamChat init');
             chat_room_observer = observeDOM(doc, { childList: true, subtree: true, attributeFilter: ['class'] }, StreamChatChallback);
         }
     };
@@ -156,6 +157,19 @@
             chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
         }
     };
+    let observeChannelPoint = function (target) {
+        console.log("observeChannelPoint");
+        if (point_observer) {
+            point_observer.observe(target, { childList: true, subtree: true });
+        }
+        else {
+            point_observer = observeDOM(target, { childList: true, subtree: true }, PointChangeCallback);
+        }
+    };
+    let record_point_number = function (num) {
+        chrome.runtime.sendMessage({ type: 'point', time: Date.now(), point: num });
+    };
+    record_point_number(555);
     observeStreamChat();
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         badge_list = changes.badge_list.newValue;

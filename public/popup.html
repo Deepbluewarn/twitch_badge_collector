@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+
+    <script src="../dist/js/Chart.min.js" defer></script>
+    <link href="../dist/css/Chart.min.css" rel="stylesheet" type="text/css" />
     <script src="../dist/js/popup.js" defer></script>
+    <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+    
     <title>Twitch_Badge_Collector</title>
 </head>
 
@@ -18,7 +22,7 @@
                 <div class='option'>
                     <img alt="스트리머" aria-label="스트리머 배지" class="chat-badge"
                         src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
-                    <span class='text'>스트리머</span>
+                    <span class='text'>스트리머 (Broadcaster)</span>
                     <div class='switch'>
                         <input id="streamer" type="checkbox" name='badge'>
                         <label for="streamer"></label>
@@ -27,7 +31,7 @@
                 <div class='option'>
                     <img alt="매니저" aria-label="매니저 배지"
                         src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
-                    <span class='text'>매니저</span>
+                    <span class='text'>매니저 (Moderator)</span>
                     <div class='switch'>
                         <input id="manager" type="checkbox" name='badge'>
                         <label for="manager"></label>
@@ -45,7 +49,7 @@
                 <div class='option'>
                     <img alt="인증 완료" aria-label="인증 완료 배지"
                         src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
-                    <span class='text'>인증 완료</span>
+                    <span class='text'>인증 완료 (Verified)</span>
                     <div class='switch'>
                         <input id="verified" type="checkbox" name='badge'>
                         <label for="verified"></label>
@@ -54,7 +58,7 @@
                 <div class='option'>
                     <img alt="매니저" aria-label="매니저 배지"
                         src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
-                    <span class='text'>정기구독자</span>
+                    <span class='text'>정기구독자 (Subscriber)</span>
                     <div class='switch'>
                         <input id="subscriber" type="checkbox" name='badge'>
                         <label for="subscriber"></label>
@@ -71,7 +75,10 @@
                     </div>-->
             </div>
         </div>
+        <h2><span>Channel Point</span></h2>
+        <canvas id="pointChart"></canvas>
     </div>
+    
 
 </body>
 
