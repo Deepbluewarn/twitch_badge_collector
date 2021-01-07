@@ -5,7 +5,7 @@
     "outDir": "./dist/js",
     "rootDir": "./src",
     "strict": true,
-    "types": ["chrome", "chart.js"],
+    "types": ["chrome"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true

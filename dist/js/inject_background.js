@@ -2,7 +2,7 @@
 (function () {
     let chat_room_observer;
     let chat_observer;
-    let point_observer;
+    //let point_observer: MutationObserver | undefined;
     let badge_list = [];
     let chatIsAtBottom = true;
     let observeDOM = (function () {
@@ -48,21 +48,24 @@
     }
     let StreamChatChallback = function (mutationRecord) {
         let stream_chat = undefined;
-        let point_textnode = undefined;
+        let point_button = undefined;
         try {
-            point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
             stream_chat = document.getElementsByClassName('stream-chat')[0];
+            point_button = stream_chat.getElementsByClassName('tw-button--success')[0];
         }
         catch (e) {
             //return;
         }
-        if (stream_chat && point_textnode) {
+        if (point_button) {
+            console.log('+50 points');
+            point_button.click();
+        }
+        if (stream_chat) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
             }
             setup();
             observeChatRoom(stream_chat);
-            observeChannelPoint(point_textnode);
             return;
         }
     };
@@ -79,7 +82,7 @@
                 addedNodes.forEach(node => {
                     var _a;
                     let nodeElement = node;
-                    console.log('newChatCallback nodeElement : ', nodeElement);
+                    //console.log('newChatCallback nodeElement : ', nodeElement);
                     let point_button;
                     try {
                         point_button = nodeElement.getElementsByClassName('tw-button--success')[0];
@@ -122,24 +125,6 @@
             }
         });
     };
-    let PointChangeCallback = function (mutationRecord) {
-        console.log('PointChangeCallback mutationRecord : ', mutationRecord);
-        let point_button = document.getElementsByClassName('tw-button--success')[0];
-        let point_textnode = document.getElementsByClassName('community-points-summary')[0].getElementsByClassName('tw-animated-number')[0];
-        let point = mutationRecord[0].addedNodes[0];
-        if (point_observer && point) {
-            point_observer.disconnect();
-            console.log('PointChangeCallback');
-            setTimeout(() => {
-                observeChannelPoint(point_textnode);
-            }, 3000);
-        }
-        //wait 3-4 sec, re-observe point_observer, record point number.
-        if (point_button) {
-            console.log('+50 points');
-            point_button.click();
-        }
-    };
     let observeStreamChat = function () {
         let doc = document.body || document.documentElement;
         if (chat_room_observer) {
@@ -155,15 +140,6 @@
         }
         else {
             chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
-        }
-    };
-    let observeChannelPoint = function (target) {
-        console.log("observeChannelPoint");
-        if (point_observer) {
-            point_observer.observe(target, { childList: true, subtree: true });
-        }
-        else {
-            point_observer = observeDOM(target, { childList: true, subtree: true }, PointChangeCallback);
         }
     };
     let record_point_number = function (num) {

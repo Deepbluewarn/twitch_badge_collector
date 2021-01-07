@@ -32,61 +32,6 @@ checkboxes.forEach(ckbox => {
         });
     });
 });
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log(sender.tab);
-    console.log(request);
-    if (request.type === 'point') {
-    }
-    //indexeddb, chart.js
-    if (request.greeting == "hello")
-        sendResponse({ farewell: "goodbye" });
-});
-var ctx = document.getElementById('pointChart');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', '3', '4'],
-        datasets: [{
-                label: 'Point',
-                data: [
-                    { x: '2016-12-25', y: 4710 },
-                    { x: '2016-12-25', y: 90 },
-                    { x: '2016-12-26', y: 4770 },
-                    { x: '2016-12-25', y: 4830 }
-                ],
-                backgroundColor: [
-                    'rgba(221,71, 255, 0.2)',
-                    'rgba(221,71, 255, 0.2)',
-                    'rgba(221,71, 255, 0.2)',
-                    'rgba(221,71, 255, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(221,71, 255, 1)',
-                    'rgba(221,71, 255, 1)',
-                    'rgba(221,71, 255, 1)',
-                    'rgba(221,71, 255, 1)'
-                ],
-                borderWidth: 1,
-                lineTension: 0
-            }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                    type: 'logarithmic',
-                    ticks: {
-                        callback: (value, index) => {
-                            const remain = value / (Math.pow(10, Math.floor(Chart.helpers.log10(value))));
-                            if (remain == 1 || remain == 2 || remain == 5 || index == 0) {
-                                return value.toLocaleString();
-                            }
-                            return '';
-                        }
-                    }
-                }]
-        }
-    }
-});
 const badge_lang = {
     ko: {
         streamer: '스트리머',
