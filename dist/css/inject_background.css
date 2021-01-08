@@ -20,3 +20,6 @@
     white-space: nowrap;
     padding: 4px;
 }
+.tbc_highlight{
+    background-color: var(--color-background-alt-2);
+}

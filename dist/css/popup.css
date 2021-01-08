@@ -7,6 +7,9 @@ h1{
     margin: 1rem;
     margin-bottom: 2.3rem;
 }
+p{
+    padding-left: 10px;
+}
 button{
     border: 0;
     border-radius: 5px;
@@ -17,6 +20,15 @@ button{
 img{
     margin-right : 3px;
 }
+
+input[type=text] , button{
+    border: 2px solid #9147ff;
+    padding: .5rem;
+    background: #18181b;
+    margin-left: 14px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+ }
 
 /* Checkbox label Switch*/
 input[type=checkbox]{
@@ -57,14 +69,10 @@ label:active:after {
 	width: 22px;
 }
 /**************************************/
-
-.choose-badge{
-
+.container{
+    display: flex;
 }
-.badge_container{
-    /*display: flex;*/
-}
-.badge_list{
+.bg_flex{
     display: flex;
     flex-direction: column;
     margin: .5rem;
