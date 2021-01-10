@@ -50,11 +50,14 @@
         }
         catch (e) {
         }
-        if (point_button && stream_chat) {
+        if (point_button) {
             console.log('+50 points, time : ', new Date().toTimeString());
             point_button.click();
+        }
+        if (stream_chat) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
+                observeStreamPage(stream_chat, { childList: true, subtree: false });
             }
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
@@ -82,7 +85,6 @@
                         console.log('+50 points, time : ', new Date().toTimeString());
                     }
                     catch (e) {
-                        return;
                     }
                     if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
                         room_clone = (_a = nodeElement.closest('.scrollable-area.origin')) === null || _a === void 0 ? void 0 : _a.parentNode;
@@ -116,13 +118,17 @@
             }
         });
     };
-    let observeStreamPage = function () {
-        let doc = document.body || document.documentElement;
+    let observeStreamPage = function (target, config) {
+        console.log('observeStreamPage : %o, config : %o', chat_room_observer, config);
+        let default_config = { childList: true, subtree: true, attributeFilter: ['class'] };
+        if (config) {
+            default_config = config;
+        }
         if (chat_room_observer) {
-            chat_room_observer.observe(doc, { childList: true, subtree: true, attributeFilter: ['class'] });
+            chat_room_observer.observe(target, default_config);
         }
         else {
-            chat_room_observer = observeDOM(doc, { childList: true, subtree: true, attributeFilter: ['class'] }, StreamPageCallback);
+            chat_room_observer = observeDOM(target, default_config, StreamPageCallback);
         }
     };
     let observeChatRoom = function (target) {
@@ -133,13 +139,13 @@
             chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
         }
     };
-    observeStreamPage();
+    observeStreamPage(document.body || document.documentElement);
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         badge_list = changes.badge_list.newValue;
     });
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
-            observeStreamPage();
+            observeStreamPage(document.body || document.documentElement);
         }
     });
 })();

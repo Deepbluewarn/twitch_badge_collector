@@ -21,8 +21,6 @@ checkboxes.forEach(ckbox => {
         let badge_list: Array<string> = [];
         let badge_setting: Array<string> = [];
 
-        //badge_list 배열에 있는 값들을 사용자가 따로 작성할 수 있게 옵션 제공
-        //지금 있는 스위치들은 기본값으로 두고, 특별한 배지를 추가하거나 다른 언어 사용자인 경우는 직접 입력할 수 있도록..
         checkboxes.forEach(c => {
             if (c.checked) {
                 const id = c.id;

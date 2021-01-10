@@ -1,4 +1,7 @@
 chrome.runtime.onInstalled.addListener(function () {
+    chrome.storage.local.set({ badge_list: ['스트리머','매니저','VIP','인증 완료'], badge_setting: ['streamer','manager','vip','verified'] }, function(){
+        console.log('Default value is set.')
+    });
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
         chrome.declarativeContent.onPageChanged.addRules([
             {

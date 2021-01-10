@@ -6,6 +6,7 @@
     let chatIsAtBottom = true;
 
     let observeDOM = (function () {
+
         let MutationObserver = window.MutationObserver;
 
         return function (obj: Element, config: Object, callback: MutationCallback) {
@@ -66,14 +67,17 @@
 
         }
 
-        if (point_button && stream_chat) {
+        if (point_button) {
             console.log('+50 points, time : ', new Date().toTimeString());
             point_button.click();
+        }
+        if (stream_chat) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
             }
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
+            observeStreamPage(stream_chat, {childList : true, subtree : false});
             return;
         }
     }
@@ -100,7 +104,7 @@
                         point_button.click();
                         console.log('+50 points, time : ', new Date().toTimeString());
                     } catch (e) {
-                        return;
+
                     }
 
                     if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
@@ -117,16 +121,18 @@
                         badges = chat_clone.getElementsByClassName('chat-badge');
 
                         Array.from(badges).some((badge) => {
-
                             let alt = badge.getAttribute('alt')!;
 
                             if (badge_list.some(el => alt.includes(el))) {
+
                                 if (message_container && chat_clone) {
                                     message_container.appendChild(chat_clone);
                                     nodeElement.classList.add('tbc_highlight');
+
                                     if (message_container.childElementCount > 100) {
                                         message_container.removeChild(<Element>message_container.firstElementChild);
                                     }
+
                                 }
                                 if (chatIsAtBottom) {
                                     scroll_area.scrollTop = scroll_area.scrollHeight;
@@ -141,12 +147,15 @@
         })
     }
 
-    let observeStreamPage = function () {
-        let doc = document.body || document.documentElement;
+    let observeStreamPage = function (target : Element, config?: MutationObserverInit) {
+        let default_config : MutationObserverInit = { childList: true, subtree: true, attributeFilter: ['class'] };
+        if(config){
+            default_config = config;
+        }
         if (chat_room_observer) {
-            chat_room_observer.observe(doc, { childList: true, subtree: true, attributeFilter: ['class'] });
+            chat_room_observer.observe(target, default_config);
         } else {
-            chat_room_observer = observeDOM(doc, { childList: true, subtree: true, attributeFilter: ['class'] }, StreamPageCallback);
+            chat_room_observer = observeDOM(target, default_config, StreamPageCallback);
         }
     }
 
@@ -158,7 +167,8 @@
         }
     }
     
-    observeStreamPage();
+
+    observeStreamPage(document.body || document.documentElement);
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         badge_list = changes.badge_list.newValue;
@@ -166,7 +176,7 @@
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
-            observeStreamPage();
+            observeStreamPage(document.body || document.documentElement);
         }
     });
 
