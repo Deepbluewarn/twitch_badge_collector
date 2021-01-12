@@ -3,12 +3,10 @@
 }
 .scrollable-area.clone{
     flex : 1;
-    /*border-radius: 30px;*/
     border-top: 2px solid var(--color-background-alt-2);
     margin : 1rem;
-    /*background-color : var(--color-hinted-grey-14);*/
 }
-.filter_chat_paused{
+/*.filter_chat_paused{
     position: absolute;
     background-color: #772ce8;
     opacity: 50%;
@@ -19,7 +17,8 @@
     transform: translateX(50%);
     white-space: nowrap;
     padding: 4px;
-}
+}*/
 .tbc_highlight{
-    background-color: var(--color-background-alt-2);
+    /*background-color: var(--color-background-alt-2);*/
+    border-left: 5px solid #9147ff;
 }
