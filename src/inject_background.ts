@@ -1,3 +1,4 @@
+//import * as _ from "lodash"
 (function () {
     let chat_room_observer: MutationObserver | undefined;
     let chat_observer: MutationObserver | undefined;
@@ -31,6 +32,9 @@
         const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
 
         if (chat_room) {
+            /*let frame = document.createElement('iframe');
+            frame.src = 'https://www.twitch.tv/popout/2chamcham2/chat?popout=';
+            chat_room.appendChild(frame);*/
 
             let room_origin = chat_room.getElementsByClassName('scrollable-area')[0];//original chat area.
 
@@ -77,65 +81,76 @@
             }
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
-            observeStreamPage(stream_chat, {childList : true, subtree : false});
+            observeStreamPage(stream_chat, { childList: true, subtree: false });
             return;
         }
     }
 
     //채팅창에서 새로운 채팅이 올라오면 분석 후 특정 채팅을 복사.
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
-        let room_clone: Element | null;
-        let chat_clone: Element | null;
-        let badges: HTMLCollection;
-        let scroll_area: Element;
-        let message_container: Element | null;
-
+        let chat_room: JQuery<Node> | null;
+        let room_clone: JQuery<Node> | null;
+        let chat_clone: JQuery<Node> | null;
+        let chat_clone_wrapper: Element | null;
+        let badges: JQuery<HTMLElement>;
+        let scroll_area: JQuery<HTMLElement> | null;
+        let message_container: JQuery<HTMLElement> | null;
+    
         Array.from(mutationRecord).forEach(mr => {
             let addedNodes = mr.addedNodes;
+            
             if (addedNodes) {
                 addedNodes.forEach(node => {
-
-                    let nodeElement: HTMLElement = <HTMLElement>node;
+    
+                    //let nodeElement: HTMLElement = <HTMLElement>node;
+                    let nodeElement = $(node);
                     //console.log('newChatCallback nodeElement : ', nodeElement);
                     let point_button: HTMLButtonElement;
-
+    
                     try {
-                        point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
+                        point_button = <HTMLButtonElement>nodeElement.find('tw-button--success')[0];
                         point_button.click();
                         console.log('+50 points, time : ', new Date().toTimeString());
                     } catch (e) {
-
+    
                     }
 
-                    if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
-
-                        room_clone = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
-                        if (!room_clone) return;
-                        room_clone = room_clone.getElementsByClassName('scrollable-area clone')[0];
-
-                        message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
-
-                        scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
-
-                        chat_clone = <Element>nodeElement.cloneNode(true);
-                        badges = chat_clone.getElementsByClassName('chat-badge');
-
+                    if (nodeElement.hasClass('chat-line__message') && nodeElement.attr('data-a-target') === 'chat-line-message') {
+    
+                        chat_room = nodeElement.closest('.scrollable-area.origin').parent();
+                        if (!chat_room){
+                            
+                            return;
+                        }
+                        room_clone = chat_room.find('.scrollable-area.clone');
+    
+                        message_container = room_clone.find('.chat-scrollable-area__message-container');
+                        console.log('message_container : %o, room_clone : %o', message_container, room_clone);
+                        scroll_area = room_clone.find('.simplebar-scroll-content');
+    
+                        chat_clone = nodeElement.clone(true, true);
+                        //let temp = <unknown>$(nodeElement).clone(true, true);
+                        //chat_clone = nodeElement.clone(true, true);
+    
+                        badges = chat_clone.find('.chat-badge');
+                        
                         Array.from(badges).some((badge) => {
+                            
                             let alt = badge.getAttribute('alt')!;
-
+                            console.log('badge_list : ', badge_list);
                             if (badge_list.some(el => alt.includes(el))) {
-
                                 if (message_container && chat_clone) {
-                                    message_container.appendChild(chat_clone);
-                                    nodeElement.classList.add('tbc_highlight');
-
-                                    if (message_container.childElementCount > 100) {
-                                        message_container.removeChild(<Element>message_container.firstElementChild);
+                                    
+                                    chat_clone.appendTo(message_container);
+                                    nodeElement.addClass('tbc_highlight');
+    
+                                    if (message_container.length > 100) {
+                                        message_container.first().remove();
                                     }
-
+    
                                 }
-                                if (chatIsAtBottom) {
-                                    scroll_area.scrollTop = scroll_area.scrollHeight;
+                                if (chatIsAtBottom && scroll_area) {
+                                    scroll_area.scrollTop(scroll_area.prop('scrollHeight'));
                                 }
                             } else {
                                 return false;
@@ -147,9 +162,9 @@
         })
     }
 
-    let observeStreamPage = function (target : Element, config?: MutationObserverInit) {
-        let default_config : MutationObserverInit = { childList: true, subtree: true, attributeFilter: ['class'] };
-        if(config){
+    let observeStreamPage = function (target: Element, config?: MutationObserverInit) {
+        let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ['class'] };
+        if (config) {
             default_config = config;
         }
         if (chat_room_observer) {
@@ -166,7 +181,7 @@
             chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
         }
     }
-    
+
 
     observeStreamPage(document.body || document.documentElement);
 
