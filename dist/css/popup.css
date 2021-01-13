@@ -1,6 +1,7 @@
 *{
     color : #efeff1;
     background-color: #18181b;
+    font-family: Consolas;
 }
 h1{
     white-space: nowrap;
@@ -88,24 +89,6 @@ label:active:after {
 }
 .text{
     align-self: center;
-}
-.bg_tag{
-    background-color: hsla(0,0%,100%,.15);
-    border: 2px solid transparent;
-    border-radius: 9000px;
-    margin : 0 2px 4px 0;
-    display:inline-block;
-    color: hsla(0,0%,100%,.7);
-    height: 1rem;
-    cursor: pointer;
-    white-space: nowrap;
-    padding: 0 .5rem;
-    font-weight: bold;
-    align-items: center;
-}
-.bg_tag:hover{
-    background-color: crimson;
-    color: rgb(37, 37, 37);
 }
 
 /*main title*/

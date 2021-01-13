@@ -1,4 +1,5 @@
 "use strict";
+//import * as _ from "lodash"
 (function () {
     let chat_room_observer;
     let chat_observer;
@@ -57,10 +58,10 @@
         if (stream_chat) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
-                observeStreamPage(stream_chat, { childList: true, subtree: false });
             }
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
+            observeStreamPage(stream_chat, { childList: true, subtree: false });
             return;
         }
     };
@@ -68,6 +69,7 @@
     let newChatCallback = function (mutationRecord) {
         let room_clone;
         let chat_clone;
+        let chat_clone_wrapper;
         let badges;
         let scroll_area;
         let message_container;
@@ -119,7 +121,6 @@
         });
     };
     let observeStreamPage = function (target, config) {
-        console.log('observeStreamPage : %o, config : %o', chat_room_observer, config);
         let default_config = { childList: true, subtree: true, attributeFilter: ['class'] };
         if (config) {
             default_config = config;
