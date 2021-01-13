@@ -14,73 +14,53 @@
 <body>
     <h1>Twitch Badge Collector</h1>
     <h2><span>Major Badges</span></h2>
+    
+    
     <div class='container'>
-        <div class='bg_flex'>
-            <div class='option'>
-                <img alt="스트리머" aria-label="스트리머 배지" class="chat-badge"
-                    src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
-                <span class='text'>스트리머 (Broadcaster)</span>
-                <div class='switch'>
-                    <input id="streamer" type="checkbox" name='badge'>
-                    <label for="streamer"></label>
+        <div id='delegation'>
+            <div class='bg_flex'>
+                <div class='option'>
+                    <img alt="스트리머" aria-label="스트리머 배지" class="chat-badge"
+                        src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
+                    <span class='text'>스트리머 (Broadcaster)</span>
+                    <div class='switch'>
+                        <input id="streamer" type="checkbox" name='badge'>
+                        <label for="streamer"></label>
+                    </div>
                 </div>
-            </div>
-            <div class='option'>
-                <img alt="매니저" aria-label="매니저 배지"
-                    src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
-                <span class='text'>매니저 (Moderator)</span>
-                <div class='switch'>
-                    <input id="manager" type="checkbox" name='badge'>
-                    <label for="manager"></label>
+                <div class='option'>
+                    <img alt="매니저" aria-label="매니저 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
+                    <span class='text'>매니저 (Moderator)</span>
+                    <div class='switch'>
+                        <input id="manager" type="checkbox" name='badge'>
+                        <label for="manager"></label>
+                    </div>
                 </div>
-            </div>
-            <div class='option'>
-                <img alt="VIP" aria-label="VIP 배지"
-                    src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1">
-                <span class='text'>VIP</span>
-                <div class='switch'>
-                    <input id="vip" type="checkbox" name='badge'>
-                    <label for="vip"></label>
+                <div class='option'>
+                    <img alt="VIP" aria-label="VIP 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1">
+                    <span class='text'>VIP</span>
+                    <div class='switch'>
+                        <input id="vip" type="checkbox" name='badge'>
+                        <label for="vip"></label>
+                    </div>
                 </div>
-            </div>
-            <div class='option'>
-                <img alt="인증 완료" aria-label="인증 완료 배지"
-                    src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
-                <span class='text'>인증 완료 (Verified)</span>
-                <div class='switch'>
-                    <input id="verified" type="checkbox" name='badge'>
-                    <label for="verified"></label>
-                </div>
-            </div>
-            <div class='option'>
-                <img alt="정기구독자" aria-label="정기구독자"
-                    src="https://static-cdn.jtvnw.net/badges/v1/5d9f2208-5dd8-11e7-8513-2ff4adfae661/1">
-                <span class='text'>정기구독자 (Subscriber)</span>
-                <div class='switch'>
-                    <input id="subscriber" type="checkbox" name='badge'>
-                    <label for="subscriber"></label>
+                <div class='option'>
+                    <img alt="인증 완료" aria-label="인증 완료 배지"
+                        src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
+                    <span class='text'>인증 완료 (Verified)</span>
+                    <div class='switch'>
+                        <input id="verified" type="checkbox" name='badge'>
+                        <label for="verified"></label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <h2><span>Custom</span></h2>
-    <p>- Separate each badge string with a comma</p>
+    <h2><span>Extras</span></h2>
     <div class="container">
-        <input type="text">
-        <button>confirm</button>
+        <button>setting</button>
     </div>
-    <div class="container">
-        <div class="tag_container">
-            <span class="bg_tag">스트리머</span>
-            <span class="bg_tag">매니저</span>
-            <span class="bg_tag">VIP</span>
-            <span class="bg_tag">인증 완료</span>
-            <span class="bg_tag">정기구독자</span>
-        </div>
-    </div>
-
-
 </body>
-
 </html>
