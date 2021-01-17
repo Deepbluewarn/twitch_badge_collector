@@ -1,15 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "twitch_badge_collector",
+  "name": "Twitch Badge Collector",
   "version": "0.0.5",
-  "description": "collect badge and point in twitch chat room",
+  "description": "Collect Badge and Channel Point in Twitch Chat Room",
   "short_name": "TBC",
-  "options_ui": {
-    "page": "public/option.html",
-    "open_in_tab": false
+  "icons": {
+    "128": "public/icons/cc_icon128.png"
   },
   "permissions": [
-    "activeTab",
     "declarativeContent",
     "webNavigation",
     "*://*.twitch.tv/*",
@@ -30,7 +28,7 @@
         "dist/css/inject_background.css"
       ],
       "js": [
-        "dist/js/jquery-3.5.1.slim.min.js", "dist/js/inject_background.js"
+        "dist/js/inject_background.js"
       ]
     }
   ],
@@ -38,7 +36,8 @@
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
     "default_icon": {
-      "16": "public/icons/icon16.png"
+      "64": "public/icons/cc_icon64.png",
+      "128": "public/icons/cc_icon128.png"
     }
   }
 }
