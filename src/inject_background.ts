@@ -2,9 +2,16 @@
 (function () {
     let chat_room_observer: MutationObserver | undefined;
     let chat_observer: MutationObserver | undefined;
-
+    let currunt_url: string;
     let badge_list: string[] = [];
     let chatIsAtBottom = true;
+
+    currunt_url = location.href;
+    //let currentChannelName: string | undefined = '';
+
+    /*chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        currentChannelName = tabs[0].url;
+    });*/
 
     let observeDOM = (function () {
 
@@ -70,7 +77,7 @@
         }
 
         if (point_button) {
-            console.log('+50 points, time : ', new Date().toTimeString());
+            console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
             point_button.click();
         }
         if (stream_chat) {
@@ -105,7 +112,7 @@
                     try {
                         point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
                         point_button.click();
-                        console.log('+50 points, time : ', new Date().toTimeString());
+                        console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
                     } catch (e) {
 
                     }
@@ -180,6 +187,7 @@
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
+            currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
         }
     });
