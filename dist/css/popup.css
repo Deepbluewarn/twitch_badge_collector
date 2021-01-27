@@ -3,10 +3,14 @@
     background-color: #18181b;
     font-family: Consolas;
 }
+body{
+    width : min-content;
+}
 h1{
     white-space: nowrap;
     margin: 1rem;
     margin-bottom: 2.3rem;
+    font-size: 1.5rem;
 }
 p{
     padding-left: 10px;
@@ -41,7 +45,7 @@ input[type=checkbox]{
 label {
 	cursor: pointer;
 	width: 46px;
-	height: 24px;
+    height: 24px;
 	background: grey;
 	display: block;
 	border-radius: 100px;
@@ -86,6 +90,12 @@ label:active:after {
 }
 .text{
     align-self: center;
+    white-space: nowrap;
+    font-size: .9rem;
+}
+#footer_text, a{
+    color: #5b5b66;
+  text-shadow: 0px 1px 0px rgba(75, 75, 75, 0.3), 0px -1px 0px rgba(39, 39, 43, 0.7);
 }
 
 /*main title*/
@@ -97,5 +107,6 @@ h2 {
     margin: 10px 0 20px; 
 }
 h2 span {
-     padding:0 10px; 
+     padding:0 10px;
+     font-size: 1.2rem;
 }
