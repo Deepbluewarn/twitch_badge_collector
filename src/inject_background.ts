@@ -129,6 +129,14 @@
 
                         chat_clone = <Element>nodeElement.cloneNode(true);
 
+                        chat_clone.addEventListener('click', mc=>{
+                            let target: HTMLElement = <HTMLElement>mc.target;
+                            if(target.classList.contains('chat-author__display-name')){
+                                nodeElement.scrollIntoView();
+                            }
+                        })
+
+
                         badges = chat_clone.getElementsByClassName('chat-badge');
 
                         Array.from(badges).some((badge) => {
@@ -139,6 +147,8 @@
                                 if (message_container && chat_clone) {
                                     message_container.appendChild(chat_clone);
                                     nodeElement.classList.add('tbc_highlight');
+
+                                    
 
                                     if (message_container.childElementCount > 100) {
                                         message_container.removeChild(<Element>message_container.firstElementChild);
