@@ -73,9 +73,6 @@ label:active:after {
 .container{
     display: flex;
 }
-.tag_container{
-
-}
 .bg_flex{
     display: flex;
     flex-direction: column;
