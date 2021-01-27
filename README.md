@@ -1,14 +1,14 @@
 # twitch_badge_collection
-[chrome extension] show twitch chat separately by badge
 
+> Kor
 
-
-만든 트위치 채팅 확장 프로그램입니다.
+트위치 채팅 확장 프로그램입니다.
 
 특정 뱃지를 가진 채팅을 한곳에 모아서 볼 수 있게 만들었습니다
 
 포인트 상자 자동 클릭 기능도 들어있어요
 
+> Eng
 
 Chrome Extension for Twitch Chat.
 
