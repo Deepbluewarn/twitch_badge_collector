@@ -1,4 +1,4 @@
-# twitch_badge_collection
+# Twitch Badge Collection
 
 ## Korean
 
