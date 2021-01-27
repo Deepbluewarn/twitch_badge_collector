@@ -192,6 +192,7 @@
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
         }
+        return true;
     });
 
 })();
