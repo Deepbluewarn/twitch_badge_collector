@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function () {
         console.log('Default value is set.');
     });
 
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+    /*chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
         chrome.declarativeContent.onPageChanged.addRules([
             {
                 conditions: [
@@ -17,10 +17,30 @@ chrome.runtime.onInstalled.addListener(function () {
                 actions: [new chrome.declarativeContent.ShowPageAction()]
             }
         ]);
-    });
-
+    });*/
 });
 
+/*const twitch_url = 'https://twitch.tv/*';
+const filter = {urls:[twitch_url]}
+let handleUpdated = function(tabId, changeInfo, tabInfo){
+
+}
+browser.tabs.onUpdated.addListener(handleUpdated, filter);*/
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    
+    let url = tab?.url;
+
+    if(!url){
+        return null;
+    }
+    console.log('pageAction ', url);
+    if (changeInfo.status === 'complete' && url.match(/https\:\/\/www\.twitch\.tv/)) {
+        chrome.pageAction.show(tabId);
+        console.log('pageAction show');
+    }
+    
+});
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
         let id : number | undefined = tabs[0].id;
