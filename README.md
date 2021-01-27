@@ -16,9 +16,8 @@ Collect chats with specific badge.
 
 It also has auto clicker for channel point.
 
+# Download
 
 Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj?hl=ko&authuser=0
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
-
-Github : https://github.com/Deepbluewarn/twitch_badge_collection
