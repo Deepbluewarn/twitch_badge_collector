@@ -8,7 +8,6 @@
     "128": "public/icons/cc_icon128.png"
   },
   "permissions": [
-    "declarativeContent",
     "webNavigation",
     "*://*.twitch.tv/*",
     "storage"
@@ -17,7 +16,7 @@
     "scripts": [
       "dist/js/extension_background.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "content_scripts": [
     {
