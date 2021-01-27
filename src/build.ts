@@ -5,9 +5,10 @@ const packageJson = require('../../package.json');
 
 const FILES: string[] = [
   'manifest.json',
-  'dist/js/popup.js',
-  'dist/js/inject_background.js',
+  'public/popup.html',
   'dist/js/extension_background.js',
+  'dist/js/inject_background.js',
+  'dist/js/popup.js',
   'dist/css/inject_background.css',
   'dist/css/popup.css',
   'public/icons/cc_icon64.png',
