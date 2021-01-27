@@ -1,5 +1,8 @@
 # Twitch Badge Collection
 
+![screenshot_1](./screenshots/screenshot_1.png)
+![screenshot_2](./screenshots/screenshot_2.png)
+
 ## Korean
 
 트위치 채팅 확장 프로그램입니다.
