@@ -1,4 +1,3 @@
-//import * as _ from "lodash"
 (function () {
     let chat_room_observer: MutationObserver | undefined;
     let chat_observer: MutationObserver | undefined;
@@ -7,11 +6,6 @@
     let chatIsAtBottom = true;
 
     currunt_url = location.href;
-    //let currentChannelName: string | undefined = '';
-
-    /*chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-        currentChannelName = tabs[0].url;
-    });*/
 
     let observeDOM = (function () {
 
@@ -95,7 +89,6 @@
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
         let room_clone: Element | null;
         let chat_clone: Element | null;
-        let chat_clone_wrapper: Element | null;
         let badges: HTMLCollection;
         let scroll_area: Element;
         let message_container: Element | null;
@@ -106,7 +99,6 @@
                 addedNodes.forEach(node => {
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
-                    //console.log('newChatCallback nodeElement : ', nodeElement);
                     let point_button: HTMLButtonElement;
 
                     try {

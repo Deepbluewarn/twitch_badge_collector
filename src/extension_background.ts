@@ -3,7 +3,6 @@ chrome.runtime.onInstalled.addListener(function () {
     let badge_list: string[] = ['스트리머','매니저','VIP','인증 완료','Broadcaster','Moderator','Verified'];
     let badge_setting: string[] = ['streamer','manager','vip','verified'];//just for popup page switch setting.
     chrome.storage.local.set({ badge_list: badge_list, badge_setting: badge_setting}, function(){
-        console.log('Default value is set.');
     });
 
     /*chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
@@ -34,10 +33,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(!url){
         return null;
     }
-    console.log('pageAction ', url);
     if (changeInfo.status === 'complete' && url.match(/https\:\/\/www\.twitch\.tv/)) {
         chrome.pageAction.show(tabId);
-        console.log('pageAction show');
     }
     
 });

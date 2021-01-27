@@ -2,7 +2,6 @@ let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[
 let delegation = document.getElementById('delegation');
 
 chrome.storage.local.get(['badge_setting'], function (result) {
-    console.log(JSON.stringify(result));
     if (Object.keys(result).length != 0 && result.constructor === Object) {
         result.badge_setting.forEach((b: string) => {
 
@@ -35,7 +34,6 @@ if (delegation) {
             });
 
             chrome.storage.local.set({ badge_list: badge_list, badge_setting: badge_setting }, function () {
-                console.log('Value is set to ' + JSON.stringify({ badge_list: badge_list, badge_setting: badge_setting }));
             });
         }
     })
