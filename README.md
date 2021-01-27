@@ -1,6 +1,6 @@
 # twitch_badge_collection
 
-> Kor
+## Korean
 
 트위치 채팅 확장 프로그램입니다.
 
@@ -8,7 +8,7 @@
 
 포인트 상자 자동 클릭 기능도 들어있어요
 
-> Eng
+## English
 
 Chrome Extension for Twitch Chat.
 
