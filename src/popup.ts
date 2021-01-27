@@ -38,7 +38,6 @@ if (delegation) {
                 console.log('Value is set to ' + JSON.stringify({ badge_list: badge_list, badge_setting: badge_setting }));
             });
         }
-
     })
 }
 type Translator = {
