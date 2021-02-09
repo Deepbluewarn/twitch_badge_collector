@@ -34,7 +34,13 @@ chrome.storage.local.get(['follow_button_visibility'], function(result){
 });
 
 //container_ratio 기본값을 range type input element 의 value 로 설정
-chrome.storage.local.set({ container_ratio_default : slider.value }, function () {
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    let id : number | undefined = tabs[0].id;
+    if(id){
+        chrome.tabs.sendMessage(id, {action: "container_ratio_default", container_ratio_default : slider.value}, function(response) {
+            
+        }); 
+    }
 });
 
 //Listeners..
@@ -77,7 +83,7 @@ if(follow_disable){
 
         chrome.storage.local.set({ follow_button_visibility : target.checked }, function () {
         });
-        
+
     });
 }
 

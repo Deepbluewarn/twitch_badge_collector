@@ -31,7 +31,7 @@
     chrome.storage.local.get(['badge_list'], function(result) {
         badge_list = result.badge_list;
     });
-    
+
     chrome.storage.local.get(['container_ratio'], function(result){
         if(result.container_ratio){
             container_ratio = parseInt(result.container_ratio);
@@ -195,9 +195,10 @@
     }
 
     let change_container_ratio = function (ratio: number) {
-
+        console.log(container_ratio_default);
         ratio = ratio ? ratio : container_ratio_default;
 
+        console.log('change_container_ratio ratio : %o', ratio);
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
 
@@ -234,10 +235,7 @@
                     container_ratio = parseInt(storageChange.newValue);
                     console.log('onChanged : container_ratio : %o', container_ratio);
                     change_container_ratio(container_ratio);
-                }else if(key === 'container_ratio_default'){
-                    container_ratio_default = parseInt(storageChange.newValue);
-                }
-                else if(key === 'follow_button_visibility'){
+                }else if(key === 'follow_button_visibility'){
                     Invisibility_cloak = storageChange.newValue;
                     set_visibility();
                 }
@@ -249,6 +247,8 @@
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
+        }else if(request.action === 'container_ratio_default') {
+            container_ratio_default = request.container_ratio_default;
         }
         return true;
     });
