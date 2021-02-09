@@ -1,25 +1,8 @@
-.scrollable-area.origin{
-    /*flex : 10;*/
-}
 .scrollable-area.clone{
-    /*flex : 2;*/
     border-top: 2px solid var(--color-background-alt-2);
     padding-top: 1rem;
     margin : 1rem;
 }
-/*.filter_chat_paused{
-    position: absolute;
-    background-color: #772ce8;
-    opacity: 50%;
-    border-radius: 5px;
-    top: 5%;
-    right: 50%;
-    visibility: hidden;
-    transform: translateX(50%);
-    white-space: nowrap;
-    padding: 4px;
-}*/
 .tbc_highlight{
-    /*background-color: var(--color-background-alt-2);*/
     border-left: 5px solid #9147ff;
 }

@@ -3,8 +3,9 @@
     let chat_observer: MutationObserver | undefined;
     let currunt_url: string;
     let badge_list: string[] = [];
+    let container_ratio_default: number;
     let container_ratio: number;
-    let Invisibility_cloak = true;//for hidden follow button.
+    let Invisibility_cloak = true; //for hidden follow button.
     let chatIsAtBottom = true;
 
     currunt_url = location.href;
@@ -32,13 +33,13 @@
     });
     
     chrome.storage.local.get(['container_ratio'], function(result){
-        container_ratio = parseInt(result.container_ratio);
-        
+        if(result.container_ratio){
+            container_ratio = parseInt(result.container_ratio);
+        }
     });
 
     chrome.storage.local.get(['follow_button_visibility'], function(result){
         Invisibility_cloak = result.follow_button_visibility;
-        console.log('Invisibility_cloak : %o', Invisibility_cloak);
     });
 
     function Mirror_of_Erised() {
@@ -195,15 +196,21 @@
 
     let change_container_ratio = function (ratio: number) {
 
+        ratio = ratio ? ratio : container_ratio_default;
+
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
+
+        if(!original_container || !clone_container){
+            return;
+        }
 
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
-        if (1 <= ratio && ratio <= 9) {
-            clone_size = parseFloat((ratio * 0.1).toFixed(1));
-            orig_size = parseFloat((1 - clone_size).toFixed(1));
+        if (1 <= ratio && ratio <= 100) {
+            clone_size = parseFloat((ratio * 0.01).toFixed(2));
+            orig_size = parseFloat((1 - clone_size).toFixed(2));
         }
 
         original_container.style.flex = String(orig_size);
@@ -225,8 +232,12 @@
                     badge_list = storageChange.newValue;
                 }else if(key === 'container_ratio'){
                     container_ratio = parseInt(storageChange.newValue);
+                    console.log('onChanged : container_ratio : %o', container_ratio);
                     change_container_ratio(container_ratio);
-                }else if(key === 'follow_button_visibility'){
+                }else if(key === 'container_ratio_default'){
+                    container_ratio_default = parseInt(storageChange.newValue);
+                }
+                else if(key === 'follow_button_visibility'){
                     Invisibility_cloak = storageChange.newValue;
                     set_visibility();
                 }

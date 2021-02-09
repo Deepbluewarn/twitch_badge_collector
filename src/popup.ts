@@ -2,6 +2,8 @@ let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[
 let delegation = document.getElementById('delegation');
 let slider = <HTMLInputElement>document.getElementById('container_size');
 let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
+
+//init popop setting value
 chrome.storage.local.get(['badge_setting'], function (result) {
     if (Object.keys(result).length != 0 && result.constructor === Object) {
         result.badge_setting.forEach((b: string) => {
@@ -15,14 +17,27 @@ chrome.storage.local.get(['badge_setting'], function (result) {
         });
     }
 });
-chrome.storage.local.get(['container_ratio'], function(result){
-    slider.value = result.container_ratio;
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    for (var key in changes) {
+        if(namespace === 'local'){
+            let storageChange = changes[key];
+            if(key === 'container_ratio'){
+                slider.value = storageChange.newValue;
+            }
+        }
+    }
 });
 
 chrome.storage.local.get(['follow_button_visibility'], function(result){
     follow_disable.checked = result.follow_button_visibility;
 });
 
+//container_ratio 기본값을 range type input element 의 value 로 설정
+chrome.storage.local.set({ container_ratio_default : slider.value }, function () {
+});
+
+//Listeners..
 if (delegation) {
     delegation.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
@@ -47,17 +62,22 @@ if (delegation) {
 }
 if (slider) {
     slider.addEventListener('change', e => {
+
         let target = <HTMLInputElement>e.target;
+
         chrome.storage.local.set({ container_ratio : target.value }, function () {
         });
+
     });
 }
 if(follow_disable){
     follow_disable.addEventListener('change', e=>{
+
         let target = <HTMLInputElement>e.target;
-        console.log('follow_disable : %o', target.checked);
+
         chrome.storage.local.set({ follow_button_visibility : target.checked }, function () {
         });
+        
     });
 }
 
