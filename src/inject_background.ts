@@ -3,6 +3,7 @@
     let chat_observer: MutationObserver | undefined;
     let currunt_url: string;
     let badge_list: string[] = [];
+    let container_ratio: number;
     let chatIsAtBottom = true;
 
     currunt_url = location.href;
@@ -42,7 +43,6 @@
 
             let room_clone = <HTMLElement>room_origin.cloneNode(true);
             room_origin.classList.add('origin');
-
             //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
 
             let scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
@@ -180,6 +180,23 @@
         }
     }
 
+    let change_container_ratio = function(ratio:number){
+        let original_container = <HTMLElement> document.getElementsByClassName('scrollable-area origin')[0];
+        let clone_container = <HTMLElement> document.getElementsByClassName('scrollable-area clone')[0];
+        //ratio : 0, orig_size : 1, clone_size : 1
+        let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
+        let clone_size =  ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
+
+        if(1 <= ratio && ratio <= 9){
+            clone_size = parseFloat((ratio * 0.1).toFixed(1));
+            orig_size = parseFloat((1 - clone_size).toFixed(1));
+        }
+
+        console.log('ratio : %o, orig_size : %o, clone_size : %o', ratio, orig_size, clone_size);
+        original_container.style.flex = String(orig_size);
+        clone_container.style.flex = String(clone_size);
+    }
+
 
     observeStreamPage(document.body || document.documentElement);
 
@@ -191,6 +208,9 @@
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
+        }else if(request.action === 'slider_changed'){
+            container_ratio = parseInt(request.container_ratio);
+            change_container_ratio(container_ratio);
         }
         return true;
     });

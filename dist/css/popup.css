@@ -36,13 +36,13 @@ input[type=text] , button{
  }
 
 /* Checkbox label Switch*/
-input[type=checkbox]{
+.badge_checkbox{
     position: absolute;
 	height: 0;
 	width: 0;
 	visibility: hidden;
 }
-label {
+.switch_label {
 	cursor: pointer;
 	width: 46px;
     height: 24px;
@@ -51,7 +51,7 @@ label {
 	border-radius: 100px;
 	position: relative;
 }
-label:after {
+.switch_label:after {
 	content: '';
 	position: absolute;
 	top: 3px;
@@ -62,20 +62,20 @@ label:after {
 	border-radius: 90px;
 	transition: 0.3s;
 }
-input:checked + label {
+input:checked + .switch_label {
 	background: #9147ff;
 }
 
-input:checked + label:after {
+input:checked + .switch_label:after {
 	left: calc(100% - 3px);
 	transform: translateX(-100%);
 }
-label:active:after {
+.switch_label:active:after {
 	width: 22px;
 }
 /**************************************/
 .container{
-    display: flex;
+    margin-bottom: 25px;
 }
 .bg_flex{
     display: flex;

@@ -1,6 +1,6 @@
 let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type=checkbox][name=badge]');
 let delegation = document.getElementById('delegation');
-
+let slider = document.getElementById('container_size');
 chrome.storage.local.get(['badge_setting'], function (result) {
     if (Object.keys(result).length != 0 && result.constructor === Object) {
         result.badge_setting.forEach((b: string) => {
@@ -38,6 +38,22 @@ if (delegation) {
         }
     })
 }
+if (slider) {
+    slider.addEventListener('change', e => {
+        let target = <HTMLInputElement>e.target;
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            let id: number | undefined = tabs[0].id;
+            if (id) {
+                chrome.tabs.sendMessage(id, { action: 'slider_changed', container_ratio: target.value }, function (response) {
+                    console.log(response.farewell);
+                });
+            }
+
+        });
+    })
+}
+
+
 type Translator = {
     [key: string]: string[];
     streamer: string[];
