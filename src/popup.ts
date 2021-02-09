@@ -1,6 +1,7 @@
 let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type=checkbox][name=badge]');
 let delegation = document.getElementById('delegation');
-let slider = document.getElementById('container_size');
+let slider = <HTMLInputElement>document.getElementById('container_size');
+let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
 chrome.storage.local.get(['badge_setting'], function (result) {
     if (Object.keys(result).length != 0 && result.constructor === Object) {
         result.badge_setting.forEach((b: string) => {
@@ -15,9 +16,12 @@ chrome.storage.local.get(['badge_setting'], function (result) {
     }
 });
 chrome.storage.local.get(['container_ratio'], function(result){
-    let slider = <HTMLInputElement>document.getElementById('container_size');
     slider.value = result.container_ratio;
-})
+});
+
+chrome.storage.local.get(['follow_button_visibility'], function(result){
+    follow_disable.checked = result.follow_button_visibility;
+});
 
 if (delegation) {
     delegation.addEventListener('change', e => {
@@ -44,19 +48,17 @@ if (delegation) {
 if (slider) {
     slider.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            let id: number | undefined = tabs[0].id;
-            if (id) {
-                chrome.storage.local.set({ container_ratio : target.value }, function () {
-                });
-                /*chrome.tabs.sendMessage(id, { action: 'slider_changed', container_ratio: target.value }, function (response) {
-                    console.log(response.farewell);
-                });*/
-                
-            }
-
+        chrome.storage.local.set({ container_ratio : target.value }, function () {
         });
-    })
+    });
+}
+if(follow_disable){
+    follow_disable.addEventListener('change', e=>{
+        let target = <HTMLInputElement>e.target;
+        console.log('follow_disable : %o', target.checked);
+        chrome.storage.local.set({ follow_button_visibility : target.checked }, function () {
+        });
+    });
 }
 
 

@@ -4,6 +4,7 @@
     let currunt_url: string;
     let badge_list: string[] = [];
     let container_ratio: number;
+    let Invisibility_cloak = true;//for hidden follow button.
     let chatIsAtBottom = true;
 
     currunt_url = location.href;
@@ -26,13 +27,18 @@
         }
     })();
 
-    chrome.storage.local.get(['badge_list'], function (result) {
+    chrome.storage.local.get(['badge_list'], function(result) {
         badge_list = result.badge_list;
     });
     
     chrome.storage.local.get(['container_ratio'], function(result){
         container_ratio = parseInt(result.container_ratio);
         
+    });
+
+    chrome.storage.local.get(['follow_button_visibility'], function(result){
+        Invisibility_cloak = result.follow_button_visibility;
+        console.log('Invisibility_cloak : %o', Invisibility_cloak);
     });
 
     function Mirror_of_Erised() {
@@ -61,32 +67,31 @@
 
             room_clone.classList.add('clone');
             chat_room.appendChild(room_clone);
+            change_container_ratio(container_ratio);
         }
     }
 
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
         let stream_chat: Element | undefined = undefined;
         let point_button: HTMLButtonElement | undefined = undefined;
-
+        let follow_div: HTMLButtonElement | undefined = undefined;
         try {
             stream_chat = document.getElementsByClassName('stream-chat')[0];
             point_button = <HTMLButtonElement>stream_chat.getElementsByClassName('tw-button--success')[0];
+            follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
         } catch (e) {
 
         }
-
         if (point_button) {
             console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
             point_button.click();
         }
-        if (stream_chat) {
+        if (stream_chat && follow_div) {
             if (chat_room_observer) {
                 chat_room_observer.disconnect();
             }
+            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
             Mirror_of_Erised();
-
-            change_container_ratio(container_ratio);
-
             observeChatRoom(stream_chat);
             observeStreamPage(stream_chat, { childList: true, subtree: false });
             return;
@@ -148,16 +153,16 @@
                                     message_container.appendChild(chat_clone);
                                     nodeElement.classList.add('tbc_highlight');
 
-
-
                                     if (message_container.childElementCount > 100) {
                                         message_container.removeChild(<Element>message_container.firstElementChild);
                                     }
 
                                 }
+
                                 if (chatIsAtBottom) {
                                     scroll_area.scrollTop = scroll_area.scrollHeight;
                                 }
+
                             } else {
                                 return false;
                             }
@@ -189,10 +194,10 @@
     }
 
     let change_container_ratio = function (ratio: number) {
-        console.log('change_container_ratio : %o', ratio);
+
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
-        //ratio : 0, orig_size : 1, clone_size : 1
+
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
@@ -205,12 +210,12 @@
         clone_container.style.flex = String(clone_size);
     }
 
+    let set_visibility = function () {
+        let follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
+        follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
+    }
 
     observeStreamPage(document.body || document.documentElement);
-
-    chrome.storage.onChanged.addListener(function (changes, namespace) {
-        //badge_list = changes.badge_list.newValue;
-    });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (var key in changes) {
@@ -221,20 +226,19 @@
                 }else if(key === 'container_ratio'){
                     container_ratio = parseInt(storageChange.newValue);
                     change_container_ratio(container_ratio);
+                }else if(key === 'follow_button_visibility'){
+                    Invisibility_cloak = storageChange.newValue;
+                    set_visibility();
                 }
             }
         }
     });
 
-
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
-        } /*else if (request.action === 'slider_changed') {
-            container_ratio = parseInt(request.container_ratio);
-            change_container_ratio(container_ratio);
-        }*/
+        }
         return true;
     });
 
