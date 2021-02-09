@@ -13,8 +13,11 @@ chrome.storage.local.get(['badge_setting'], function (result) {
             }
         });
     }
-
 });
+chrome.storage.local.get(['container_ratio'], function(result){
+    let slider = <HTMLInputElement>document.getElementById('container_size');
+    slider.value = result.container_ratio;
+})
 
 if (delegation) {
     delegation.addEventListener('change', e => {
@@ -44,9 +47,12 @@ if (slider) {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             let id: number | undefined = tabs[0].id;
             if (id) {
-                chrome.tabs.sendMessage(id, { action: 'slider_changed', container_ratio: target.value }, function (response) {
-                    console.log(response.farewell);
+                chrome.storage.local.set({ container_ratio : target.value }, function () {
                 });
+                /*chrome.tabs.sendMessage(id, { action: 'slider_changed', container_ratio: target.value }, function (response) {
+                    console.log(response.farewell);
+                });*/
+                
             }
 
         });
