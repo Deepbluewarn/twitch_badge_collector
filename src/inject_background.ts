@@ -29,6 +29,10 @@
     chrome.storage.local.get(['badge_list'], function (result) {
         badge_list = result.badge_list;
     });
+    chrome.storage.local.get(['container_ratio'], function(result){
+        container_ratio = parseInt(result.container_ratio);
+        change_container_ratio(result.container_ratio);
+    })
 
     function Mirror_of_Erised() {
         const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
@@ -121,9 +125,9 @@
 
                         chat_clone = <Element>nodeElement.cloneNode(true);
 
-                        chat_clone.addEventListener('click', mc=>{
+                        chat_clone.addEventListener('click', mc => {
                             let target: HTMLElement = <HTMLElement>mc.target;
-                            if(target.classList.contains('chat-author__display-name')){
+                            if (target.classList.contains('chat-author__display-name')) {
                                 nodeElement.scrollIntoView();
                             }
                         })
@@ -140,7 +144,7 @@
                                     message_container.appendChild(chat_clone);
                                     nodeElement.classList.add('tbc_highlight');
 
-                                    
+
 
                                     if (message_container.childElementCount > 100) {
                                         message_container.removeChild(<Element>message_container.firstElementChild);
@@ -180,19 +184,18 @@
         }
     }
 
-    let change_container_ratio = function(ratio:number){
-        let original_container = <HTMLElement> document.getElementsByClassName('scrollable-area origin')[0];
-        let clone_container = <HTMLElement> document.getElementsByClassName('scrollable-area clone')[0];
+    let change_container_ratio = function (ratio: number) {
+        let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
+        let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
         //ratio : 0, orig_size : 1, clone_size : 1
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
-        let clone_size =  ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
+        let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
-        if(1 <= ratio && ratio <= 9){
+        if (1 <= ratio && ratio <= 9) {
             clone_size = parseFloat((ratio * 0.1).toFixed(1));
             orig_size = parseFloat((1 - clone_size).toFixed(1));
         }
 
-        console.log('ratio : %o, orig_size : %o, clone_size : %o', ratio, orig_size, clone_size);
         original_container.style.flex = String(orig_size);
         clone_container.style.flex = String(clone_size);
     }
@@ -201,17 +204,32 @@
     observeStreamPage(document.body || document.documentElement);
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
-        badge_list = changes.badge_list.newValue;
+        //badge_list = changes.badge_list.newValue;
     });
+
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (var key in changes) {
+            if(namespace === 'local'){
+                let storageChange = changes[key];
+                if(key === 'badge_list'){
+                    badge_list = storageChange.newValue;
+                }else if(key === 'container_ratio'){
+                    container_ratio = parseInt(storageChange.newValue);
+                    change_container_ratio(container_ratio);
+                }
+            }
+        }
+    });
+
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
-        }else if(request.action === 'slider_changed'){
+        } /*else if (request.action === 'slider_changed') {
             container_ratio = parseInt(request.container_ratio);
             change_container_ratio(container_ratio);
-        }
+        }*/
         return true;
     });
 
