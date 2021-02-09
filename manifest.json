@@ -9,7 +9,7 @@
   },
   "permissions": [
     "webNavigation",
-    "https://www.twitch.tv/*",
+    "tabs",
     "storage"
   ],
   "background": {
