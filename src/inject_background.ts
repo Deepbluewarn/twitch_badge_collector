@@ -29,10 +29,11 @@
     chrome.storage.local.get(['badge_list'], function (result) {
         badge_list = result.badge_list;
     });
+    
     chrome.storage.local.get(['container_ratio'], function(result){
         container_ratio = parseInt(result.container_ratio);
-        change_container_ratio(result.container_ratio);
-    })
+        
+    });
 
     function Mirror_of_Erised() {
         const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
@@ -83,6 +84,9 @@
                 chat_room_observer.disconnect();
             }
             Mirror_of_Erised();
+
+            change_container_ratio(container_ratio);
+
             observeChatRoom(stream_chat);
             observeStreamPage(stream_chat, { childList: true, subtree: false });
             return;
@@ -185,6 +189,7 @@
     }
 
     let change_container_ratio = function (ratio: number) {
+        console.log('change_container_ratio : %o', ratio);
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
         //ratio : 0, orig_size : 1, clone_size : 1
