@@ -19,8 +19,14 @@ Collect chats with specific badge.
 
 It also has auto clicker for channel point.
 
+
 # Download
 
 Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
+
+## v1.2.0 Changlog
+   - 팔로우 버튼을 실수로 누르는 것을 방지하기 위한 팔로우 버튼 비활성화 기능<br>(Invisibility cloak for prevent accidentally pressing the follow button)
+   - 채팅창 크기 조절 기능 추가<br>
+     (Added chat window sizing function)
