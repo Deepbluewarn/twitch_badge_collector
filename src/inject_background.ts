@@ -3,7 +3,6 @@
     let chat_observer: MutationObserver | undefined;
     let currunt_url: string;
     let badge_list: string[] = [];
-    let container_ratio_default: number;
     let container_ratio: number;
     let Invisibility_cloak = true; //for hidden follow button.
     let chatIsAtBottom = true;
@@ -195,10 +194,9 @@
     }
 
     let change_container_ratio = function (ratio: number) {
-        console.log(container_ratio_default);
-        ratio = ratio ? ratio : container_ratio_default;
-
-        console.log('change_container_ratio ratio : %o', ratio);
+        if(ratio != 0){
+            ratio = ratio ? ratio : 30;
+        }
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
 
@@ -220,7 +218,9 @@
 
     let set_visibility = function () {
         let follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
-        follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
+        if(follow_div){
+            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
+        }
     }
 
     observeStreamPage(document.body || document.documentElement);
@@ -233,7 +233,6 @@
                     badge_list = storageChange.newValue;
                 }else if(key === 'container_ratio'){
                     container_ratio = parseInt(storageChange.newValue);
-                    console.log('onChanged : container_ratio : %o', container_ratio);
                     change_container_ratio(container_ratio);
                 }else if(key === 'follow_button_visibility'){
                     Invisibility_cloak = storageChange.newValue;
@@ -247,8 +246,6 @@
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage(document.body || document.documentElement);
-        }else if(request.action === 'container_ratio_default') {
-            container_ratio_default = request.container_ratio_default;
         }
         return true;
     });

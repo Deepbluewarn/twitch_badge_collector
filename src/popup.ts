@@ -29,19 +29,18 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     }
 });
 
+chrome.storage.local.get(['container_ratio'], function(result){
+    let ratio = result.container_ratio;
+    if(ratio){
+        slider.value = ratio;
+    }
+});
+
 chrome.storage.local.get(['follow_button_visibility'], function(result){
     follow_disable.checked = result.follow_button_visibility;
 });
 
-//container_ratio 기본값을 range type input element 의 value 로 설정
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    let id : number | undefined = tabs[0].id;
-    if(id){
-        chrome.tabs.sendMessage(id, {action: "container_ratio_default", container_ratio_default : slider.value}, function(response) {
-            
-        }); 
-    }
-});
+
 
 //Listeners..
 if (delegation) {
