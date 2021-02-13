@@ -1,9 +1,11 @@
 (function () {
+    let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
-    let chat_observer: MutationObserver | undefined;
+    let follow_btn_observer: MutationObserver | undefined;
     let currunt_url: string;
     let badge_list: string[] = [];
     let container_ratio: number;
+
     let Invisibility_cloak = true; //for hidden follow button.
     let chatIsAtBottom = true;
 
@@ -79,22 +81,27 @@
             stream_chat = document.getElementsByClassName('stream-chat')[0];
             point_button = <HTMLButtonElement>stream_chat.getElementsByClassName('tw-button--success')[0];
             follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
+            
         } catch (e) {
 
         }
-        if (point_button) {
+        if(stream_chat && follow_div){
+            if (stream_page_observer) {
+                //원하는 Element (stream-chat and follow_div) 을 찾았으므로 disconnect().
+                stream_page_observer.disconnect();
+            }
+            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
+        }
+        if(point_button){
+            //처음 페이지가 로딩 되었을 때 포인트 버튼이 있을 경우는 새로 추가된 경우가 아니기 때문에 observer 에서 캐치할 수 없다.
             console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
             point_button.click();
         }
-        if (stream_chat && follow_div) {
-            if (chat_room_observer) {
-                chat_room_observer.disconnect();
-            }
-            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
+        if (stream_chat) {
+            //follow_div 가 없어도 실행되어야 함. (채팅창 팝업)
+            //must executed when chat in popup. (follow button not exist in popup)
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
-            observeStreamPage(stream_chat, { childList: true, subtree: false });
-            return;
         }
     }
 
@@ -173,23 +180,36 @@
         })
     }
 
-    let observeStreamPage = function (target: Element, config?: MutationObserverInit) {
-        let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ['class'] };
-        if (config) {
-            default_config = config;
-        }
-        if (chat_room_observer) {
-            chat_room_observer.observe(target, default_config);
+    /**
+     * 
+     * @param target Element to be Observed
+     * 
+     */
+    let observeStreamPage = function (target: Element = document.body) {
+        let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"]};
+        
+        if (stream_page_observer) {
+            stream_page_observer.observe(target, default_config);
         } else {
-            chat_room_observer = observeDOM(target, default_config, StreamPageCallback);
+            stream_page_observer = observeDOM(target, default_config, StreamPageCallback);
         }
     }
 
     let observeChatRoom = function (target: Element) {
-        if (chat_observer) {
-            chat_observer.observe(target, { childList: true, subtree: true });
+        //observer 가 중복 할당 되는것을 방지. 두번 할당되면 채팅이 두번씩 올라오는 끔찍한 일이 벌어진다.
+        if (chat_room_observer) {
+            //chat-line__message class 는 observe 대상인 stream-chat class 의 direct child 가 아니기 때문에 subtree : true 이어야 한다.
+            chat_room_observer.observe(target, { childList: true, subtree: true, attributeFilter: ["class"]});
         } else {
-            chat_observer = observeDOM(target, { childList: true, subtree: true }, newChatCallback);
+            chat_room_observer = observeDOM(target, { childList: true, subtree: true, attributeFilter: ["class"]}, newChatCallback);
+        }
+    }
+
+    let observeFollowBtn = function (target: Element) {
+        if(follow_btn_observer){
+            follow_btn_observer.observe(target, {})
+        }else{
+
         }
     }
 
@@ -223,7 +243,7 @@
         }
     }
 
-    observeStreamPage(document.body || document.documentElement);
+    observeStreamPage();
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (var key in changes) {
@@ -245,7 +265,7 @@
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
-            observeStreamPage(document.body || document.documentElement);
+            observeStreamPage();
         }
         return true;
     });
