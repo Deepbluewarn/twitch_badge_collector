@@ -1,7 +1,6 @@
 (function () {
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
-    let follow_btn_observer: MutationObserver | undefined;
     let currunt_url: string;
     let badge_list: string[] = [];
     let container_ratio: number;
@@ -43,6 +42,9 @@
         Invisibility_cloak = result.follow_button_visibility;
     });
 
+    /**
+     * Create chat window clone.
+     */
     function Mirror_of_Erised() {
         const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
 
@@ -120,7 +122,6 @@
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
                     let point_button: HTMLButtonElement;
-
                     try {
                         point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
                         point_button.click();
@@ -174,6 +175,9 @@
                                 return false;
                             }
                         });
+                    }else if(nodeElement.className === 'chat-line__status' && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message'){
+                        //채팅방 재접속. (reconnect chat)
+                        Mirror_of_Erised();
                     }
                 })
             }
@@ -202,14 +206,6 @@
             chat_room_observer.observe(target, { childList: true, subtree: true, attributeFilter: ["class"]});
         } else {
             chat_room_observer = observeDOM(target, { childList: true, subtree: true, attributeFilter: ["class"]}, newChatCallback);
-        }
-    }
-
-    let observeFollowBtn = function (target: Element) {
-        if(follow_btn_observer){
-            follow_btn_observer.observe(target, {})
-        }else{
-
         }
     }
 
