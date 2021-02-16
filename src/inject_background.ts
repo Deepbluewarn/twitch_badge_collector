@@ -76,28 +76,15 @@
     }
 
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
-        let stream_chat: Element | undefined = undefined;
-        let point_button: HTMLButtonElement | undefined = undefined;
-        let follow_div: HTMLButtonElement | undefined = undefined;
-        try {
-            stream_chat = document.getElementsByClassName('stream-chat')[0];
-            point_button = <HTMLButtonElement>stream_chat.getElementsByClassName('tw-button--success')[0];
-            follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
-            
-        } catch (e) {
-
-        }
+        let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
+        let follow_div: HTMLButtonElement | undefined = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
+        
         if(stream_chat && follow_div){
             if (stream_page_observer) {
                 //원하는 Element (stream-chat and follow_div) 을 찾았으므로 disconnect().
                 stream_page_observer.disconnect();
             }
             follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
-        }
-        if(point_button){
-            //처음 페이지가 로딩 되었을 때 포인트 버튼이 있을 경우는 새로 추가된 경우가 아니기 때문에 observer 에서 캐치할 수 없다.
-            console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
-            point_button.click();
         }
         if (stream_chat) {
             //follow_div 가 없어도 실행되어야 함. (채팅창 팝업)
@@ -142,12 +129,12 @@
 
                         chat_clone = <Element>nodeElement.cloneNode(true);
 
-                        chat_clone.addEventListener('click', mc => {
+                        /*chat_clone.addEventListener('click', mc => {
                             let target: HTMLElement = <HTMLElement>mc.target;
                             if (target.classList.contains('chat-author__display-name')) {
                                 nodeElement.scrollIntoView();
                             }
-                        })
+                        })*/
 
 
                         badges = chat_clone.getElementsByClassName('chat-badge');
@@ -215,7 +202,6 @@
         }
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
-
         if(!original_container || !clone_container){
             return;
         }
