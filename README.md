@@ -26,7 +26,8 @@ Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpen
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
 
-## v1.2.0 Changlog
-   - 팔로우 버튼을 실수로 누르는 것을 방지하기 위한 팔로우 버튼 비활성화 기능<br>(Invisibility cloak for prevent accidentally pressing the follow button)
-   - 채팅창 크기 조절 기능 추가<br>
-     (Added chat window sizing function)
+## v1.2.1 Changlog
+   - 팝업 채팅창에서 작동하지 않는 문제 수정
+     (Fix problems not work in pop-up)
+   - 팝업 채팅창을 종료한 뒤 돌아오는 채팅창에서 작동하지 않는 문제 수정
+     (Fix clone not show up when chat return from popup)
