@@ -5,10 +5,11 @@
     "outDir": "./dist/js",
     "rootDir": "./src",
     "strict": true,
-    "types": ["chrome", "node"],
+    "types": ["chrome", "node", "google.analytics"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
   }
 }

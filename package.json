@@ -6,13 +6,15 @@
   "private": true,
   "devDependencies": {
     "@types/chrome": "0.0.128",
+    "@types/google.analytics": "0.0.41",
+    "@types/gtag.js": "0.0.4",
     "@types/node": "^14.14.22",
     "node-zip": "^1.1.1",
     "typescript": "^4.1.3"
   },
   "scripts": {
     "build": "tsc",
-    "zip" : "node dist/js/build.js",
+    "zip": "node dist/js/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -20,8 +20,14 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         let id: number | undefined = tabs[0].id;
+        let url = tabs[0].url;
+
+        chrome.storage.local.set({current_url : url}, function () {
+            
+        });
+
         if (id) {
-            chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated" }, function (response) {
+            chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url : url}, function (response) {
 
             });
         }

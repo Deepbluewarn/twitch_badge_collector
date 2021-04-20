@@ -1,39 +1,34 @@
-*{
-    color : #efeff1;
-    background-color: #18181b;
-    font-family: Consolas;
+:root{
+    --text-color : #efeff1;
+    --background-color : #18181b;
+    --line-color : #25252c;
+    --button-background-color : #9147ff;
+    --switch-disable-color : grey;
+    --switch-button-color : white;
+    --switch-active-color : #9147ff;
 }
+
 body{
+    background-color: var(--background-color);
+    color : var(--text-color);
+    font-family: Consolas;
     width : min-content;
 }
+
 h1{
     white-space: nowrap;
     margin: 1rem;
     margin-bottom: 2.3rem;
     font-size: 1.5rem;
 }
+
 p{
     padding-left: 10px;
 }
-button{
-    border: 0;
-    border-radius: 5px;
-    text-align: right;
-    padding: 2px;
-    background-color: #9147ff;
-}
+
 img{
     margin-right : 3px;
 }
-
-input[type=text] , button{
-    border: 2px solid #9147ff;
-    padding: .5rem;
-    background: #18181b;
-    margin-left: 14px;
-    margin-bottom: 10px;
-    white-space: nowrap;
- }
 
 /* Checkbox label Switch*/
 .badge_checkbox{
@@ -46,7 +41,7 @@ input[type=text] , button{
 	cursor: pointer;
 	width: 46px;
     height: 24px;
-	background: grey;
+	background: var(--switch-disable-color);
 	display: block;
 	border-radius: 100px;
 	position: relative;
@@ -58,12 +53,12 @@ input[type=text] , button{
 	left: 3px;
 	width: 18px;
 	height: 18px;
-	background: #fff;
+	background: var(--switch-button-color);
 	border-radius: 90px;
 	transition: 0.3s;
 }
 input:checked + .switch_label {
-	background: #9147ff;
+	background: var(--switch-active-color);
 }
 
 input:checked + .switch_label:after {
@@ -95,18 +90,19 @@ input:checked + .switch_label:after {
 }
 #footer_text, a{
     color: #5b5b66;
-  text-shadow: 0px 1px 0px rgba(75, 75, 75, 0.3), 0px -1px 0px rgba(39, 39, 43, 0.7);
+    text-shadow: 0px 1px 0px rgba(75, 75, 75, 0.3), 0px -1px 0px rgba(39, 39, 43, 0.7);
 }
 
-/*main title*/
+/* title */
 h2 {
     width: 100%; 
     text-align: left; 
-    border-bottom: 2px solid #26262c;
+    border-bottom: 2px solid var(--line-color);
     line-height: 0.1em;
     margin: 10px 0 20px; 
-}
-h2 span {
-     padding:0 10px;
-     font-size: 1.2rem;
-}
+ } 
+ 
+ h2 span {
+     background-color: var(--background-color);
+     padding:0 10px; 
+ }

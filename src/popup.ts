@@ -3,6 +3,8 @@ let delegation = document.getElementById('delegation');
 let slider = <HTMLInputElement>document.getElementById('container_size');
 let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
 
+let current_url = '';
+
 //init popop setting value
 chrome.storage.local.get(['badge_setting'], function (result) {
     if (Object.keys(result).length != 0 && result.constructor === Object) {
@@ -20,23 +22,25 @@ chrome.storage.local.get(['badge_setting'], function (result) {
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     for (var key in changes) {
-        if(namespace === 'local'){
+        if (namespace === 'local') {
             let storageChange = changes[key];
-            if(key === 'container_ratio'){
+            if (key === 'container_ratio') {
                 slider.value = storageChange.newValue;
+            } else if (key === 'current_url') {
+                current_url = storageChange.newValue;
             }
         }
     }
 });
 
-chrome.storage.local.get(['container_ratio'], function(result){
+chrome.storage.local.get(['container_ratio'], function (result) {
     let ratio = result.container_ratio;
-    if(ratio){
+    if (ratio) {
         slider.value = ratio;
     }
 });
 
-chrome.storage.local.get(['follow_button_visibility'], function(result){
+chrome.storage.local.get(['follow_button_visibility'], function (result) {
     follow_disable.checked = result.follow_button_visibility;
 });
 
@@ -47,6 +51,9 @@ if (delegation) {
     delegation.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
         if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
+
+            ga('send', 'event', {'eventCategory' : 'Switch', 'eventAction' : target.checked, 'eventLabel' : target.id});
+
             let badge_list: Array<string> = [];
             let badge_setting: Array<string> = [];
 
@@ -67,20 +74,23 @@ if (delegation) {
 }
 if (slider) {
     slider.addEventListener('change', e => {
-
         let target = <HTMLInputElement>e.target;
 
-        chrome.storage.local.set({ container_ratio : target.value }, function () {
+        ga('send', 'event', {'eventCategory' : 'Slider', 'eventAction' : target.value, 'eventLabel' : 'set_container_size'});
+        
+
+        chrome.storage.local.set({ container_ratio: target.value }, function () {
         });
 
     });
 }
-if(follow_disable){
-    follow_disable.addEventListener('change', e=>{
-
+if (follow_disable) {
+    follow_disable.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
 
-        chrome.storage.local.set({ follow_button_visibility : target.checked }, function () {
+        ga('send', 'event', {'eventCategory' : 'Checkbox', 'eventAction' : target.checked, 'eventLabel' : 'follow_disable'});
+
+        chrome.storage.local.set({ follow_button_visibility: target.checked }, function () {
         });
 
     });
