@@ -26,8 +26,5 @@ Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpen
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
 
-## v1.2.1 Changlog
-   - 팝업 채팅창에서 작동하지 않는 문제 수정
-     (Fix problems not work in pop-up)
-   - 팝업 채팅창을 종료한 뒤 돌아오는 채팅창에서 작동하지 않는 문제 수정
-     (Fix clone not show up when chat return from popup)
+## v1.2.4 Changlog
+   - CSS 변경 (CSS Changes in popup page)
