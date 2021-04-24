@@ -2,13 +2,16 @@
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
     let currunt_url: string;
+    let current_channel: string;
     let badge_list: string[] = [];
     let container_ratio: number;
 
     let Invisibility_cloak = true; //for hidden follow button.
     let chatIsAtBottom = true;
+    const button_point = 50;
 
     currunt_url = location.href;
+    current_channel = location.pathname.substring(1);
 
     let observeDOM = (function () {
 
@@ -112,7 +115,7 @@
                     try {
                         point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
                         point_button.click();
-                        console.log('+50 points, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
+                        console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
                     } catch (e) {
 
                     }

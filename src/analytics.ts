@@ -10,7 +10,7 @@ function gaInit(){
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga', gaNewElem, gaElems);
   
-  //ga('create', 'UA-194964708-1', 'auto'); for dev
+  //ga('create', 'UA-194964708-1', 'auto'); //for dev
   ga('create', 'UA-194964708-2', 'auto');
   
   ga('set', 'checkProtocolTask', null);
@@ -20,8 +20,6 @@ function gaInit(){
   chrome.tabs.query(query, (tabs)=>{
       ga('send', 'event', {'eventCategory' : 'Url', 'eventAction' : 'current_url', 'eventLabel' : tabs[0].url});
   });
-
-  console.log('gaInit() done.');
 }
 
 (function() {

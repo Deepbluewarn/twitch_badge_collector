@@ -1,8 +1,8 @@
 let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type=checkbox][name=badge]');
 let delegation = document.getElementById('delegation');
-let slider = <HTMLInputElement>document.getElementById('container_size');
+let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
 let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
-
+let point_status = <HTMLElement>document.getElementById('point_status');
 let current_url = '';
 
 //init popop setting value
@@ -44,8 +44,6 @@ chrome.storage.local.get(['follow_button_visibility'], function (result) {
     follow_disable.checked = result.follow_button_visibility;
 });
 
-
-
 //Listeners..
 if (delegation) {
     delegation.addEventListener('change', e => {
@@ -72,6 +70,7 @@ if (delegation) {
         }
     })
 }
+
 if (slider) {
     slider.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
@@ -84,6 +83,7 @@ if (slider) {
 
     });
 }
+
 if (follow_disable) {
     follow_disable.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
@@ -95,7 +95,6 @@ if (follow_disable) {
 
     });
 }
-
 
 type Translator = {
     [key: string]: string[];
