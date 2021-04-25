@@ -50,7 +50,9 @@ if (delegation) {
         let target = <HTMLInputElement>e.target;
         if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
 
-            ga('send', 'event', {'eventCategory' : 'Switch', 'eventAction' : target.checked, 'eventLabel' : target.id});
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Switch', 'eventAction' : target.checked, 'eventLabel' : target.id}}, function(response) {
+                //console.log(response.);
+            });
 
             let badge_list: Array<string> = [];
             let badge_setting: Array<string> = [];
@@ -75,8 +77,9 @@ if (slider) {
     slider.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
 
-        ga('send', 'event', {'eventCategory' : 'Slider', 'eventAction' : target.value, 'eventLabel' : 'set_container_size'});
-        
+        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Slider', 'eventAction' : target.value, 'eventLabel' : 'set_container_size'}}, function(response) {
+            //console.log(response.farewell);
+        });
 
         chrome.storage.local.set({ container_ratio: target.value }, function () {
         });
@@ -88,8 +91,9 @@ if (follow_disable) {
     follow_disable.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
 
-        ga('send', 'event', {'eventCategory' : 'Checkbox', 'eventAction' : target.checked, 'eventLabel' : 'follow_disable'});
-
+        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Checkbox', 'eventAction' : target.checked, 'eventLabel' : 'follow_disable'}}, function(response) {
+            //console.log(response.farewell);
+        });
         chrome.storage.local.set({ follow_button_visibility: target.checked }, function () {
         });
 

@@ -7,7 +7,7 @@
     let container_ratio: number;
 
     let Invisibility_cloak = true; //for hidden follow button.
-    let chatIsAtBottom = true;
+    let chatIsAtBottom = true;// chat auto scroll [on / off]
     const button_point = 50;
 
     currunt_url = location.href;
@@ -66,9 +66,10 @@
             let scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
             scroll_area.addEventListener("scroll", function () {
-                chatIsAtBottom = scroll_area.scrollTop + scroll_area.clientHeight >= scroll_area.scrollHeight;
+                //사용자가 스크롤을 40 픽셀 이상 올렸을 때만 false 반환.
+                //Return false only when the user raises the scroll by more than 40 pixels.
+                chatIsAtBottom = scroll_area.scrollTop + scroll_area.clientHeight >= scroll_area.scrollHeight - 40;
             }, false);
-
             let message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
             message_container.textContent = '';//remove all chat lines.
 
@@ -156,7 +157,6 @@
                                     }
 
                                 }
-
                                 if (chatIsAtBottom) {
                                     scroll_area.scrollTop = scroll_area.scrollHeight;
                                 }
