@@ -1,8 +1,7 @@
 let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type=checkbox][name=badge]');
 let delegation = document.getElementById('delegation');
 let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
-let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
-let point_status = <HTMLElement>document.getElementById('point_status');
+//let follow_disable = <HTMLInputElement>document.getElementById('disable_follow_button');
 let current_url = '';
 
 //init popop setting value
@@ -40,19 +39,15 @@ chrome.storage.local.get(['container_ratio'], function (result) {
     }
 });
 
-chrome.storage.local.get(['follow_button_visibility'], function (result) {
+/*chrome.storage.local.get(['follow_button_visibility'], function (result) {
     follow_disable.checked = result.follow_button_visibility;
-});
+});*/
 
 //Listeners..
 if (delegation) {
     delegation.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
         if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
-
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Switch', 'eventAction' : target.checked, 'eventLabel' : target.id}}, function(response) {
-                //console.log(response.);
-            });
 
             let badge_list: Array<string> = [];
             let badge_setting: Array<string> = [];
@@ -77,28 +72,21 @@ if (slider) {
     slider.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
 
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Slider', 'eventAction' : target.value, 'eventLabel' : 'set_container_size'}}, function(response) {
-            //console.log(response.farewell);
-        });
-
         chrome.storage.local.set({ container_ratio: target.value }, function () {
         });
 
     });
 }
 
-if (follow_disable) {
+/*if (follow_disable) {
     follow_disable.addEventListener('change', e => {
         let target = <HTMLInputElement>e.target;
 
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : {'eventCategory' : 'Checkbox', 'eventAction' : target.checked, 'eventLabel' : 'follow_disable'}}, function(response) {
-            //console.log(response.farewell);
-        });
         chrome.storage.local.set({ follow_button_visibility: target.checked }, function () {
         });
 
     });
-}
+}*/
 
 type Translator = {
     [key: string]: string[];

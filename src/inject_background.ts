@@ -80,25 +80,18 @@
     }
 
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
-        let follow_div: HTMLButtonElement | undefined = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
         
-        if(stream_chat && follow_div){
-            if (stream_page_observer) {
-                //원하는 Element (stream-chat and follow_div) 을 찾았으므로 disconnect().
-                stream_page_observer.disconnect();
-            }
-            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
-        }
         if (stream_chat) {
-            //follow_div 가 없어도 실행되어야 함. (채팅창 팝업)
-            //must executed when chat in popup. (follow button not exist in popup)
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
+            if(stream_page_observer){
+                stream_page_observer.disconnect();
+            }
         }
     }
 
-    //채팅창에서 새로운 채팅이 올라오면 분석 후 특정 채팅을 복사.
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
         let room_clone: Element | null;
         let chat_clone: Element | null;
@@ -140,7 +133,6 @@
                             }
                         })*/
 
-
                         badges = chat_clone.getElementsByClassName('chat-badge');
 
                         Array.from(badges).some((badge) => {
@@ -166,7 +158,7 @@
                             }
                         });
                     }else if(nodeElement.className === 'chat-line__status' && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message'){
-                        //채팅방 재접속. (reconnect chat)
+                        //채팅방 재접속. (when re-connected to chat room)
                         Mirror_of_Erised();
                     }
                 })
@@ -221,12 +213,12 @@
         clone_container.style.flex = String(clone_size);
     }
 
-    let set_visibility = function () {
+    /*let set_visibility = function () {
         let follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
         if(follow_div){
             follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
         }
-    }
+    }*/
 
     observeStreamPage();
 
@@ -239,10 +231,10 @@
                 }else if(key === 'container_ratio'){
                     container_ratio = parseInt(storageChange.newValue);
                     change_container_ratio(container_ratio);
-                }else if(key === 'follow_button_visibility'){
+                }/*else if(key === 'follow_button_visibility'){
                     Invisibility_cloak = storageChange.newValue;
                     set_visibility();
-                }
+                }*/
             }
         }
     });
