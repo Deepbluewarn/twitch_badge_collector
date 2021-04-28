@@ -1,0 +1,10 @@
+{
+    "appName": {
+      "message": "Twitch Badge Collector",
+      "description": "Twitch chat assistant and point auto clicker"
+    },
+    "appDesc": {
+      "message": "Twitch Badge Collector",
+      "description":"collect badge and channel point in Twitch chat room"
+    }
+  }

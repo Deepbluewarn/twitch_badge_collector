@@ -5,7 +5,7 @@
     "outDir": "./dist/js",
     "rootDir": "./src",
     "strict": true,
-    "types": ["chrome", "node", "google.analytics"],
+    "types": ["chrome", "node", "google.analytics", "tmi.js"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

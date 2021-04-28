@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
   "name": "Twitch Badge Collector",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Collect Badge and Channel Point in Twitch Chat Room",
   "short_name": "TBC",
+  "default_locale" : "ko",
   "icons": {
     "128": "public/icons/cc_icon128.png"
   },
@@ -13,10 +14,9 @@
     "storage"
   ],
   "background": {
-    "scripts": [
-      "dist/js/extension_background.js"
-    ]
+    "page": "public/background.html"
   },
+  "web_accessible_resources" : ["/dist/js/tmi.min.js", "/dist/js/twitch_irc.js"],
   "content_scripts": [
     {
       "matches": [

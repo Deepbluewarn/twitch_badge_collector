@@ -1,4 +1,56 @@
+var s = document.createElement('script');
+var t = document.createElement('script');
+s.src = chrome.runtime.getURL('dist/js/tmi.min.js');
+t.src = chrome.runtime.getURL('dist/js/twitch_irc.js');
+//s.defer = true;
+/*s.onload = function () {
+    s.remove();
+    console.log('tmi.min.js onload : %o', (<any>window).tmi);
+};*/
+(document.head || document.documentElement).appendChild(s);
+(document.head || document.documentElement).appendChild(t);
+
+
+window.addEventListener("message", function(event) {
+    // We only accept messages from ourselves
+    if (event.source != window)
+        return;
+
+    if (event.data.type && (event.data.type == "FROM_PAGE")) {
+        console.log("Content script received message id : " + event.data.id);
+        console.log("Content script received message userstate : %o", event.data.userstate);
+    }
+});
+
+/*(async () => {
+    const src = chrome.runtime.getURL("dist/js/tmi.min.js");
+    const contentMain = await import(src);
+    contentMain.main();
+})();
+*/
+/*if ("WebSocket" in window) {
+  let ws = new WebSocket("wss://irc-ws.chat.twitch.tv");
+  ws.onopen = function() {
+    ws.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
+    
+    ws.send("NICK justinfan123")
+    //ws.send("JOIN #" + "bluewarn")
+    ws.send("JOIN #bluewarn");
+
+  };
+  ws.onmessage = (data)=>{
+      let d:string = data.data;
+      if(d.lastIndexOf('PING', 0) === 0){
+        ws.send("PONG :tmi.twitch.tv");
+      }
+      console.log(data.data)
+  }
+}*/
+
+
+
 (function () {
+    console.log('inject_background.js');
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
     let currunt_url: string;
@@ -31,17 +83,17 @@
         }
     })();
 
-    chrome.storage.local.get(['badge_list'], function(result) {
+    chrome.storage.local.get(['badge_list'], function (result) {
         badge_list = result.badge_list;
     });
 
-    chrome.storage.local.get(['container_ratio'], function(result){
-        if(result.container_ratio){
+    chrome.storage.local.get(['container_ratio'], function (result) {
+        if (result.container_ratio) {
             container_ratio = parseInt(result.container_ratio);
         }
     });
 
-    chrome.storage.local.get(['follow_button_visibility'], function(result){
+    chrome.storage.local.get(['follow_button_visibility'], function (result) {
         Invisibility_cloak = result.follow_button_visibility;
     });
 
@@ -82,11 +134,11 @@
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
 
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
-        
+
         if (stream_chat) {
             Mirror_of_Erised();
             observeChatRoom(stream_chat);
-            if(stream_page_observer){
+            if (stream_page_observer) {
                 stream_page_observer.disconnect();
             }
         }
@@ -157,7 +209,7 @@
                                 return false;
                             }
                         });
-                    }else if(nodeElement.className === 'chat-line__status' && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message'){
+                    } else if (nodeElement.className === 'chat-line__status' && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
                         //채팅방 재접속. (when re-connected to chat room)
                         Mirror_of_Erised();
                     }
@@ -172,8 +224,8 @@
      * 
      */
     let observeStreamPage = function (target: Element = document.body) {
-        let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"]};
-        
+        let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
+
         if (stream_page_observer) {
             stream_page_observer.observe(target, default_config);
         } else {
@@ -185,19 +237,19 @@
         //observer 가 중복 할당 되는것을 방지. 두번 할당되면 채팅이 두번씩 올라오는 끔찍한 일이 벌어진다.
         if (chat_room_observer) {
             //chat-line__message class 는 observe 대상인 stream-chat class 의 direct child 가 아니기 때문에 subtree : true 이어야 한다.
-            chat_room_observer.observe(target, { childList: true, subtree: true, attributeFilter: ["class"]});
+            chat_room_observer.observe(target, { childList: true, subtree: true, attributeFilter: ["class"] });
         } else {
-            chat_room_observer = observeDOM(target, { childList: true, subtree: true, attributeFilter: ["class"]}, newChatCallback);
+            chat_room_observer = observeDOM(target, { childList: true, subtree: true, attributeFilter: ["class"] }, newChatCallback);
         }
     }
 
     let change_container_ratio = function (ratio: number) {
-        if(ratio != 0){
+        if (ratio != 0) {
             ratio = ratio ? ratio : 30;
         }
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
-        if(!original_container || !clone_container){
+        if (!original_container || !clone_container) {
             return;
         }
 
@@ -224,11 +276,11 @@
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (var key in changes) {
-            if(namespace === 'local'){
+            if (namespace === 'local') {
                 let storageChange = changes[key];
-                if(key === 'badge_list'){
+                if (key === 'badge_list') {
                     badge_list = storageChange.newValue;
-                }else if(key === 'container_ratio'){
+                } else if (key === 'container_ratio') {
                     container_ratio = parseInt(storageChange.newValue);
                     change_container_ratio(container_ratio);
                 }/*else if(key === 'follow_button_visibility'){
@@ -243,7 +295,9 @@
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage();
-        }
+        }/*else if(request.action === "twitch_chat"){
+            console.log('inject_background onMessage : %o', request.id);
+        }*/
         return true;
     });
 
