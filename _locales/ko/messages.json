@@ -1,10 +1,20 @@
 {
-    "appName": {
-      "message": "Twitch Badge Collector",
-      "description": "트위치 채팅 도우미 & 포인트 상자 자동 클릭 기능."
-    },
-    "appDesc": {
-      "message": "Twitch Badge Collector",
-      "description":"특별한 배지를 가진 채팅을 한 곳에 모아서 볼 수 있습니다. 채널 포인트 상자를 자동으로 클릭하는 기능도 가지고 있습니다."
-    }
+  "popup_title" : {
+    "message" : "트위치 배지 수집기"
+  },
+  "Broadcaster" : {
+    "message" : "스트리머"
+  },
+  "Moderator" : {
+    "message" : "매니저"
+  },
+  "VIP" : {
+    "message" : "VIP"
+  },
+  "Verified" : {
+    "message" : "인증 완료"
+  },
+  "icon" : {
+    "message" : "아이콘 제작자"
   }
+}

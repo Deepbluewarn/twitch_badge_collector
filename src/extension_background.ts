@@ -5,6 +5,8 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.local.set({ badge_list: badge_list, badge_setting: badge_setting }, function () {
         
     });
+    chrome.storage.local.set({ theme: 'light_mode'}, function () {
+    });
 });
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 

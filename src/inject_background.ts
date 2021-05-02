@@ -1,54 +1,3 @@
-var s = document.createElement('script');
-var t = document.createElement('script');
-s.src = chrome.runtime.getURL('dist/js/tmi.min.js');
-t.src = chrome.runtime.getURL('dist/js/twitch_irc.js');
-//s.defer = true;
-/*s.onload = function () {
-    s.remove();
-    console.log('tmi.min.js onload : %o', (<any>window).tmi);
-};*/
-(document.head || document.documentElement).appendChild(s);
-(document.head || document.documentElement).appendChild(t);
-
-
-window.addEventListener("message", function(event) {
-    // We only accept messages from ourselves
-    if (event.source != window)
-        return;
-
-    if (event.data.type && (event.data.type == "FROM_PAGE")) {
-        console.log("Content script received message id : " + event.data.id);
-        console.log("Content script received message userstate : %o", event.data.userstate);
-    }
-});
-
-/*(async () => {
-    const src = chrome.runtime.getURL("dist/js/tmi.min.js");
-    const contentMain = await import(src);
-    contentMain.main();
-})();
-*/
-/*if ("WebSocket" in window) {
-  let ws = new WebSocket("wss://irc-ws.chat.twitch.tv");
-  ws.onopen = function() {
-    ws.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
-    
-    ws.send("NICK justinfan123")
-    //ws.send("JOIN #" + "bluewarn")
-    ws.send("JOIN #bluewarn");
-
-  };
-  ws.onmessage = (data)=>{
-      let d:string = data.data;
-      if(d.lastIndexOf('PING', 0) === 0){
-        ws.send("PONG :tmi.twitch.tv");
-      }
-      console.log(data.data)
-  }
-}*/
-
-
-
 (function () {
     console.log('inject_background.js');
     let stream_page_observer: MutationObserver | undefined;
@@ -151,9 +100,20 @@ window.addEventListener("message", function(event) {
         let scroll_area: Element;
         let message_container: Element | null;
 
+        /*let point_button: HTMLButtonElement = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
+        if(point_button){
+            point_button.click();
+            console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
+        }*/
+
         Array.from(mutationRecord).forEach(mr => {
             let addedNodes = mr.addedNodes;
             if (addedNodes) {
+                /*let point_button: HTMLButtonElement = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
+                if (point_button) {
+                    point_button.click();
+                    console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
+                }*/
                 addedNodes.forEach(node => {
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
@@ -161,10 +121,8 @@ window.addEventListener("message", function(event) {
                     try {
                         point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
                         point_button.click();
-                        console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
-                    } catch (e) {
-
-                    }
+                        console.log('points claimed, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
+                    } catch (e) {}
 
                     if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
 

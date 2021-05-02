@@ -16,7 +16,6 @@
   "background": {
     "page": "public/background.html"
   },
-  "web_accessible_resources" : ["/dist/js/tmi.min.js", "/dist/js/twitch_irc.js"],
   "content_scripts": [
     {
       "matches": [
