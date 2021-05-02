@@ -7,6 +7,7 @@ const FILES: string[] = [
   'manifest.json',
   '_locales/en/messages.json',
   '_locales/ko/messages.json',
+  'public/background.html',
   'public/popup.html',
   'dist/js/extension_background.js',
   'dist/js/inject_background.js',
