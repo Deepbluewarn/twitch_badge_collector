@@ -1,7 +1,7 @@
 # Twitch Badge Collection
 
-![screenshot_1](./screenshots/screenshot_1.png)
-![screenshot_2](./screenshots/screenshot_2.png)
+![screenshot_1](./screenshots/screenshot_1_en_1.2.10.png)
+![screenshot_2](./screenshots/popup_en.png)
 
 ## Korean
 
