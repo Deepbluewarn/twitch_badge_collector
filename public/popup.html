@@ -6,21 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
-    <!--<link href="https://cdn.jsdelivr.net/gh/Deepbluewarn/twitch_badge_collection@main/dist/css/popup.css" rel="stylesheet" type="text/css" />-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
     <title>Twitch Badge Collector</title>
-
 </head>
 
 <body class='light_mode'>
     <div id='screenshot'>
         <div class='title_container'>
 
-            <h1 id='title_text'>트위치 채팅 수집기</h1>
+            <h1 id='title_text'>트위치 배지 수집기</h1>
 
             <div class='container' id='title_button'>
                 <div class='bg_flex_row'>
@@ -45,7 +43,7 @@
                                 src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
                             <span class='text' id='Broadcaster'>스트리머</span>
                             <div class='switch'>
-                                <input class='badge_checkbox' id="streamer" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='5527c58c-fb7d-422d-b71b-f309dcb85cc1' id="streamer" type="checkbox" name='badge'>
                                 <label class='switch_label' for="streamer"></label>
                             </div>
                         </div>
@@ -54,7 +52,7 @@
                                 src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
                             <span class='text' id='Moderator'>매니저</span>
                             <div class='switch'>
-                                <input class='badge_checkbox' id="manager" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='3267646d-33f0-4b17-b3df-f923a41db1d0' id="manager" type="checkbox" name='badge'>
                                 <label class='switch_label' for="manager"></label>
                             </div>
                         </div>
@@ -63,7 +61,7 @@
                                 src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1">
                             <span class='text' id='VIP'>VIP</span>
                             <div class='switch'>
-                                <input class='badge_checkbox' id="vip" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='b817aba4-fad8-49e2-b88a-7cc744dfa6ec' id="vip" type="checkbox" name='badge'>
                                 <label class='switch_label' for="vip"></label>
                             </div>
                         </div>
@@ -72,7 +70,7 @@
                                 src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
                             <span class='text' id='Verified'>인증 완료</span>
                             <div class='switch'>
-                                <input class='badge_checkbox' id="verified" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='d12a2e27-16f6-41d0-ab77-b780518f00a3' id="verified" type="checkbox" name='badge'>
                                 <label class='switch_label' for="verified"></label>
                             </div>
                         </div>
@@ -85,16 +83,6 @@
                 </div>
             </div>
 
-            <!--<div class='container'>
-                <div class='bg_flex'>
-
-                    <div class='option'>
-                        <input id="disable_follow_button" type="checkbox">Disable Follow Button</input>
-                    </div>
-
-                </div>
-            </div>-->
-
             <div class='container'>
                 <span class='footer_text'>
                     <span class='footer_text' id='footer_text_translate'>아이콘 제작자</span>
@@ -103,7 +91,6 @@
                     <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a>
 
                 </span>
-                
             </div>
         </div>
     </div>

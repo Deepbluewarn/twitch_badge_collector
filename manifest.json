@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
   "name": "Twitch Badge Collector",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "Collect Badge and Channel Point in Twitch Chat Room",
   "short_name": "TBC",
-  "default_locale" : "ko",
+  "default_locale" : "en",
   "icons": {
     "128": "public/icons/cc_icon128.png"
   },

@@ -1,10 +1,9 @@
 (function () {
-    console.log('inject_background.js');
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
     let currunt_url: string;
     let current_channel: string;
-    let badge_list: string[] = [];
+    let badge_setting = {};
     let container_ratio: number;
 
     let Invisibility_cloak = true; //for hidden follow button.
@@ -32,8 +31,8 @@
         }
     })();
 
-    chrome.storage.local.get(['badge_list'], function (result) {
-        badge_list = result.badge_list;
+    chrome.storage.local.get(['badge_setting'], function (result) {
+        badge_setting = result.badge_setting;
     });
 
     chrome.storage.local.get(['container_ratio'], function (result) {
@@ -100,20 +99,9 @@
         let scroll_area: Element;
         let message_container: Element | null;
 
-        /*let point_button: HTMLButtonElement = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
-        if(point_button){
-            point_button.click();
-            console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
-        }*/
-
         Array.from(mutationRecord).forEach(mr => {
             let addedNodes = mr.addedNodes;
             if (addedNodes) {
-                /*let point_button: HTMLButtonElement = <HTMLButtonElement>document.getElementsByClassName('tw-button--success')[0];
-                if (point_button) {
-                    point_button.click();
-                    console.log('+%o points, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
-                }*/
                 addedNodes.forEach(node => {
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
@@ -146,10 +134,9 @@
                         badges = chat_clone.getElementsByClassName('chat-badge');
 
                         Array.from(badges).some((badge) => {
-                            let alt = badge.getAttribute('alt')!;
+                            let badge_uuid = new URL(badge.getAttribute('src')!).pathname.split('/')[3];
 
-                            if (badge_list.some(el => alt.includes(el))) {
-
+                            if(Object.values(badge_setting).includes(badge_uuid)){
                                 if (message_container && chat_clone) {
                                     message_container.appendChild(chat_clone);
                                     nodeElement.classList.add('tbc_highlight');
@@ -162,8 +149,7 @@
                                 if (chatIsAtBottom) {
                                     scroll_area.scrollTop = scroll_area.scrollHeight;
                                 }
-
-                            } else {
+                            }else{
                                 return false;
                             }
                         });
@@ -223,6 +209,14 @@
         clone_container.style.flex = String(clone_size);
     }
 
+    function get_Twitch_Language() {
+        let reg = document.cookie.match(/(?:^|; )language=([^;]*)/);
+        return reg ? reg[1] : '';
+    }
+    /*chrome.runtime.sendMessage({twitch_language: get_Twitch_Language()}, function(response) {
+        //console.log(response.farewell);
+    });*/
+
     /*let set_visibility = function () {
         let follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
         if(follow_div){
@@ -236,8 +230,8 @@
         for (var key in changes) {
             if (namespace === 'local') {
                 let storageChange = changes[key];
-                if (key === 'badge_list') {
-                    badge_list = storageChange.newValue;
+                if (key === 'badge_setting') {
+                    badge_setting = storageChange.newValue;
                 } else if (key === 'container_ratio') {
                     container_ratio = parseInt(storageChange.newValue);
                     change_container_ratio(container_ratio);
