@@ -26,5 +26,5 @@ Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpen
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
 
-## v1.2.4 Changlog
+## v1.2.10 Changlog
    - CSS 변경 (CSS Changes in popup page)
