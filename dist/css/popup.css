@@ -107,6 +107,7 @@ img {
 .bg_flex {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	margin: .5rem;
 }
 
@@ -120,14 +121,14 @@ img {
 .option {
 	display: grid;
 	align-items: center;
-	grid-template-columns: 1.5fr 8fr 2.3fr;
+	grid-template-columns: 1.2fr 8fr 2.3fr;
 	margin: .2rem;
 }
 
 .text {
 	align-self: center;
 	white-space: nowrap;
-	font-size: 1.1rem;
+	font-size: 1.2rem;
 }
 
 .footer_text,
@@ -159,6 +160,22 @@ a {
 	text-shadow: none;
 }
 
+#broadcaster_badge{
+	font-size: .7rem;
+	color : #fa4949;
+}
+#moderator_badge{
+	font-size: .7rem;
+	color : #9de97a;
+}
+#vip_badge{
+	font-size: .7rem;
+	color : #d84b88;
+}
+#verified_badge{
+	font-size: .7rem;
+	color : #8b67b8;
+}
 
 /* range css */
 

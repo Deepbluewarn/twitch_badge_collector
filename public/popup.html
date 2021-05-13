@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
@@ -16,6 +19,7 @@
 
 <body class='light_mode'>
     <div id='screenshot'>
+        
         <div class='title_container'>
 
             <h1 id='title_text'>트위치 배지 수집기</h1>
@@ -26,21 +30,24 @@
                         <span class="material-icons-round" id='theme_button'>light_mode</span>
                     </div>
                     <div class='icons'>
+                        
                         <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
                             target='_blank'>
-                            <span class="material-icons" id='rate_button'>rate_review</span>
+                            
+                            <span class="material-icons" id='rate_button' title='리뷰를 남겨주세요!'>rate_review</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+
         <div id='setting_container'>
+
             <div class='container'>
                 <div id='delegation'>
                     <div class='bg_flex'>
                         <div class='option'>
-                            <img alt="스트리머" aria-label="스트리머 배지" class="chat-badge"
-                                src="https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1">
+                            <span class="material-icons" id="broadcaster_badge">circle</span>          
                             <span class='text' id='Broadcaster'>스트리머</span>
                             <div class='switch'>
                                 <input class='badge_checkbox' uuid='5527c58c-fb7d-422d-b71b-f309dcb85cc1' id="streamer" type="checkbox" name='badge'>
@@ -48,8 +55,7 @@
                             </div>
                         </div>
                         <div class='option'>
-                            <img alt="매니저" aria-label="매니저 배지"
-                                src="https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1">
+                            <span class="material-icons" id="moderator_badge">circle</span>
                             <span class='text' id='Moderator'>매니저</span>
                             <div class='switch'>
                                 <input class='badge_checkbox' uuid='3267646d-33f0-4b17-b3df-f923a41db1d0' id="manager" type="checkbox" name='badge'>
@@ -57,8 +63,7 @@
                             </div>
                         </div>
                         <div class='option'>
-                            <img alt="VIP" aria-label="VIP 배지"
-                                src="https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1">
+                            <span class="material-icons" id="vip_badge">circle</span>
                             <span class='text' id='VIP'>VIP</span>
                             <div class='switch'>
                                 <input class='badge_checkbox' uuid='b817aba4-fad8-49e2-b88a-7cc744dfa6ec' id="vip" type="checkbox" name='badge'>
@@ -66,8 +71,7 @@
                             </div>
                         </div>
                         <div class='option'>
-                            <img alt="인증 완료" aria-label="인증 완료 배지"
-                                src="https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1">
+                            <span class="material-icons" id="verified_badge">circle</span>
                             <span class='text' id='Verified'>인증 완료</span>
                             <div class='switch'>
                                 <input class='badge_checkbox' uuid='d12a2e27-16f6-41d0-ab77-b780518f00a3' id="verified" type="checkbox" name='badge'>
@@ -77,6 +81,7 @@
                     </div>
                 </div>
             </div>
+
             <div class='container'>
                 <div class='bg_flex'>
                     <input type="range" class="container_size" name="container_size" value='30' min="0" max="100">
@@ -89,7 +94,6 @@
                     <a href="https://www.flaticon.com/kr/authors/freepik" title="Freepik">Freepik</a>
                     from
                     <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a>
-
                 </span>
             </div>
         </div>
