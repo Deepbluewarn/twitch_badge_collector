@@ -11,6 +11,7 @@ const [dark_button, light_button] = ['star', 'light_mode'];
 function localizeHtmlPage() {
     let option_buttons = document.getElementsByClassName('option');
     let title_text = document.getElementById('title_text');
+    let rate_button_title = document.getElementById('rate_button');
     let footer_text_translate = <HTMLSpanElement>document.getElementById('footer_text_translate');
 
     Array.from(option_buttons).forEach(e => {
@@ -21,6 +22,9 @@ function localizeHtmlPage() {
     });
     if (title_text) {
         title_text.textContent = chrome.i18n.getMessage('popup_title');
+    }
+    if(rate_button_title){
+        rate_button_title.setAttribute('title', chrome.i18n.getMessage('review_msg'));
     }
     if (footer_text_translate) {
         footer_text_translate.textContent = chrome.i18n.getMessage('icon');
