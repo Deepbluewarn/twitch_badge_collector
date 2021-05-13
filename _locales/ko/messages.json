@@ -1,4 +1,10 @@
 {
+  "ExtensionName" : {
+    "message" : "Twitch Badge Collector"
+  },
+  "ExtensionDesc" : {
+    "message" : "트위치 채팅에서 특별한 배지를 가진 채팅을 모아 볼 수 있는 편리한 확장 프로그램입니다."
+  },
   "popup_title" : {
     "message" : "트위치 배지 수집기"
   },
@@ -13,6 +19,9 @@
   },
   "Verified" : {
     "message" : "인증 완료"
+  },
+  "review_msg" : {
+    "message" : "리뷰를 남겨주세요!"
   },
   "icon" : {
     "message" : "아이콘 제작자"
