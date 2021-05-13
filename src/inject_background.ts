@@ -250,6 +250,7 @@
         }/*else if(request.action === "twitch_chat"){
             console.log('inject_background onMessage : %o', request.id);
         }*/
+        sendResponse({status : true})
         return true;
     });
 
