@@ -100,10 +100,11 @@
                     let nodeElement: HTMLElement = <HTMLElement>node;
                     let point_button: HTMLButtonElement;
                     let point_summary: HTMLDivElement;
-
+                    
                     try {
                         // 채널 포인트 상자가 추가된 nodeElement 인지 확인하기 위해 부모 Element 중 .community-points-summary class 가 있는지 확인
-                        point_summary = <HTMLDivElement>nodeElement.closest('.community-points-summary');
+                        // point_summary = <HTMLDivElement>nodeElement.closest('.community-points-summary');
+                        point_summary = <HTMLDivElement>nodeElement.getElementsByClassName('community-points-summary')[0];
 
                         if(point_summary){
                             point_button = point_summary.children[1].getElementsByTagName('button')[0];
