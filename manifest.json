@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
-  "default_locale" : "en",
+  "default_locale": "en",
   "icons": {
     "128": "public/icons/cc_icon128.png"
   },
@@ -13,8 +13,15 @@
     "*://*.twitch.tv/*",
     "storage"
   ],
+  "web_accessible_resources": [
+    "dist/css/fontawesome.min.css",
+    "dist/css/regular.min.css",
+    "dist/webfonts/fa-regular-400.woff2"
+  ],
   "background": {
-    "page": "public/background.html"
+    "scripts": [
+      "dist/js/extension_background.js"
+    ]
   },
   "content_scripts": [
     {
@@ -32,9 +39,10 @@
   "page_action": {
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
-    "show_matches": ["https://www.twitch.tv/*"],
+    "show_matches": [
+      "https://www.twitch.tv/*"
+    ],
     "default_icon": {
-      "64": "public/icons/cc_icon64.png",
       "128": "public/icons/cc_icon128.png"
     }
   }

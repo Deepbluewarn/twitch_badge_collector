@@ -7,15 +7,18 @@ const FILES: string[] = [
   'manifest.json',
   '_locales/en/messages.json',
   '_locales/ko/messages.json',
-  'public/background.html',
   'public/popup.html',
   'dist/js/extension_background.js',
   'dist/js/inject_background.js',
   'dist/js/popup.js',
   'dist/css/inject_background.css',
   'dist/css/popup.css',
-  'public/icons/cc_icon64.png',
-  'public/icons/cc_icon128.png'
+  'dist/css/fa/brands.css',
+  'dist/css/fa/fontawesome.min.css',
+  'dist/css/fa/solid.css',
+  'public/icons/cc_icon128.png',
+  'dist/webfonts/fa-brands-400.woff2',
+  'dist/webfonts/fa-solid-900.woff2'
 ];
 
 function run() {

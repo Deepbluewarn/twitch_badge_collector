@@ -5,7 +5,7 @@
     "outDir": "./dist/js",
     "rootDir": "./src",
     "strict": true,
-    "types": ["chrome", "node"],
+    "types": ["chrome", "node", "clipboard"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
