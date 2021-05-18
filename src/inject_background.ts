@@ -6,7 +6,6 @@
     let badge_setting = {};
     let container_ratio: number;
 
-    let Invisibility_cloak = true; //for hidden follow button.
     let chatIsAtBottom = true;// chat auto scroll [on / off]
     const button_point = 50;
 
@@ -19,12 +18,10 @@
 
         return function (obj: Element, config: Object, callback: MutationCallback) {
 
-            if (!obj || obj.nodeType !== 1) {
-                return;
-            };
+            if (!obj || obj.nodeType !== 1) return;
 
             if (MutationObserver) {
-                let mutationObserver = new MutationObserver(callback)
+                let mutationObserver = new MutationObserver(callback);
                 mutationObserver.observe(obj, config);
                 return mutationObserver;
             }
@@ -41,25 +38,20 @@
         }
     });
 
-    chrome.storage.local.get(['follow_button_visibility'], function (result) {
-        Invisibility_cloak = result.follow_button_visibility;
-    });
-
     /**
      * Create chat window clone.
      */
     function Mirror_of_Erised() {
-        const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default .tw-flex');
-
+        const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default');
+        
         if (chat_room) {
-
+            
+            let clone = chat_room.getElementsByClassName('scrollable-area clone')[0];
+            
+            if (chat_room.contains(clone)) return false;
             let room_origin = chat_room.getElementsByClassName('scrollable-area')[0];//original chat area.
-
-            if (chat_room.contains(chat_room.getElementsByClassName('scrollable-area clone')[0])) {
-                return false;
-            }
-
             let room_clone = <HTMLElement>room_origin.cloneNode(true);
+
             room_origin.classList.add('origin');
             //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
 
@@ -74,7 +66,9 @@
             message_container.textContent = '';//remove all chat lines.
 
             room_clone.classList.add('clone');
-            chat_room.appendChild(room_clone);
+            chat_room.firstChild?.appendChild(room_clone);
+            //chat_room.appendChild(room_clone);
+
             change_container_ratio(container_ratio);
         }
     }
@@ -106,30 +100,33 @@
 
                     let nodeElement: HTMLElement = <HTMLElement>node;
                     let point_button: HTMLButtonElement;
+                    let point_summary: HTMLDivElement;
                     try {
-                        point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
-                        point_button.click();
-                        console.log('points claimed, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
+                        // 채널 포인트 상자가 추가된 nodeElement 인지 확인하기 위해 부모 Element 중 .community-points-summary class 가 있는지 확인
+                        point_summary = <HTMLDivElement>nodeElement.closest('.community-points-summary');
+                        if(point_summary){
+                            point_button = nodeElement.getElementsByTagName('button')[0];
+                            point_button.click();
+                            console.log('points claimed, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
+                        }
+                        //point_button = document.getElementsByClassName('community-points-summary')[0].children[1].getElementsByTagName('button')[0];
+                        //point_button = point_summary.children[1].getElementsByTagName('button')[0];
+                        
+                        //point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
+                        //point_button = <HTMLButtonElement>nodeElement.getElementsByTagName('button')[0];
+                        
                     } catch (e) {}
 
                     if (nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message') {
 
                         room_clone = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
                         if (!room_clone) return;
+
                         room_clone = room_clone.getElementsByClassName('scrollable-area clone')[0];
-
                         message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
-
                         scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
                         chat_clone = <Element>nodeElement.cloneNode(true);
-
-                        /*chat_clone.addEventListener('click', mc => {
-                            let target: HTMLElement = <HTMLElement>mc.target;
-                            if (target.classList.contains('chat-author__display-name')) {
-                                nodeElement.scrollIntoView();
-                            }
-                        })*/
 
                         badges = chat_clone.getElementsByClassName('chat-badge');
 
@@ -188,18 +185,15 @@
     }
 
     let change_container_ratio = function (ratio: number) {
-        if (ratio != 0) {
-            ratio = ratio ? ratio : 30;
-        }
+        if (ratio != 0) ratio = ratio ? ratio : 30;
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
-        if (!original_container || !clone_container) {
-            return;
-        }
+
+        if (!original_container || !clone_container) return;
 
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
-
+        
         if (1 <= ratio && ratio <= 100) {
             clone_size = parseFloat((ratio * 0.01).toFixed(2));
             orig_size = parseFloat((1 - clone_size).toFixed(2));
@@ -208,21 +202,6 @@
         original_container.style.flex = String(orig_size);
         clone_container.style.flex = String(clone_size);
     }
-
-    function get_Twitch_Language() {
-        let reg = document.cookie.match(/(?:^|; )language=([^;]*)/);
-        return reg ? reg[1] : '';
-    }
-    /*chrome.runtime.sendMessage({twitch_language: get_Twitch_Language()}, function(response) {
-        //console.log(response.farewell);
-    });*/
-
-    /*let set_visibility = function () {
-        let follow_div = <HTMLButtonElement>document.getElementsByClassName('follow-btn__follow-btn')[0];
-        if(follow_div){
-            follow_div.style.visibility = Invisibility_cloak ? 'hidden' : 'visible';
-        }
-    }*/
 
     observeStreamPage();
 
@@ -235,10 +214,7 @@
                 } else if (key === 'container_ratio') {
                     container_ratio = parseInt(storageChange.newValue);
                     change_container_ratio(container_ratio);
-                }/*else if(key === 'follow_button_visibility'){
-                    Invisibility_cloak = storageChange.newValue;
-                    set_visibility();
-                }*/
+                }
             }
         }
     });
@@ -247,13 +223,10 @@
         if (request.action === "onHistoryStateUpdated") {
             currunt_url = location.href;
             observeStreamPage();
-        }/*else if(request.action === "twitch_chat"){
-            console.log('inject_background onMessage : %o', request.id);
-        }*/
+        }
         sendResponse({status : true})
         return true;
     });
-
 })();
 
 
