@@ -1,4 +1,4 @@
-# Twitch Badge Collection
+# Twitch Badge Collector
 
 ![screenshot_1](./screenshots/screenshot_1_en_1.2.10.png)
 
