@@ -1,7 +1,6 @@
 # Twitch Badge Collection
 
 ![screenshot_1](./screenshots/screenshot_1_en_1.2.10.png)
-![screenshot_2](./screenshots/popup_en.png)
 
 Chrome Extension for Twitch Chat.
 
