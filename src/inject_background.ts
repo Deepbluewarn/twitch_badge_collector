@@ -97,23 +97,19 @@
             let addedNodes = mr.addedNodes;
             if (addedNodes) {
                 addedNodes.forEach(node => {
-
                     let nodeElement: HTMLElement = <HTMLElement>node;
                     let point_button: HTMLButtonElement;
                     let point_summary: HTMLDivElement;
+
                     try {
                         // 채널 포인트 상자가 추가된 nodeElement 인지 확인하기 위해 부모 Element 중 .community-points-summary class 가 있는지 확인
                         point_summary = <HTMLDivElement>nodeElement.closest('.community-points-summary');
+
                         if(point_summary){
-                            point_button = nodeElement.getElementsByTagName('button')[0];
+                            point_button = point_summary.children[1].getElementsByTagName('button')[0];
                             point_button.click();
                             console.log('points claimed, time : %o, channel_name : %o', button_point, new Date().toTimeString(), currunt_url);
                         }
-                        //point_button = document.getElementsByClassName('community-points-summary')[0].children[1].getElementsByTagName('button')[0];
-                        //point_button = point_summary.children[1].getElementsByTagName('button')[0];
-                        
-                        //point_button = <HTMLButtonElement>nodeElement.getElementsByClassName('tw-button--success')[0];
-                        //point_button = <HTMLButtonElement>nodeElement.getElementsByTagName('button')[0];
                         
                     } catch (e) {}
 

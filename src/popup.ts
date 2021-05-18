@@ -137,3 +137,8 @@ slider.addEventListener('change', e => {
     let target = <HTMLInputElement>e.target;
     chrome.storage.local.set({ container_ratio: target.value }, function () { });
 });
+
+/*ethereum_button.addEventListener('click', e=>{
+    console.log('이더리움 후원 버튼 클릭 됨');
+    chrome.tabs.create({url : 'public/donation.html'});
+})*/
