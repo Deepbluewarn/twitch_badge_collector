@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../dist/js/clipboard.min.js"></script>
     <script src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/tooltip.css" rel="stylesheet" type="text/css" />
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -14,31 +17,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
+    <link href="../dist/css/fa/fontawesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/brands.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/solid.css" rel="stylesheet" type="text/css" />
+
     <title>Twitch Badge Collector</title>
 </head>
 
-<body class='light_mode'>
+<body class='dark_mode'>
     <div id='screenshot'>
-        
+
         <div class='title_container'>
-
-            <h1 id='title_text'>트위치 배지 수집기</h1>
-
-            <div class='container' id='title_button'>
-                <div class='bg_flex_row'>
-                    <div class='icons'>
-                        <span class="material-icons-round" id='theme_button'>light_mode</span>
-                    </div>
-                    <div class='icons'>
-                        
-                        <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
-                            target='_blank'>
-                            
-                            <span class="material-icons" id='rate_button' title='리뷰를 남겨주세요!'>rate_review</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <h1 id='title_text'>Twitch Badge Collector</h1>
         </div>
 
         <div id='setting_container'>
@@ -47,36 +37,44 @@
                 <div id='delegation'>
                     <div class='bg_flex'>
                         <div class='option'>
-                            <span class="material-icons" id="broadcaster_badge">circle</span>          
-                            <span class='text' id='Broadcaster'>스트리머</span>
+                            <!--<span class="material-icons" id="broadcaster_badge">circle</span>-->
+
                             <div class='switch'>
-                                <input class='badge_checkbox' uuid='5527c58c-fb7d-422d-b71b-f309dcb85cc1' id="streamer" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='5527c58c-fb7d-422d-b71b-f309dcb85cc1' id="streamer"
+                                    type="checkbox" name='badge'>
                                 <label class='switch_label' for="streamer"></label>
                             </div>
+                            <span class='text' id='Broadcaster'>스트리머</span>
                         </div>
                         <div class='option'>
-                            <span class="material-icons" id="moderator_badge">circle</span>
-                            <span class='text' id='Moderator'>매니저</span>
+                            <!--<span class="material-icons" id="moderator_badge">circle</span>-->
+
                             <div class='switch'>
-                                <input class='badge_checkbox' uuid='3267646d-33f0-4b17-b3df-f923a41db1d0' id="manager" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='3267646d-33f0-4b17-b3df-f923a41db1d0' id="manager"
+                                    type="checkbox" name='badge'>
                                 <label class='switch_label' for="manager"></label>
                             </div>
+                            <span class='text' id='Moderator'>매니저</span>
                         </div>
                         <div class='option'>
-                            <span class="material-icons" id="vip_badge">circle</span>
-                            <span class='text' id='VIP'>VIP</span>
+                            <!-- <span class="material-icons" id="vip_badge">circle</span> -->
+
                             <div class='switch'>
-                                <input class='badge_checkbox' uuid='b817aba4-fad8-49e2-b88a-7cc744dfa6ec' id="vip" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='b817aba4-fad8-49e2-b88a-7cc744dfa6ec' id="vip"
+                                    type="checkbox" name='badge'>
                                 <label class='switch_label' for="vip"></label>
                             </div>
+                            <span class='text' id='VIP'>VIP</span>
                         </div>
                         <div class='option'>
-                            <span class="material-icons" id="verified_badge">circle</span>
-                            <span class='text' id='Verified'>인증 완료</span>
+                            <!-- <span class="material-icons" id="verified_badge">circle</span> -->
+
                             <div class='switch'>
-                                <input class='badge_checkbox' uuid='d12a2e27-16f6-41d0-ab77-b780518f00a3' id="verified" type="checkbox" name='badge'>
+                                <input class='badge_checkbox' uuid='d12a2e27-16f6-41d0-ab77-b780518f00a3' id="verified"
+                                    type="checkbox" name='badge'>
                                 <label class='switch_label' for="verified"></label>
                             </div>
+                            <span class='text' id='Verified'>인증 완료</span>
                         </div>
                     </div>
                 </div>
@@ -84,19 +82,42 @@
 
             <div class='container'>
                 <div class='bg_flex'>
-                    <input type="range" class="container_size" name="container_size" value='30' min="0" max="100">
+                    <input type="range" class="container_size" name="container_size" min="0" max="100">
                 </div>
             </div>
+            <div class="container">
+                <div class='bg_flex_row'>
+                    <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
+                        target='_blank'>
+                        <div class='footer_text' id='review_link'>
+                            REVIEW
+                        </div>
+                    </a>
+                    <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
+                        target='_blank'>
+                        <div class='footer_text' id='support_link'>
+                            SUPPORT
+                        </div>
+                    </a>
 
-            <div class='container'>
-                <span class='footer_text'>
-                    <span class='footer_text' id='footer_text_translate'>아이콘 제작자</span>
-                    <a href="https://www.flaticon.com/kr/authors/freepik" title="Freepik">Freepik</a>
-                    from
-                    <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a>
-                </span>
+
+                    <!-- <div class='tooltipped tooltipped-nw tooltipped-no-delay m-2 p-2 border' id='donate_button'
+                        data-clipboard-text="0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158"
+                        aria-label="클립보드에 복사">
+                        <div class='footer_text'>
+                            <i class="fab fa-ethereum" ></i>
+                            DONATE
+                        </div>
+                        <i class="fab fa-ethereum fa_icon" id="ethereum_public_key"></i>
+                    </div> -->
+
+
+                    
+                </div>
+
             </div>
         </div>
     </div>
 </body>
+
 </html>

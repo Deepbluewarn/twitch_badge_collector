@@ -21,11 +21,11 @@
 	--slider-thumb-size: 16px;
 	--slider-thumb-border-size: 2px;
 	--slider-thumb-border-radius: 50px;
-	--footer-text-color: #726AA6;
+	--footer-text-color: #9085d4;
 	--footer-text-shadow: 0px 0px 0px rgb(73 73 73), 0.5px 0.7px 0px rgb(0 0 0 / 70%);
 }
 
-.light_mode {
+/*.light_mode {
 	--text-color: #373350;
 	--title-color: #373350;
 	--title-shadow: 0.8px 0.8px 0px #37335040;
@@ -50,11 +50,11 @@
 	--slider-thumb-border-radius: 50px;
 	--footer-text-color: #bdc4bf;
 	--footer-text-shadow: 0.5px 0.7px 0px #ffffff;
-}
+}*/
 
 * {
 	font-family: 'Gaegu', 'Hachi Maru Pop', cursive;
-	font-size: 1.1rem;
+	font-size: 1rem;
 }
 
 body {
@@ -71,10 +71,10 @@ body {
 	color: var(--title-color);
 	padding-left: 1.5rem;
 	padding-right: 1.5rem;
-	padding-top: 1.5rem;
-	padding-bottom: 0.8rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 	margin: 0;
-	font-size: 1.5rem;
+	font-size: 1.3rem;
 	text-shadow: var(--title-shadow)
 }
 
@@ -115,32 +115,35 @@ img {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 	margin: .5rem;
 }
 
 .option {
 	display: grid;
-	align-items: center;
-	grid-template-columns: 1.2fr 8fr 2.3fr;
-	margin: .2rem;
+    align-items: center;
+    grid-template-columns: 0fr 4fr;
+    gap: .7rem;
+    margin: .1rem;
 }
 
 .text {
 	align-self: center;
 	white-space: nowrap;
-	font-size: 1.2rem;
+	font-size: 1rem;
 }
 
-.footer_text,
-a {
-	color: red;
+.footer_text{
 	font-size: .8rem;
 	white-space: nowrap;
 	align-self: center;
 	color: var(--footer-text-color);
 	text-align: end;
-	text-decoration: none;
 	text-shadow: var(--footer-text-shadow)
+}
+
+a{
+	text-decoration: none;
 }
 
 .icons {
@@ -152,31 +155,19 @@ a {
 #theme_button {
 	cursor: pointer;
 	color: var(--theme-button-color);
+	font-size: 1.3rem;
 }
 
 #rate_button {
 	cursor: pointer;
 	color: var(--rate-button-color);
 	text-shadow: none;
+	font-size: 1.3rem;
 }
 
-#broadcaster_badge{
-	font-size: .7rem;
-	color : #fa4949;
+.fa_icon{
+	font-size: 1.5rem;
 }
-#moderator_badge{
-	font-size: .7rem;
-	color : #9de97a;
-}
-#vip_badge{
-	font-size: .7rem;
-	color : #d84b88;
-}
-#verified_badge{
-	font-size: .7rem;
-	color : #8b67b8;
-}
-
 /* range css */
 
 input[type=range].container_size {
@@ -285,8 +276,8 @@ input[type=range].container_size::-ms-thumb {
 
 .switch_label {
 	cursor: pointer;
-	width: 46px;
-	height: 24px;
+	width: 34px;
+	height: 19px;
 	background: var(--switch-disable-color);
 	display: block;
 	border-radius: 100px;
@@ -299,8 +290,8 @@ input[type=range].container_size::-ms-thumb {
 	position: absolute;
 	top: 3px;
 	left: 3px;
-	width: 18px;
-	height: 18px;
+	width: 13px;
+	height: 13px;
 	background: var(--switch-button-color);
 	border-radius: 90px;
 	transition: 0.3s;
@@ -316,6 +307,6 @@ input:checked+.switch_label:after {
 }
 
 .switch_label:active:after {
-	width: 22px;
+	width: 15px;
 }
 

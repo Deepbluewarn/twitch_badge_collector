@@ -3,7 +3,7 @@
     "message" : "Twitch Badge Collector"
   },
   "ExtensionDesc" : {
-    "message" : "Convenient extension that collect and view chat with special badges in Twitch Chat."
+    "message" : "Collect and view chat with special badges in Twitch Chat."
   },
   "popup_title": {
     "message": "Twitch Badge Collector"
@@ -20,10 +20,16 @@
   "Verified": {
     "message": "Verified"
   },
-  "review_msg" : {
-    "message" : "Rate My Extension!"
+  "review" : {
+    "message" : "REVIEW"
   },
-  "icon": {
-    "message": "Icons made by"
+  "support" : {
+    "message" : "SUPPORT"
+  },
+  "donate" : {
+    "message" : "DONATE"
+  },
+  "copy_tooltip" : {
+    "message" : "Copy to Clipboard"
   }
 }
