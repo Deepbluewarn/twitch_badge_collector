@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.2.15",
+  "version": "1.2.17",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
   "default_locale": "en",
@@ -12,11 +12,6 @@
     "webNavigation",
     "*://*.twitch.tv/*",
     "storage"
-  ],
-  "web_accessible_resources": [
-    "dist/css/fontawesome.min.css",
-    "dist/css/regular.min.css",
-    "dist/webfonts/fa-regular-400.woff2"
   ],
   "background": {
     "scripts": [
