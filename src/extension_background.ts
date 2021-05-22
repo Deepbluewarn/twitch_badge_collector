@@ -8,7 +8,6 @@ chrome.runtime.onInstalled.addListener(function () {
     }
 
     chrome.storage.local.set({ badge_setting: badge_setting, BADGE_LIST: badge_setting }, function () {});
-    //chrome.storage.local.set({ theme: 'light_mode' }, function () {});
     chrome.storage.local.set({ container_ratio: 30 }, function () {});
 
 });

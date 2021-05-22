@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="../dist/js/clipboard.min.js"></script>
     <script src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/tooltip.css" rel="stylesheet" type="text/css" />
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> -->
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
@@ -20,6 +19,8 @@
     <link href="../dist/css/fa/fontawesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/fa/brands.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/fa/solid.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" rel="stylesheet" type="text/css" /> -->
+    
 
     <title>Twitch Badge Collector</title>
 </head>
@@ -89,30 +90,35 @@
                 <div class='bg_flex_row'>
                     <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
                         target='_blank'>
-                        <div class='footer_text' id='review_link'>
+                        <div class='text link' id='review_link'>
                             REVIEW
                         </div>
                     </a>
                     <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
                         target='_blank'>
-                        <div class='footer_text' id='support_link'>
+                        <div class='text link' id='support_link'>
                             SUPPORT
                         </div>
                     </a>
 
 
-                    <!-- <div id='donate_button' aria-label="클립보드에 복사">
-                        <div class='footer_text'>
-                           <i class="fab fa-ethereum" ></i>
+                    <div id='donate_link'>
+                        <div class='text link'>
+                           <!-- <i class="fab fa-ethereum" ></i> -->
                             DONATE
                         </div>
-                         <i class="fab fa-ethereum fa_icon" id="ethereum_public_key"></i>
-                    </div> -->
+                         <!-- <i class="fab fa-ethereum fa_icon" id="ethereum_public_key"></i> -->
+                    </div>
                 </div>
                 
                 <!-- <div style="font-size: .7rem;">
                     0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158
                 </div> -->
+            </div>
+            <div class='bg_flex'>
+                <span class=footer_text id='version_info'>
+                    
+                </span>
             </div>
         </div>
     </div>

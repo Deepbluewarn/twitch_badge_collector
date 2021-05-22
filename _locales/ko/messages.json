@@ -29,7 +29,13 @@
   "donate" : {
     "message" : "후원"
   },
-  "copy_tooltip" : {
-    "message" : "클립보드에 복사"
+  "donate_page_btn_copyMsg" : {
+    "message" : "(클릭해서 복사하기)"
+  },
+  "donate_page_copied" : {
+    "message" : "복사 됨!"
+  },
+  "donate_page_thank_you" : {
+    "message" : "후원해 주셔서 감사합니다!"
   }
 }

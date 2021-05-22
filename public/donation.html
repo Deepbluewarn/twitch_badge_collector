@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../dist/js/clipboard.min.js"></script>
+    <script src="../dist/js/donation.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <link href="../dist/css/tooltip.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/fontawesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/brands.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/solid.css" rel="stylesheet" type="text/css" />
+    <title>Donation</title>
+</head>
+
+<body class='dark_mode' style="height: 100%;">
+    <div class='text bg_flex centered' style="padding: 2rem;">
+        <p id='title' style="font-size: 1.7rem; font-weight: bold;">[ D O N A T I O N ]</p>
+        <!-- <a href="https://www.buymeacoffee.com/bluewarndev"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a pizza&emoji=🍕&slug=bluewarndev&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff"></a>
+        <p id='or'>OR</p> -->
+        <button class='copy_crypto_addr' id='ether_btn' data-clipboard-text='0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158' aria-label='Click to Copy'>
+            <!-- <i class="fab fa-ethereum" ></i> -->
+            Ethereum<br>
+            <span class='copy_msg'>(Click to Copy)</span>
+        </button>
+        <button class='copy_crypto_addr' id='doge_btn' data-clipboard-text='DPgb63LDVPK6MkwWq2U7zXUyoXCArcufLU' aria-label='Click to Copy'>
+            <!-- <i class="fab fa-ethereum" ></i> -->
+            Dogecoin<br>
+            <span class='copy_msg'>(Click to Copy)</span>
+        </button>
+        <p id='thank_you'></p>
+    </div>
+    
+</body>
+
+</html>

@@ -3,7 +3,7 @@
     "message" : "Twitch Badge Collector"
   },
   "ExtensionDesc" : {
-    "message" : "Collect and view chat with special badges in Twitch Chat."
+    "message" : "Collect and view chat with special badges in Twitch Chat!"
   },
   "popup_title": {
     "message": "Twitch Badge Collector"
@@ -29,7 +29,13 @@
   "donate" : {
     "message" : "DONATE"
   },
-  "copy_tooltip" : {
-    "message" : "Copy to Clipboard"
+  "donate_page_btn_copyMsg" : {
+    "message" : "(Click to Copy)"
+  },
+  "donate_page_copied" : {
+    "message" : "Copied!"
+  },
+  "donate_page_thank_you" : {
+    "message" : "Thanks to your donation!"
   }
 }

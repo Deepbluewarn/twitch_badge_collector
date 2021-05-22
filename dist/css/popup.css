@@ -21,7 +21,7 @@
 	--slider-thumb-size: 16px;
 	--slider-thumb-border-size: 2px;
 	--slider-thumb-border-radius: 50px;
-	--footer-text-color: #9085d4;
+	--footer-text-color: #38325a;
 	--footer-text-shadow: 0px 0px 0px rgb(73 73 73), 0.5px 0.7px 0px rgb(0 0 0 / 70%);
 }
 
@@ -65,6 +65,20 @@ body {
 	width: min-content;
 }
 
+
+a{
+	text-decoration: none;
+}
+
+p{
+	font-size: 1.4rem;
+}
+
+img {
+	margin-right: 3px;
+	border-radius: 10%;
+}
+
 #title_text {
 	text-align: center;
 	white-space: nowrap;
@@ -78,9 +92,28 @@ body {
 	text-shadow: var(--title-shadow)
 }
 
-img {
-	margin-right: 3px;
-	border-radius: 10%;
+#setting_container {
+	margin: 7px;
+}
+
+#title_button {
+	padding-bottom: 1px;
+}
+
+#donate_link{
+	cursor: pointer;
+}
+
+#ether_btn{
+	background-color: #3c3c3d;
+	color: whitesmoke;
+	font-weight: bold;
+}
+
+#doge_btn{
+	background-color: #edd592;
+	color: black;
+	font-weight: bold;
 }
 
 .title_container {
@@ -90,12 +123,16 @@ img {
 	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
-#setting_container {
-	margin: 7px;
-}
-
-#title_button {
-	padding-bottom: 1px;
+.copy_crypto_addr{
+	font-size: 1.4rem;
+	color : #ecf0f1;
+	background-color: #3c3c3d;
+	margin: .5rem;
+	border: 0;
+	cursor: pointer;
+    border-radius: 5px;
+    width: 14.13rem;
+    /* height: 3.13rem; */
 }
 
 .container {
@@ -128,46 +165,42 @@ img {
 }
 
 .text {
+	font-size: 1.1rem;
 	align-self: center;
 	white-space: nowrap;
-	font-size: 1rem;
+	color: var(--text-color);
+}
+
+.link{
+	font-size: .9rem;
 }
 
 .footer_text{
-	font-size: .8rem;
+	font-size: .9rem;
 	white-space: nowrap;
 	align-self: center;
 	color: var(--footer-text-color);
 	text-align: end;
-	text-shadow: var(--footer-text-shadow)
+	text-shadow: var(--footer-text-shadow);
 }
 
-a{
-	text-decoration: none;
-}
-
+.centered {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	/* bring your own prefixes */
+	transform: translate(-50%, -50%);
+  }
 .icons {
 	text-align: end;
 	margin-left: 1rem;
 	margin-right: 1rem;
 }
 
-#theme_button {
-	cursor: pointer;
-	color: var(--theme-button-color);
-	font-size: 1.3rem;
-}
 
-#rate_button {
-	cursor: pointer;
-	color: var(--rate-button-color);
-	text-shadow: none;
-	font-size: 1.3rem;
-}
 
-.fa_icon{
-	font-size: 1.5rem;
-}
+
+
 /* range css */
 
 input[type=range].container_size {
@@ -241,27 +274,6 @@ input[type=range].container_size::-ms-thumb {
 	border-radius: var(--slider-thumb-border-radius);
 	cursor: pointer;
 	margin-top: 0px;
-	/*Needed to keep the Edge thumb centred*/
-}
-
-
-/*input[type=range].container_size:focus::-ms-fill-lower {
-    background: rgba(255, 222, 78, 0.7);
-  }
-  input[type=range].container_size:focus::-ms-fill-upper {
-    background: #8dff76;
-  }*/
-
-
-/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
-  how to remove the virtical space around the range input in IE*/
-
-@supports (-ms-ime-align:auto) {
-	/* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
-	input[type=range].container_size {
-		margin: 0;
-		/*Edge starts the margin from the thumb, not the track as other browsers do*/
-	}
 }
 
 
@@ -276,7 +288,7 @@ input[type=range].container_size::-ms-thumb {
 
 .switch_label {
 	cursor: pointer;
-	width: 34px;
+	width: 36px;
 	height: 19px;
 	background: var(--switch-disable-color);
 	display: block;
