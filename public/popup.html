@@ -7,18 +7,19 @@
 
     <script src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
-    <link href="../dist/css/tooltip.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../dist/css/tooltip.css" rel="stylesheet" type="text/css" /> -->
 
     <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> -->
 
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet"> -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
-
-    <link href="../dist/css/fa/fontawesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet"> 
+    <!-- <link href="../dist/css/fa/fontawesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/fa/brands.css" rel="stylesheet" type="text/css" />
-    <link href="../dist/css/fa/solid.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/fa/solid.css" rel="stylesheet" type="text/css" /> -->
     <!-- <link href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" rel="stylesheet" type="text/css" /> -->
     
 
@@ -28,14 +29,14 @@
 <body class='dark_mode'>
     <div id='screenshot'>
 
-        <div class='title_container'>
+        <div id='title_container'>
             <h1 id='title_text'>Twitch Badge Collector</h1>
         </div>
 
         <div id='setting_container'>
 
             <div class='container'>
-                <div id='delegation'>
+                <div id='options'>
                     <div class='bg_flex'>
                         <div class='option'>
                             <!--<span class="material-icons" id="broadcaster_badge">circle</span>-->
@@ -45,7 +46,7 @@
                                     type="checkbox" name='badge'>
                                 <label class='switch_label' for="streamer"></label>
                             </div>
-                            <span class='text' id='Broadcaster'>스트리머</span>
+                            <span class='text' id='Broadcaster'>Broadcaster</span>
                         </div>
                         <div class='option'>
                             <!--<span class="material-icons" id="moderator_badge">circle</span>-->
@@ -55,7 +56,7 @@
                                     type="checkbox" name='badge'>
                                 <label class='switch_label' for="manager"></label>
                             </div>
-                            <span class='text' id='Moderator'>매니저</span>
+                            <span class='text' id='Moderator'>Moderator</span>
                         </div>
                         <div class='option'>
                             <!-- <span class="material-icons" id="vip_badge">circle</span> -->
@@ -75,19 +76,29 @@
                                     type="checkbox" name='badge'>
                                 <label class='switch_label' for="verified"></label>
                             </div>
-                            <span class='text' id='Verified'>인증 완료</span>
+                            <span class='text' id='Verified'>Verified</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class='container'>
-                <div class='bg_flex'>
+                <div class='bg_flex' id='container_range'>
                     <input type="range" class="container_size" name="container_size" min="0" max="100">
                 </div>
+                <!-- Inspired by https://stackoverflow.com/questions/55437508/how-to-create-range-silder-with-marker-and-change-color-of-filled-range-->
+                <div class='text' id='range_marks'>
+                    <p>0</p>
+                    <p>25</p>
+                    <p>50</p>
+                    <p>75</p>
+                    <p>100</p>
+                </div>
             </div>
-            <div class="container">
-                <div class='bg_flex_row'>
+        </div>
+        <div id='bottom_container'>
+            <div class="container" id='links'>
+                <div class='bg_flex_row foot_element'>
                     <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
                         target='_blank'>
                         <div class='text link' id='review_link'>
@@ -100,14 +111,8 @@
                             SUPPORT
                         </div>
                     </a>
-
-
-                    <div id='donate_link'>
-                        <div class='text link'>
-                           <!-- <i class="fab fa-ethereum" ></i> -->
-                            DONATE
-                        </div>
-                         <!-- <i class="fab fa-ethereum fa_icon" id="ethereum_public_key"></i> -->
+                    <div class='text link' id='donate_link'>
+                        DONATE
                     </div>
                 </div>
                 
@@ -115,9 +120,9 @@
                     0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158
                 </div> -->
             </div>
-            <div class='bg_flex'>
+            <div class='bg_flex foot_element'>
                 <span class=footer_text id='version_info'>
-                    
+                    v4.4.4 made by nanana~
                 </span>
             </div>
         </div>

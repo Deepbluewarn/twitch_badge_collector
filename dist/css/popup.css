@@ -1,28 +1,31 @@
 .dark_mode {
-	--text-color: #a199e0;
-	--title-color: #978fc7;
-	--title-shadow: 0.8px 0.8px 0px #978fc738;
-	--title-background-color: #373350;
-	--background-color: #221d29;
-	--theme-button-color: #ffd800;
-	--rate-button-color: #978fc7;
-	--switch-active-color: #a199e0;
-	--switch-disable-color: #726AA6;
-	--switch-button-color: #4c4868;
-	--switch-border-color: #4c4868;
-	--switch-border-size: 2px;
-	--slider-background-color: #a199e079;
-	--slider-border-size: 1px;
-	--slider-track-height: 6px;
-	--slider-track-radius: 25px;
-	--slider-track-border-color: #4c486800;
-	--slider-thumb-color: #a199e0;
-	--slider-thumb-border-color: #4c4868;
-	--slider-thumb-size: 16px;
-	--slider-thumb-border-size: 2px;
-	--slider-thumb-border-radius: 50px;
-	--footer-text-color: #38325a;
-	--footer-text-shadow: 0px 0px 0px rgb(73 73 73), 0.5px 0.7px 0px rgb(0 0 0 / 70%);
+	--text-color: #000000;
+	--text-color-inverted : #f9f9f9;
+	--text-highlight-color : #ee4865;
+    --title-color: #f9f9f9;
+    --title-shadow: 0.8px 0.8px 0px #978fc738;
+    --title-background-color: #0E1D31;
+	--title-padding-side : 2rem;
+    --background-color: #F9F9F9;
+    --theme-button-color: #ffd800;
+    --rate-button-color: #978fc7;
+    --switch-active-color: #ee4865;
+    --switch-disable-color: #ffa7b7;
+    --switch-button-color: #ffffff;
+    --switch-border-color: #ffffff00;
+    --switch-border-size: 2px;
+    --slider-background-color: #d6d6d6b0;
+    /* --slider-border-size: px; */
+    --slider-track-height: 6px;
+    --slider-track-radius: 25px;
+    /* --slider-track-border-color: #1e00f0; */
+    --slider-thumb-color: #ffa7b7;
+    --slider-thumb-border-color: #ee4865;
+    --slider-thumb-size: 16px;
+    --slider-thumb-border-size: 2px;
+    --slider-thumb-border-radius: 50px;
+    --footer-text-color: #d3d3d3;
+    /* --footer-text-shadow: 0px 0px 0px rgb(73 73 73), 0.5px 0.7px 0px rgb(0 0 0 / 70%); */
 }
 
 /*.light_mode {
@@ -53,7 +56,8 @@
 }*/
 
 * {
-	font-family: 'Gaegu', 'Hachi Maru Pop', cursive;
+	/* font-family: 'Gaegu', 'Hachi Maru Pop', cursive; */
+	font-family: 'Poor Story', cursive;
 	font-size: 1rem;
 }
 
@@ -83,17 +87,28 @@ img {
 	text-align: center;
 	white-space: nowrap;
 	color: var(--title-color);
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding : 1rem var(--title-padding-side) 1rem var(--title-padding-side);
 	margin: 0;
 	font-size: 1.3rem;
+	font-weight: 100;
 	text-shadow: var(--title-shadow)
+}
+
+#title_container {
+	background-color: var(--title-background-color);
+	/* border-radius: 0 0 10% 10%; */
+	margin-bottom: 17px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
 #setting_container {
 	margin: 7px;
+}
+
+#bottom_container{
+	background-color: var(--title-background-color);
+	margin: 0;
+	padding: 0;
 }
 
 #title_button {
@@ -107,33 +122,14 @@ img {
 #ether_btn{
 	background-color: #3c3c3d;
 	color: whitesmoke;
-	font-weight: bold;
 }
 
 #doge_btn{
 	background-color: #edd592;
 	color: black;
-	font-weight: bold;
 }
 
-.title_container {
-	background-color: var(--title-background-color);
-	border-radius: 0 0 10% 10%;
-	margin-bottom: 20px;
-	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-}
 
-.copy_crypto_addr{
-	font-size: 1.4rem;
-	color : #ecf0f1;
-	background-color: #3c3c3d;
-	margin: .5rem;
-	border: 0;
-	cursor: pointer;
-    border-radius: 5px;
-    width: 14.13rem;
-    /* height: 3.13rem; */
-}
 
 .container {
 	margin-bottom: .7rem;
@@ -145,6 +141,7 @@ img {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: .1rem;
 	margin: .5rem;
 }
 
@@ -164,15 +161,27 @@ img {
     margin: .1rem;
 }
 
+.foot_element{
+	margin: 0 .5rem 0 .5rem;
+	padding: .4rem 0 .4rem 0;
+}
+
 .text {
-	font-size: 1.1rem;
+	font-size: .96rem;
 	align-self: center;
 	white-space: nowrap;
+	
 	color: var(--text-color);
 }
 
 .link{
+	color: var(--text-color-inverted);
 	font-size: .9rem;
+	/* font-weight: bold; */
+}
+
+.link:hover{
+	color: var(--text-highlight-color);
 }
 
 .footer_text{
@@ -197,6 +206,51 @@ img {
 	margin-right: 1rem;
 }
 
+
+
+#container_range{
+	margin-bottom: 0;
+}
+
+#range_marks {
+	display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+#range_marks p {
+	position: relative;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 1px;
+    height: 7px;
+	cursor: pointer;
+    background: #D3D3D3;
+    font-size: .8rem;
+    line-height: 40px;
+    margin: 0 0 20px 0;
+}
+#range_marks p:hover {
+	color : var(--text-highlight-color);
+	font-weight: bold;
+}
+
+#links {
+	margin: 0 .7rem 0 .7rem;
+	padding: .3rem 0 0 0;
+}
+/* #review_link:hover{
+	
+}
+
+#support_link:hover{
+
+}
+
+#donate_link:hover{
+
+} */
 
 
 
@@ -288,7 +342,7 @@ input[type=range].container_size::-ms-thumb {
 
 .switch_label {
 	cursor: pointer;
-	width: 36px;
+	width: 38px;
 	height: 19px;
 	background: var(--switch-disable-color);
 	display: block;
@@ -300,10 +354,10 @@ input[type=range].container_size::-ms-thumb {
 .switch_label:after {
 	content: '';
 	position: absolute;
-	top: 3px;
-	left: 3px;
-	width: 13px;
-	height: 13px;
+	top: 2px;
+	left: 2px;
+	width: 15px;
+	height: 15px;
 	background: var(--switch-button-color);
 	border-radius: 90px;
 	transition: 0.3s;
