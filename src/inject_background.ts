@@ -182,13 +182,13 @@
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
 
         if (!original_container || !clone_container) return;
-
+        
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
         if (1 <= ratio && ratio <= 100) {
-            orig_size = parseFloat((1 - clone_size).toFixed(2));
             clone_size = parseFloat((ratio * 0.01).toFixed(2));
+            orig_size = parseFloat((1 - clone_size).toFixed(2));
         }
 
         original_container.style.flex = String(orig_size);

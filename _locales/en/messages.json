@@ -29,8 +29,14 @@
   "donate" : {
     "message" : "DONATE"
   },
-  "donate_page_btn_copyMsg" : {
-    "message" : "(Click to Copy)"
+  "ethereum" : {
+    "message" : "Ethereum"
+  },
+  "doge" : {
+    "message" : "Dogecoin"
+  },
+  "donate_help_msg" : {
+    "message" : "Click to copy Adddress"
   },
   "donate_page_copied" : {
     "message" : "Copied!"

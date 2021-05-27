@@ -1,6 +1,7 @@
 
-let delegation = <HTMLDivElement>document.getElementById('delegation');
+let options = <HTMLDivElement>document.getElementById('options');
 let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
+let range_marks = <HTMLDivElement>document.getElementById('range_marks');
 let donate_link = <HTMLDivElement>document.getElementById('donate_link');
 let version_info = <HTMLSpanElement>document.getElementById('version_info');
 
@@ -11,13 +12,20 @@ version_info.textContent = 'v' + chrome.runtime.getManifest().version + ' made b
 
 function localizeHtmlPage() {
 
-    let option_buttons = document.getElementsByClassName('option');
+    let options = document.getElementsByClassName('option');
+    let review_link = <HTMLDivElement>document.getElementById('review_link');
+    let support_link = <HTMLDivElement>document.getElementById('support_link');
+    let donate_link = <HTMLDivElement>document.getElementById('donate_link');
 
-    Array.from(option_buttons).forEach(e => {
+    Array.from(options).forEach(e => {
         let text = e.getElementsByClassName('text');
         let id = text[0].getAttribute('id');
         if (id) text[0].textContent = chrome.i18n.getMessage(id);
     });
+
+    review_link.textContent = chrome.i18n.getMessage('review');
+    support_link.textContent = chrome.i18n.getMessage('support');
+    donate_link.textContent = chrome.i18n.getMessage('donate');
 }
 
 window.addEventListener('load', e => {
@@ -63,7 +71,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
 //Listeners..
 
-delegation.addEventListener('change', e => {
+options.addEventListener('change', e => {
 
     let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type=checkbox][name=badge]');
     let target = <HTMLInputElement>e.target;
@@ -87,6 +95,13 @@ slider.addEventListener('change', e => {
     chrome.storage.local.set({ container_ratio: value }, function () { });
 });
 
-donate_link.addEventListener('click', e => {
-    chrome.tabs.create({ url: 'public/donation.html' });
+range_marks.addEventListener('click', e =>{
+    let target = (e.target as HTMLParagraphElement)
+    if(target.nodeName != 'P') return;
+    chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
 })
+
+donate_link.addEventListener('click', e => {
+    let url = chrome.extension.getURL('public/donation.html');
+    chrome.tabs.create({ url: url });
+});

@@ -7,14 +7,19 @@ const FILES: string[] = [
   'manifest.json',
   '_locales/en/messages.json',
   '_locales/ko/messages.json',
+
   'public/popup.html',
   'public/donation.html',
+
   'dist/js/extension_background.js',
   'dist/js/inject_background.js',
   'dist/js/popup.js',
+  'dist/js/donation.js',
+
   'dist/css/inject_background.css',
   'dist/css/popup.css',
   'dist/css/donation.css',
+
   'public/icons/cc_icon128.png',
 ];
 
