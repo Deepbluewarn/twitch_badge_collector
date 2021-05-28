@@ -26,8 +26,8 @@
   "support" : {
     "message" : "SUPPORT"
   },
-  "donate" : {
-    "message" : "DONATE"
+  "homepage" : {
+    "message" : "HOMEPAGE"
   },
   "ethereum" : {
     "message" : "Ethereum"

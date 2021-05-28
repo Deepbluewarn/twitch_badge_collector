@@ -26,8 +26,8 @@
   "support" : {
     "message" : "지 원"
   },
-  "donate" : {
-    "message" : "후 원"
+  "homepage" : {
+    "message" : "홈페이지"
   },
   "ethereum" : {
     "message" : "이더리움"

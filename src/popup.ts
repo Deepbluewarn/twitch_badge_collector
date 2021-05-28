@@ -15,7 +15,7 @@ function localizeHtmlPage() {
     let options = document.getElementsByClassName('option');
     let review_link = <HTMLDivElement>document.getElementById('review_link');
     let support_link = <HTMLDivElement>document.getElementById('support_link');
-    let donate_link = <HTMLDivElement>document.getElementById('donate_link');
+    let homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
 
     Array.from(options).forEach(e => {
         let text = e.getElementsByClassName('text');
@@ -25,7 +25,7 @@ function localizeHtmlPage() {
 
     review_link.textContent = chrome.i18n.getMessage('review');
     support_link.textContent = chrome.i18n.getMessage('support');
-    donate_link.textContent = chrome.i18n.getMessage('donate');
+    homepage_link.textContent = chrome.i18n.getMessage('homepage');
 }
 
 window.addEventListener('load', e => {
