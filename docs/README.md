@@ -1,4 +1,7 @@
 # Twitch Badge Collector
+
+For English [Link](https://tbc.bluewarn.dev/README_en.html)
+
 트위치 채팅을 보기 쉽게 해주는 확장 프로그램입니다.
 
 특정 배지를 달고 있는 채팅을 따로 모아서 볼 수 있도록 도와줍니다.
@@ -12,17 +15,17 @@
 ### 트위치 채팅창
 확장 프로그램을 설치하고 트위치 실시간 방송에 접속하면 아래 사진처럼 채팅창 아래 구분선과 빈 공간이 생성됩니다.
 
-![screenshot_1](/screenshot/chat_room_example.png)
+![screenshot_1](/screenshot/ko/chat_room_example.png)
 
 올라오는 채팅의 배지가 설정된 조건과 맞으면 아래 창에 채팅을 복사합니다.
 
-![screenshot_2](/screenshot/chat_room_example_2.png)
+![screenshot_2](/screenshot/ko/chat_room_example_2.png)
 
 위는 원본 채팅이고 아래는 복사된 채팅입니다.
 채팅이 복사되면 해당 채팅의 원본을 쉽게 찾을 수 있도록 채팅 좌측에 빨간색으로 표시됩니다.
 
 ### 설정
-![screenshot_3](/screenshot/popup_ko.png)
+![screenshot_3](/screenshot/ko/popup_ko.png)
 
 브라우저 상단 우측의 확장 프로그램 아이콘을 클릭하면 프로그램을 설정 할 수 있는 팝업창이 나옵니다.<br>
 현재 지원하는 채팅 배지는 총 4 가지 입니다. (스트리머, 매니저, VIP, 인증 완료)
