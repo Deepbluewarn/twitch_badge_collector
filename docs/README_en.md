@@ -49,6 +49,6 @@ You can adjust the size of the chat window added with the slider below.
 
 > Donation
 >> Ethereum: 0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158 <br>
->> 도지코인 : DPgb63LDVPK6MkwWq2U7zXUyoXCArcufLU
+>> Dogecoin : DPgb63LDVPK6MkwWq2U7zXUyoXCArcufLU
 
 Thank you.
