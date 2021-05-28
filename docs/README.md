@@ -42,10 +42,12 @@
 ***
 
 * 오류 발생이나 건의사항은
+
     > 이메일 : n5lp97@gmail.com <br>
     > 크롬 웹스토어 지원 : (링크)
 
 * 잘 사용하고 계신다면
+
     > [리뷰](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
 
     > 후원
