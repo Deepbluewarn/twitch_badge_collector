@@ -25,7 +25,7 @@ For English [Link](https://tbc.bluewarn.dev/README_en.html)
 채팅이 복사되면 해당 채팅의 원본을 쉽게 찾을 수 있도록 채팅 좌측에 빨간색으로 표시됩니다.
 
 ### 설정
-![screenshot_3](/screenshot/ko/popup_ko.png)
+![screenshot_3](/screenshot/ko/popup.png)
 
 브라우저 상단 우측의 확장 프로그램 아이콘을 클릭하면 프로그램을 설정 할 수 있는 팝업창이 나옵니다.<br>
 현재 지원하는 채팅 배지는 총 4 가지 입니다. (스트리머, 매니저, VIP, 인증 완료)

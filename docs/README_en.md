@@ -19,7 +19,7 @@ Above is the original chat and below is the copied chat.
 Once the chat is copied, it will appear in red on the left side of the chat to make it easier to find the source of the chat.
 
 ### Settings
-![screenshot_3](/screenshot/en/popup_ko.png)
+![screenshot_3](/screenshot/en/popup.png)
 
 Click the extension icon on the top right of your browser to see a pop-up window where you can set up your extension.<br>
 Currently, there are 4 types of chat badges support. (Broadcaster, Moderator, VIP, Verified)
