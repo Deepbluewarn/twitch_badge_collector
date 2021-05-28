@@ -48,7 +48,7 @@ You can adjust the size of the chat window added with the slider below.
 > [Email](emailto:n5lp97@gmail.com)<br>
 > [Support](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support)
 
-* If you're using it well
+* Support me with
 
 > [Review](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
 
