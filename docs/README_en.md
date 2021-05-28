@@ -40,12 +40,12 @@ You can adjust the size of the chat window added with the slider below.
 
 * For errors or suggestions
 
-> [emailto:n5lp97@gmail.com]<br>
-> [Support] (https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support)
+> [Email](emailto:n5lp97@gmail.com)<br>
+> [Support](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support)
 
 * If you're using it well
 
-> [Review] (https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
+> [Review](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
 
 > Donation
 >> Ethereum: 0x43BbA0A3FC9567Ed6Fa9E07C9bc099f7A6cb9158 <br>
