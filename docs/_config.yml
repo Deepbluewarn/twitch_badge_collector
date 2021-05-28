@@ -1,10 +1,10 @@
 theme: jekyll-theme-cayman
 title: Twitch Badge Collector
 description: Collect and view chat with special badges in Twitch Chat!
-show_downloads: false
+show_downloads: true
 google_analytics: G-7YGNFPC8YW
 
 
 github:
   zip_url: https://github.com/Deepbluewarn/twitch_badge_collector/releases/latest/download/twitch_badge_collector.zip
-
+  another_url: https://github.com/Deepbluewarn/twitch_badge_collector/releases/latest/download/twitch_badge_collector.zip
