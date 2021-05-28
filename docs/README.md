@@ -8,6 +8,10 @@ For English [Link](https://tbc.bluewarn.dev/README_en.html)
 
 사람들이 ㅋㅋㅋ 치고 있는데 왜 웃는지 나만 몰라서 스크롤을 올려 본 경험이 있을때 이 프로그램을 사용해 보세요!
 
+## 다운로드
+
+[Chrome 웹스토어](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)<br>
+[Firefox Addon](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
 
 ## 사용법
 ***

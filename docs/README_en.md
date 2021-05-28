@@ -3,6 +3,11 @@ It's an extension that makes Twitch Chat easier to view.
 
 Collect and view the chat with a specific badge!
 
+## Downloads
+
+[Chrome Web Store](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)<br>
+[Firefox Addon](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
+
 ## Usage
 ***
 
