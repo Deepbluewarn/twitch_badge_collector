@@ -35,7 +35,7 @@ You can adjust the size of the chat window added with the slider below.
 
 
 
-##See more
+## See more
 ***
 
 * For errors or suggestions
