@@ -52,6 +52,13 @@
             let room_origin = chat_room.getElementsByClassName('scrollable-area')[0];//original chat area.
             let room_clone = <HTMLElement>room_origin.cloneNode(true);
 
+            // resize handle (drag bar)
+            const resize_handle = document.createElement('div');
+            resize_handle.classList.add('tbc_resize_handle');
+            resize_handle.addEventListener('mousedown', startDrag);
+            resize_handle.addEventListener('touchstart', startDrag);
+            chat_room.firstChild?.appendChild(resize_handle);
+
             room_origin.classList.add('origin');
             //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
 
@@ -193,6 +200,32 @@
 
         original_container.style.flex = String(orig_size);
         clone_container.style.flex = String(clone_size);
+    }
+
+    let startDrag = function (e: MouseEvent | TouchEvent) {
+        e.preventDefault();
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('touchmove', doDrag);
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+    }
+
+    let doDrag = function (e: MouseEvent | TouchEvent) {
+        const chat_room = document.querySelector('.chat-room__content .chat-list--default');
+        const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+        if (chat_room) {
+            const rect = chat_room.getBoundingClientRect();
+            let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
+            container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
+            chrome.storage.local.set({ container_ratio }, function () {});
+        }
+    }
+
+    let endDrag = function () {
+        window.removeEventListener('mousemove', doDrag);
+        window.removeEventListener('touchmove', doDrag);
+        window.removeEventListener('mouseup', endDrag);
+        window.removeEventListener('touchend', endDrag);
     }
 
     observeStreamPage();
