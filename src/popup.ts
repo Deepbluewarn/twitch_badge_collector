@@ -99,9 +99,4 @@ range_marks.addEventListener('click', e =>{
     let target = (e.target as HTMLParagraphElement)
     if(target.nodeName != 'P') return;
     chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
-})
-
-donate_link.addEventListener('click', e => {
-    let url = chrome.extension.getURL('public/donation.html');
-    chrome.tabs.create({ url: url });
 });
