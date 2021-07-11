@@ -28,6 +28,10 @@ For English [Link](https://tbc.bluewarn.dev/README_en.html)
 위는 원본 채팅이고 아래는 복사된 채팅입니다.
 채팅이 복사되면 해당 채팅의 원본을 쉽게 찾을 수 있도록 채팅 좌측에 빨간색으로 표시됩니다.
 
+![screenshot_drag](/screenshot/ko/drag.webp)
+
+구분선을 잡아 끌어서 채팅창의 크기를 조절할 수 있습니다.
+
 ### 설정
 ![screenshot_3](/screenshot/ko/popup.png)
 
