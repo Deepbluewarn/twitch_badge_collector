@@ -23,6 +23,7 @@
       "matches": [
         "*://*.twitch.tv/*"
       ],
+      "all_frames" : true,
       "css": [
         "dist/css/inject_background.css"
       ],
@@ -35,7 +36,8 @@
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
     "show_matches": [
-      "https://www.twitch.tv/*"
+      "https://www.twitch.tv/*",
+      "https://multistre.am/*"
     ],
     "default_icon": {
       "128": "public/icons/cc_icon128.png"

@@ -18,7 +18,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (!url) return null;
 
     let isTwitch = url.match(/https\:\/\/www\.twitch\.tv/);
-    if (isTwitch) chrome.pageAction.show(tabId);
+    let isMultiStr = url.match(/https\:\/\/multistre\.am/);
+    if (isTwitch || isMultiStr) chrome.pageAction.show(tabId);
 
 });
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
