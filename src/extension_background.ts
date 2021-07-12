@@ -13,6 +13,8 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     //let isCompleted = changeInfo.status === 'complete';
+    chrome.pageAction.show(tabId);
+    /*
     
     let url = tab.url;
     if (!url) return null;
@@ -20,6 +22,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     let isTwitch = url.match(/https\:\/\/www\.twitch\.tv/);
     let isMultiStr = url.match(/https\:\/\/multistre\.am/);
     if (isTwitch || isMultiStr) chrome.pageAction.show(tabId);
+    
+    */
 
 });
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {

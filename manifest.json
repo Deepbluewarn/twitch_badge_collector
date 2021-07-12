@@ -35,10 +35,6 @@
   "page_action": {
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
-    "show_matches": [
-      "https://www.twitch.tv/*",
-      "https://multistre.am/*"
-    ],
     "default_icon": {
       "128": "public/icons/cc_icon128.png"
     }
