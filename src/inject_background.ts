@@ -10,6 +10,8 @@
 
     let chatIsAtBottom = true;// chat auto scroll [on / off]
 
+    const CLONE_CHAT_COUNT = 100;
+
     currunt_url = location.href;
 
     let observeDOM = (function () {
@@ -43,41 +45,39 @@
      */
     function Mirror_of_Erised() {
         const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default');
+        if (!chat_room) return false;
 
-        if (chat_room) {
+        let clone = chat_room.getElementsByClassName('scrollable-area clone')[0];
+        if (chat_room.contains(clone)) return false;
 
-            let clone = chat_room.getElementsByClassName('scrollable-area clone')[0];
+        let room_origin = chat_room.getElementsByClassName('scrollable-area')[0];//original chat area.
+        let room_clone = <HTMLElement>room_origin.cloneNode(true);
 
-            if (chat_room.contains(clone)) return false;
-            let room_origin = chat_room.getElementsByClassName('scrollable-area')[0];//original chat area.
-            let room_clone = <HTMLElement>room_origin.cloneNode(true);
+        // resize handle (drag bar)
+        const resize_handle = document.createElement('div');
+        resize_handle.classList.add('tbc_resize_handle');
+        resize_handle.addEventListener('mousedown', startDrag);
+        resize_handle.addEventListener('touchstart', startDrag);
+        chat_room.firstChild?.appendChild(resize_handle);
 
-            // resize handle (drag bar)
-            const resize_handle = document.createElement('div');
-            resize_handle.classList.add('tbc_resize_handle');
-            resize_handle.addEventListener('mousedown', startDrag);
-            resize_handle.addEventListener('touchstart', startDrag);
-            chat_room.firstChild?.appendChild(resize_handle);
+        room_origin.classList.add('origin');
+        //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
 
-            room_origin.classList.add('origin');
-            //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
+        let scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
-            let scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
+        scroll_area.addEventListener("scroll", function () {
+            //사용자가 스크롤을 40 픽셀 이상 올렸을 때만 false 반환.
+            //Return false only when the user raises the scroll by more than 40 pixels.
+            chatIsAtBottom = scroll_area.scrollTop + scroll_area.clientHeight >= scroll_area.scrollHeight - 40;
+        }, false);
+        let message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
+        message_container.textContent = '';//remove all chat lines.
 
-            scroll_area.addEventListener("scroll", function () {
-                //사용자가 스크롤을 40 픽셀 이상 올렸을 때만 false 반환.
-                //Return false only when the user raises the scroll by more than 40 pixels.
-                chatIsAtBottom = scroll_area.scrollTop + scroll_area.clientHeight >= scroll_area.scrollHeight - 40;
-            }, false);
-            let message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
-            message_container.textContent = '';//remove all chat lines.
+        room_clone.classList.add('clone');
+        chat_room.firstChild?.appendChild(room_clone);
+        //chat_room.appendChild(room_clone);
 
-            room_clone.classList.add('clone');
-            chat_room.firstChild?.appendChild(room_clone);
-            //chat_room.appendChild(room_clone);
-
-            change_container_ratio(container_ratio);
-        }
+        change_container_ratio(container_ratio);
     }
 
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
@@ -106,6 +106,9 @@
             if (!addedNodes) return;
             addedNodes.forEach(node => {
                 let nodeElement = <HTMLElement>node;
+                //console.debug(nodeElement);
+                //console.debug("nodeElement.className === 'chat-line__status' : " + nodeElement.className)
+                //console.debug("nodeElement.getAttribute('data-a-target') === 'chat-welcome-message' : " + nodeElement.getAttribute('data-a-target'))
 
                 if (!nodeElement || nodeElement.nodeType !== 1) return;
 
@@ -145,13 +148,13 @@
                             message_container.appendChild(chat_clone);
                             nodeElement.classList.add('tbc_highlight');
 
-                            if (message_container.childElementCount > 100) {
+                            if (message_container.childElementCount > CLONE_CHAT_COUNT) {
                                 message_container.removeChild(<Element>message_container.firstElementChild);
                             }
                             if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
                         }
                     });
-                } else if (nodeElement.className === 'chat-line__status' && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
+                } else if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
                     //채팅방 재접속. (when re-connected to chat room)
                     Mirror_of_Erised();
                 }
@@ -189,7 +192,7 @@
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];
 
         if (!original_container || !clone_container) return;
-        
+
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
@@ -217,7 +220,7 @@
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
             container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
-            chrome.storage.local.set({ container_ratio }, function () {});
+            chrome.storage.local.set({ container_ratio }, function () { });
         }
     }
 
