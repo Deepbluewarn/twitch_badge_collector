@@ -13,6 +13,7 @@
     "*://*.twitch.tv/*",
     "storage"
   ],
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://ssl.google-analytics.com; object-src 'self'",
   "background": {
     "scripts": [
       "dist/js/extension_background.js"

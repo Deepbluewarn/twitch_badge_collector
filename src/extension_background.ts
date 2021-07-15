@@ -1,3 +1,24 @@
+var gaNewElem: any = {};
+var gaElems: any = {};
+
+
+function gaInit_background() {
+
+    var currdate: any = new Date();
+    var url = 'https://www.google-analytics.com/analytics.js';
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * currdate; a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', url, 'ga', gaNewElem, gaElems);
+
+    ga('create', 'UA-194964708-5', 'auto');
+    ga('set', 'checkProtocolTask', null);
+}
+
+gaInit_background();
+
 chrome.runtime.onInstalled.addListener(function () {
     
     const badge_setting = {
@@ -10,20 +31,26 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.local.set({ badge_setting: badge_setting, BADGE_LIST: badge_setting }, function () {});
     chrome.storage.local.set({ container_ratio: 30 }, function () {});
 
+    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': chrome.runtime.getManifest().version });
+
 });
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    //let isCompleted = changeInfo.status === 'complete';
-    chrome.pageAction.show(tabId);
-    /*
+    let isCompleted = changeInfo.status === 'complete';
+    
+    
     
     let url = tab.url;
     if (!url) return null;
 
     let isTwitch = url.match(/https\:\/\/www\.twitch\.tv/);
-    let isMultiStr = url.match(/https\:\/\/multistre\.am/);
-    if (isTwitch || isMultiStr) chrome.pageAction.show(tabId);
+    if(isTwitch && isCompleted){
+        ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onUpdated', 'eventLabel': chrome.runtime.getManifest().version });
+    }
+    chrome.pageAction.show(tabId);
+    //let isMultiStr = url.match(/https\:\/\/multistre\.am/);
+    //if (isTwitch || isMultiStr) chrome.pageAction.show(tabId);
     
-    */
+    
 
 });
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
