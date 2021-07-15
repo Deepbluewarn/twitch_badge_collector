@@ -127,11 +127,11 @@
                 }
 
                 if (is_chat_msg) {
-
-                    room_clone = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
-                    if (!room_clone) return;
-
-                    room_clone = room_clone.getElementsByClassName('scrollable-area clone')[0];
+                    let room_clone_parent = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
+                    if(!room_clone_parent) return false; // nodeElement 가 .scrollable-area.origin 의 자식 요소가 아니면 return.
+                    room_clone = room_clone_parent.getElementsByClassName('scrollable-area clone')[0];
+                    if (!room_clone) return false;
+                    
                     message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
                     scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
