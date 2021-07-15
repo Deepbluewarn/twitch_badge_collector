@@ -13,14 +13,14 @@ function gaInit_background() {
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', url, 'ga', gaNewElem, gaElems);
 
-    ga('create', 'UA-194964708-5', 'auto');
+    ga('create', 'UA-194964708-5', 'auto'); // live
+    //ga('create', 'UA-194964708-6', 'auto'); // debug
     ga('set', 'checkProtocolTask', null);
 }
 
 gaInit_background();
 
-chrome.runtime.onInstalled.addListener(function () {
-    
+chrome.runtime.onInstalled.addListener(function (reason) {
     const badge_setting = {
         'streamer' : '5527c58c-fb7d-422d-b71b-f309dcb85cc1',
         'manager' : '3267646d-33f0-4b17-b3df-f923a41db1d0',
@@ -32,6 +32,7 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.local.set({ container_ratio: 30 }, function () {});
 
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': chrome.runtime.getManifest().version });
+    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason)});
 
 });
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
