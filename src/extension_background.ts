@@ -1,6 +1,7 @@
-var gaNewElem: any = {};
-var gaElems: any = {};
-
+let gaNewElem: any = {};
+let gaElems: any = {};
+let twitch_exist: boolean = false;
+const heartbeatInterval = 5;
 
 function gaInit_background() {
 
@@ -18,53 +19,91 @@ function gaInit_background() {
     ga('set', 'checkProtocolTask', null);
 }
 
+function heartbeat() {
+
+    chrome.windows.getAll(windows => {
+        if (Array.isArray(windows) && windows.length === 0) {
+            chrome.alarms.clear('heartbeat');
+        }
+    });
+    console.log('twitch_exist : ', twitch_exist);
+    if (twitch_exist) {
+        console.debug('heartbeat sent!')
+        ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'heartbeat', 'eventLabel': chrome.runtime.getManifest().version });
+    } else {
+        chrome.alarms.clear('heartbeat');
+    }
+
+}
+
+function isTwitch(url: string | undefined) {
+    if (url) {
+        twitch_exist = url.match(/https\:\/\/www\.twitch\.tv/) ? true : false;
+        return twitch_exist;
+    }
+}
+
 gaInit_background();
 
-chrome.runtime.onInstalled.addListener(function (reason:any) {
+chrome.runtime.onInstalled.addListener(function (reason: any) {
+
     const badge_setting = {
-        'streamer' : '5527c58c-fb7d-422d-b71b-f309dcb85cc1',
-        'manager' : '3267646d-33f0-4b17-b3df-f923a41db1d0',
-        'vip' : 'b817aba4-fad8-49e2-b88a-7cc744dfa6ec',
-        'verified' : 'd12a2e27-16f6-41d0-ab77-b780518f00a3'
+        'streamer': '5527c58c-fb7d-422d-b71b-f309dcb85cc1',
+        'manager': '3267646d-33f0-4b17-b3df-f923a41db1d0',
+        'vip': 'b817aba4-fad8-49e2-b88a-7cc744dfa6ec',
+        'verified': 'd12a2e27-16f6-41d0-ab77-b780518f00a3'
     }
+
     let version = chrome.runtime.getManifest().version;
     reason.to = version;
-    chrome.storage.local.set({ badge_setting: badge_setting, BADGE_LIST: badge_setting }, function () {});
-    chrome.storage.local.set({ container_ratio: 30 }, function () {});
 
-    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version });
-    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason)});
+    chrome.storage.local.set({ badge_setting: badge_setting, BADGE_LIST: badge_setting }, function () { });
+    chrome.storage.local.set({ container_ratio: 30 }, function () { });
 
+    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
 });
+
+chrome.alarms.onAlarm.addListener(function (alarm) {
+    heartbeat();
+});
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+
     let isCompleted = changeInfo.status === 'complete';
-    
+    if (!isCompleted) return;
+
     let url = tab.url;
-    if (!url) return null;
 
-    let isTwitch = url.match(/https\:\/\/www\.twitch\.tv/);
-    if(isTwitch && isCompleted){
-        ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onUpdated', 'eventLabel': chrome.runtime.getManifest().version });
+    if (isTwitch(url)) {
+        chrome.alarms.get('heartbeat', (alarm) => {
+            if (!alarm) {
+                chrome.alarms.create('heartbeat', { periodInMinutes: heartbeatInterval });
+                heartbeat();
+            };
+        });
     }
-    chrome.pageAction.show(tabId);
-    //let isMultiStr = url.match(/https\:\/\/multistre\.am/);
-    //if (isTwitch || isMultiStr) chrome.pageAction.show(tabId);
-    
-    
 
+    chrome.pageAction.show(tabId);
 });
+
+chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+    chrome.tabs.query({}, function (tabs) {
+        twitch_exist = false;
+        tabs.forEach(tab => {
+            isTwitch(tab.url);
+        });
+    })
+});
+
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-
         let id = tabs[0].id;
         let url = tabs[0].url;
+        if (!(id && url)) return;
 
-        chrome.storage.local.set({ current_url: url }, function () {});
-
-        if (id) {
-            chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
-                return true;
-            });
-        }
+        chrome.storage.local.set({ current_url: url }, function () { });
+        chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
+            return true;
+        });
     });
 });

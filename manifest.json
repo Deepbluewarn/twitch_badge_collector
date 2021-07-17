@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.2.25",
+  "version": "1.2.26",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
   "default_locale": "en",
@@ -11,13 +11,15 @@
   "permissions": [
     "webNavigation",
     "*://*.twitch.tv/*",
-    "storage"
+    "storage",
+    "alarms"
   ],
   "content_security_policy": "script-src 'self' https://www.google-analytics.com https://ssl.google-analytics.com; object-src 'self'",
   "background": {
     "scripts": [
       "dist/js/extension_background.js"
-    ]
+    ],
+    "persistent": false
   },
   "content_scripts": [
     {
