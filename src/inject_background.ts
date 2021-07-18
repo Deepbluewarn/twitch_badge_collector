@@ -30,11 +30,11 @@
         }
     })();
 
-    chrome.storage.sync.get(['badge_setting'], function (result) {
+    chrome.storage.local.get(['badge_setting'], function (result) {
         badge_setting = result.badge_setting;
     });
 
-    chrome.storage.sync.get(['container_ratio'], function (result) {
+    chrome.storage.local.get(['container_ratio'], function (result) {
         if (result.container_ratio) {
             container_ratio = parseInt(result.container_ratio);
         }
@@ -214,13 +214,15 @@
     }
 
     let doDrag = function (e: MouseEvent | TouchEvent) {
+
         const chat_room = document.querySelector('.chat-room__content .chat-list--default');
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+        
         if (chat_room) {
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
             container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
-            chrome.storage.sync.set({ container_ratio }, function () { });
+            chrome.storage.local.set({ container_ratio }, function () { });
         }
     }
 
@@ -235,7 +237,7 @@
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
 
-        //if (namespace != 'sync') return;
+        if (namespace != 'local') return;
 
         for (var key in changes) {
             let newValue = changes[key].newValue;

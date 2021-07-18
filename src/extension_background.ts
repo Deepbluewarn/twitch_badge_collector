@@ -14,8 +14,8 @@ function gaInit_background() {
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', url, 'ga', gaNewElem, gaElems);
 
-    //ga('create', 'UA-194964708-5', 'auto'); // live
-    ga('create', 'UA-194964708-6', 'auto'); // debug
+    ga('create', 'UA-194964708-5', 'auto'); // live
+    //ga('create', 'UA-194964708-6', 'auto'); // debug
     ga('set', 'checkProtocolTask', null);
 }
 
@@ -55,9 +55,9 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     let version = chrome.runtime.getManifest().version;
     reason.to = version;
 
-    chrome.storage.sync.set({ badge_setting }, function () { });
-    chrome.storage.sync.set({ container_ratio: 30 }, function () { });
-    
+    chrome.storage.local.set({ badge_setting }, function () { });
+    chrome.storage.local.set({ container_ratio: 30 }, function () { });
+
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version });
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
 });
@@ -100,7 +100,7 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         let url = tabs[0].url;
         if (!(id && url)) return;
 
-        chrome.storage.sync.set({ current_url: url }, function () { });
+        chrome.storage.local.set({ current_url: url }, function () { });
         chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
             return true;
         });

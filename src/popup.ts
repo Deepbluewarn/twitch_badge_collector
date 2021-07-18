@@ -32,7 +32,7 @@ window.addEventListener('load', e => {
 });
 
 //init popop setting value
-chrome.storage.sync.get(['badge_setting'], function (result) {
+chrome.storage.local.get(['badge_setting'], function (result) {
 
     let chboxs = document.getElementsByClassName('badge_checkbox');
 
@@ -43,14 +43,14 @@ chrome.storage.sync.get(['badge_setting'], function (result) {
     });
 });
 
-chrome.storage.sync.get(['container_ratio'], function (result) {
+chrome.storage.local.get(['container_ratio'], function (result) {
     let ratio = result.container_ratio;
     if (ratio) slider.value = ratio;
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
 
-    //if (namespace != 'sync') return;
+    if (namespace != 'local') return;
 
     for (var key in changes) {
         let newValue = changes[key].newValue;
@@ -82,17 +82,17 @@ options.addEventListener('change', e => {
                 badge_setting[id] = uuid;
             }
         });
-        chrome.storage.sync.set({ badge_setting }, function () { });
+        chrome.storage.local.set({ badge_setting }, function () { });
     }
 });
 
 slider.addEventListener('change', e => {
     let value = (e.target as HTMLInputElement).value;
-    chrome.storage.sync.set({ container_ratio: value }, function () { });
+    chrome.storage.local.set({ container_ratio: value }, function () { });
 });
 
 range_marks.addEventListener('click', e =>{
     let target = (e.target as HTMLParagraphElement)
     if(target.nodeName != 'P') return;
-    chrome.storage.sync.set({ container_ratio: target.textContent }, function () { });
+    chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
 });
