@@ -26,9 +26,7 @@ function heartbeat() {
             chrome.alarms.clear('heartbeat');
         }
     });
-    console.log('twitch_exist : ', twitch_exist);
     if (twitch_exist) {
-        console.debug('heartbeat sent!')
         ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'heartbeat', 'eventLabel': chrome.runtime.getManifest().version });
     } else {
         chrome.alarms.clear('heartbeat');
@@ -57,9 +55,10 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     let version = chrome.runtime.getManifest().version;
     reason.to = version;
 
-    chrome.storage.local.set({ badge_setting: badge_setting, BADGE_LIST: badge_setting }, function () { });
-    chrome.storage.local.set({ container_ratio: 30 }, function () { });
-
+    chrome.storage.sync.set({ badge_setting }, function () { });
+    chrome.storage.sync.set({ container_ratio: 30 }, function () { });
+    
+    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version });
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
 });
 
@@ -101,7 +100,7 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         let url = tabs[0].url;
         if (!(id && url)) return;
 
-        chrome.storage.local.set({ current_url: url }, function () { });
+        chrome.storage.sync.set({ current_url: url }, function () { });
         chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
             return true;
         });

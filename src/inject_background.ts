@@ -30,11 +30,11 @@
         }
     })();
 
-    chrome.storage.local.get(['badge_setting'], function (result) {
+    chrome.storage.sync.get(['badge_setting'], function (result) {
         badge_setting = result.badge_setting;
     });
 
-    chrome.storage.local.get(['container_ratio'], function (result) {
+    chrome.storage.sync.get(['container_ratio'], function (result) {
         if (result.container_ratio) {
             container_ratio = parseInt(result.container_ratio);
         }
@@ -220,7 +220,7 @@
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
             container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
-            chrome.storage.local.set({ container_ratio }, function () { });
+            chrome.storage.sync.set({ container_ratio }, function () { });
         }
     }
 
@@ -235,7 +235,7 @@
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
 
-        if (namespace != 'local') return;
+        //if (namespace != 'sync') return;
 
         for (var key in changes) {
             let newValue = changes[key].newValue;

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.2.26",
+  "version": "1.2.27",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
   "default_locale": "en",

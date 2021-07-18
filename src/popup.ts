@@ -6,7 +6,6 @@ let donate_link = <HTMLDivElement>document.getElementById('donate_link');
 let version_info = <HTMLSpanElement>document.getElementById('version_info');
 
 let current_url = '';
-let BADGE_LIST = {};
 
 version_info.textContent = 'v' + chrome.runtime.getManifest().version + ' made by bluewarn';
 
@@ -33,7 +32,7 @@ window.addEventListener('load', e => {
 });
 
 //init popop setting value
-chrome.storage.local.get(['badge_setting'], function (result) {
+chrome.storage.sync.get(['badge_setting'], function (result) {
 
     let chboxs = document.getElementsByClassName('badge_checkbox');
 
@@ -44,18 +43,14 @@ chrome.storage.local.get(['badge_setting'], function (result) {
     });
 });
 
-chrome.storage.local.get(['BADGE_LIST'], function (result) {
-    BADGE_LIST = result.BADGE_LIST;
-});
-
-chrome.storage.local.get(['container_ratio'], function (result) {
+chrome.storage.sync.get(['container_ratio'], function (result) {
     let ratio = result.container_ratio;
     if (ratio) slider.value = ratio;
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
 
-    if (namespace != 'local') return;
+    //if (namespace != 'sync') return;
 
     for (var key in changes) {
         let newValue = changes[key].newValue;
@@ -83,20 +78,21 @@ options.addEventListener('change', e => {
         checkboxes.forEach(c => {
             if (c.checked) {
                 const id = c.id;
-                badge_setting[id] = BADGE_LIST[id];
+                const uuid = c.getAttribute('uuid');
+                badge_setting[id] = uuid;
             }
         });
-        chrome.storage.local.set({ badge_setting: badge_setting }, function () { });
+        chrome.storage.sync.set({ badge_setting }, function () { });
     }
 });
 
 slider.addEventListener('change', e => {
     let value = (e.target as HTMLInputElement).value;
-    chrome.storage.local.set({ container_ratio: value }, function () { });
+    chrome.storage.sync.set({ container_ratio: value }, function () { });
 });
 
 range_marks.addEventListener('click', e =>{
     let target = (e.target as HTMLParagraphElement)
     if(target.nodeName != 'P') return;
-    chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
+    chrome.storage.sync.set({ container_ratio: target.textContent }, function () { });
 });
