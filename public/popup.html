@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="../dist/js/popup.js" defer></script>
+    <script src="../dist/js/suncalc.js"></script>
+    <script type='module' src="../dist/js/popup.js" defer></script>
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
@@ -13,12 +14,13 @@
     <title>Twitch Badge Collector</title>
 </head>
 
-<body class='dark_mode'>
+<body class='default'>
     <div id='screenshot'>
 
         <div id='title_container'>
             <h1 id='title_text'>Twitch Badge Collector</h1>
         </div>
+        
 
         <div id='setting_container'>
             <div class='container'>
@@ -63,8 +65,13 @@
                                 <label class='switch_label' for="verified"></label>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+            </div>
+            <div class='container'>
+                <button id='add_condition_btn'>조건 추가</button>
             </div>
 
             <div class='container'>
@@ -81,6 +88,7 @@
                 </div>
             </div>
         </div>
+        <!-- <div class='linebox'></div> -->
         <div id='bottom_container'>
             <div class="container" id='links'>
                 <div class='bg_flex_row foot_element'>

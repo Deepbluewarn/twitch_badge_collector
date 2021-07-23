@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type='module' src="../dist/js/setting.js" defer></script>
+
+    <link href="../dist/css/setting.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+
+    <title>TBC - Setting</title>
+</head>
+
+<body>
+    <div id='screenshot'>
+
+        <div id='title_container'>
+            <h1>설정</h1>
+        </div>
+
+        <div id='setting_container'>
+
+            조건 추가</br>
+
+            <select name="Category" id="category-select">
+                <option value="badge_uuid">배지 링크</option>
+                <option value="login_name">닉네임</option>
+            </select>
+
+            <input id ='condition_value' type='text' placeholder="배지 링크 입력">
+
+            <select name="Condition" id="condition-select">
+                <option value="include">포함</option>
+                <option value="exclude">제외</option>
+            </select>
+
+            <button id='add_condition'>추가</button>
+
+            <a href="https://tbc.bluewarn.dev" target="_blank">사용설명서 참고!</a>
+            <!-- <div class='container'>
+                닉네임 추가</br>
+                (영문 닉네임을 입력하셔야 합니다.)</br>
+                <input type='text' placeholder="로그인 닉네임 입력">
+                (n / 100)
+                
+            </div> -->
+
+        </div>
+
+
+        <div class='search_container'>
+            <input id='search_input' type='text' placeholder="">
+            <button id='remove_btn'>선택 항목 삭제</button>
+        </div>
+
+
+        <div id='list_container'>
+            <div class='list'>
+                <div class='component'>
+                    <input id='checkbox_head' type='checkbox'>
+                    <span id='category_head'>카테고리</span>
+                    <span id='badge_icon_head'>배지</span>
+                    <span id='value_head'>내용</span>
+                    <span id='condition_head'>조건</span>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div id='page_links'>
+            <span id='current_page_num'></span>
+        </div>
+    </div>
+</body>
+
+</html>

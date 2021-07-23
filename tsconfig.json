@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "es2015",
+    "module": "es2015",
     "outDir": "./dist/js",
     "rootDir": "./src",
     "strict": true,
+    "moduleResolution": "node",
     "types": ["chrome", "node", "clipboard", "@types/google.analytics"],
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

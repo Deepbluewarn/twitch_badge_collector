@@ -6,8 +6,6 @@ For English [Link](https://tbc.bluewarn.dev/README_en.html)
 
 특정 배지를 달고 있는 채팅을 따로 모아서 볼 수 있도록 도와줍니다.
 
-사람들이 ㅋㅋㅋ 치고 있는데 왜 웃는지 나만 몰라서 스크롤을 올려 본 경험이 있을때 이 프로그램을 사용해 보세요!
-
 ## 다운로드
 
 [Chrome 웹스토어](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)<br>

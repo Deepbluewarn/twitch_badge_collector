@@ -1,11 +1,14 @@
-
+// @ts-nocheck
+import {Filter, filter_category, filter_type, default_badge} from './types.js';
 let options = <HTMLDivElement>document.getElementById('options');
+let add_condition_btn = <HTMLButtonElement>document.getElementById('add_condition_btn');
 let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
 let range_marks = <HTMLDivElement>document.getElementById('range_marks');
-let donate_link = <HTMLDivElement>document.getElementById('donate_link');
 let version_info = <HTMLSpanElement>document.getElementById('version_info');
 
 let current_url = '';
+
+let global_filter: Array<Filter>;
 
 version_info.textContent = 'v' + chrome.runtime.getManifest().version + ' made by bluewarn';
 
@@ -27,25 +30,38 @@ function localizeHtmlPage() {
     homepage_link.textContent = chrome.i18n.getMessage('homepage');
 }
 
+function set_solar_system(){
+    var now = new Date();
+    var times = SunCalc.getTimes(now, 35.179444, 129.075556);
+    console.debug(times)
+    if(times.night < now < times.sunrise){
+        console.debug('밤과 일출 사이');
+    }
+}
+set_solar_system();
+
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
 
 //init popop setting value
-chrome.storage.local.get(['badge_setting'], function (result) {
+chrome.storage.local.get(['filter'], function (result) {
 
-    let chboxs = document.getElementsByClassName('badge_checkbox');
+    let chboxs = Array.from(document.getElementsByClassName('badge_checkbox'));
+    global_filter = result.filter;
 
-    Array.from(chboxs).some(e => {
-        if (e.getAttribute('uuid') === result.badge_setting[e.id]) {
-            (e as HTMLInputElement).checked = true;
-        }
+    chboxs.forEach(e=>{
+        global_filter.some(filter=>{
+            if(filter.filter_id === e.id){
+                (e as HTMLInputElement).checked = filter.filter_type === filter_type.Include ? true : false;
+                return true;
+            }
+        });
     });
 });
 
 chrome.storage.local.get(['container_ratio'], function (result) {
-    let ratio = result.container_ratio;
-    if (ratio) slider.value = ratio;
+    slider.value = result.container_ratio;
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
@@ -73,16 +89,29 @@ options.addEventListener('change', e => {
 
     if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
 
-        let badge_setting = {};
+        // chrome.storage.local.get(['filter'], function (result) {
+            
+        // });
+        let filter = global_filter;
 
         checkboxes.forEach(c => {
-            if (c.checked) {
-                const id = c.id;
-                const uuid = c.getAttribute('uuid');
-                badge_setting[id] = uuid;
-            }
+            const id = c.id; // 필터 타입 (include / exclude)
+            
+            let type = c.checked ? filter_type.Include : filter_type.Exclude;
+            filter.forEach((e, i)=>{
+                let filter_id = e.filter_id;
+                let is_default = Object.values(default_badge).includes(filter_id);
+                if(is_default && filter_id === id){
+                    console.debug('다음 배지의 상태가 변경 됨 : %o : %o', id, type);
+                    filter[i].filter_type = type;
+                }
+            })
         });
-        chrome.storage.local.set({ badge_setting }, function () { });
+
+        chrome.storage.local.set({ filter }, function () {
+            console.debug('popup 에서 배지 옵션이 변경되었습니다. filter : ', filter);
+        });
+        
     }
 });
 
@@ -95,4 +124,9 @@ range_marks.addEventListener('click', e =>{
     let target = (e.target as HTMLParagraphElement)
     if(target.nodeName != 'P') return;
     chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
+});
+
+add_condition_btn.addEventListener('click', e=>{
+    let url = chrome.extension.getURL('public/setting.html');
+    chrome.tabs.create({ url: url });
 });

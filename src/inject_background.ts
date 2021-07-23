@@ -1,11 +1,11 @@
 (function () {
-
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let currunt_url: string;
-    let badge_setting = {};
+    //let badge_setting = {};
+    let filter = {};
     let container_ratio: number;
 
     let chatIsAtBottom = true;// chat auto scroll [on / off]
@@ -30,8 +30,11 @@
         }
     })();
 
-    chrome.storage.local.get(['badge_setting'], function (result) {
-        badge_setting = result.badge_setting;
+    // chrome.storage.local.get(['badge_setting'], function (result) {
+    //     badge_setting = result.badge_setting;
+    // });
+    chrome.storage.local.get(['filter'], function (result) {
+        filter = result.filter;
     });
 
     chrome.storage.local.get(['container_ratio'], function (result) {
@@ -80,6 +83,20 @@
         change_container_ratio(container_ratio);
     }
 
+    function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element) {
+        console.debug('add_chat');
+        if (!(message_container && chat_clone)) return;
+
+        message_container.appendChild(chat_clone);
+        origNodeElement.classList.add('tbc_highlight');
+
+        if (message_container.childElementCount > CLONE_CHAT_COUNT) {
+            message_container.removeChild(<Element>message_container.firstElementChild);
+        }
+
+        if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
+    }
+
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
 
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
@@ -93,11 +110,11 @@
     }
 
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
-        let room_clone: Element | null;
-        let chat_clone: Element | null;
+        let room_clone: Element;
+        let chat_clone: Element;
         let badges: HTMLCollection;
         let scroll_area: Element;
-        let message_container: Element | null;
+        let message_container: Element;
 
         const point_summary_className = 'community-points-summary';
 
@@ -106,9 +123,6 @@
             if (!addedNodes) return;
             addedNodes.forEach(node => {
                 let nodeElement = <HTMLElement>node;
-                //console.debug(nodeElement);
-                //console.debug("nodeElement.className === 'chat-line__status' : " + nodeElement.className)
-                //console.debug("nodeElement.getAttribute('data-a-target') === 'chat-welcome-message' : " + nodeElement.getAttribute('data-a-target'))
 
                 if (!nodeElement || nodeElement.nodeType !== 1) return;
 
@@ -128,32 +142,54 @@
 
                 if (is_chat_msg) {
                     let room_clone_parent = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
-                    if(!room_clone_parent) return false; // nodeElement 가 .scrollable-area.origin 의 자식 요소가 아니면 return.
+                    if (!room_clone_parent) return false; // nodeElement 가 .scrollable-area.origin 의 자식 요소가 아니면 return.
                     room_clone = room_clone_parent.getElementsByClassName('scrollable-area clone')[0];
                     if (!room_clone) return false;
-                    
+
                     message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
                     scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
                     chat_clone = <Element>nodeElement.cloneNode(true);
 
+                    let display_name = chat_clone.getElementsByClassName('chat-author__display-name')[0];
+                    let login_name = display_name.getAttribute('data-a-user');
+
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
+                    let filter_arr = Object.keys(filter).map(el => filter[el]);
+
+                    var id_include = filter_arr.filter(el => (el.value === login_name) && (el.filter_type === 'include'));
+                    var id_exclude = filter_arr.filter(el => (el.value === login_name) && (el.filter_type === 'exclude'));
+                    let id_available = ((id_include.length != 0) && (id_exclude.length === 0));
+
                     Array.from(badges).some((badge) => {
+
                         let badge_uuid = new URL(badge.getAttribute('src')!).pathname.split('/')[3];
 
-                        if (Object.values(badge_setting).includes(badge_uuid)) {
+                        var badge_include = filter_arr.filter(el => (el.value === badge_uuid) && el.filter_type === 'include');
 
-                            if (!(message_container && chat_clone)) return;
-                            message_container.appendChild(chat_clone);
-                            nodeElement.classList.add('tbc_highlight');
+                        // 빈 배열을 반환할 경우 제외 대상이 아니라는 의미. 배열에 값이 있는 경우 해당 배지는 제외 대상.
+                        var badge_exclude = filter_arr.filter(el => (el.value === badge_uuid) && el.filter_type === 'exclude');
 
-                            if (message_container.childElementCount > CLONE_CHAT_COUNT) {
-                                message_container.removeChild(<Element>message_container.firstElementChild);
-                            }
-                            if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
+                        if(badge_exclude.length > 0 || id_exclude.length > 0){
+                            // exclude 에 등록되어 있으면 무조건 안됨.
+                            return true;
+                        }
+                        if(badge_include.length === 0 && id_include.length === 0){
+                            // include 에 등록되어 있지 않으면 안됨.
+                            return true;
+                        }
+                        if(badge_include.length > 0 || id_include.length > 0){
+                            // 위 두 조건을 만족하고 include 에 하나라도 등록되어 있으면 통과.
+                            add_chat(nodeElement, chat_clone, scroll_area, message_container);
+                            return true;
                         }
                     });
+                    if(id_available){
+                        //pass = true;
+                        add_chat(nodeElement, chat_clone, scroll_area, message_container);
+                    }
+                    
                 } else if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
                     //채팅방 재접속. (when re-connected to chat room)
                     Mirror_of_Erised();
@@ -217,7 +253,7 @@
 
         const chat_room = document.querySelector('.chat-room__content .chat-list--default');
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-        
+
         if (chat_room) {
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
@@ -242,8 +278,9 @@
         for (var key in changes) {
             let newValue = changes[key].newValue;
 
-            if (key === 'badge_setting') {
-                badge_setting = newValue;
+            if (key === 'filter') {
+                console.debug('filter updated : ', filter);
+                filter = newValue;
             } else if (key === 'container_ratio') {
                 change_container_ratio(parseInt(newValue));
             }
@@ -260,10 +297,3 @@
         return true;
     });
 })();
-
-
-
-
-
-
-
