@@ -9,15 +9,22 @@ const FILES: string[] = [
   '_locales/ko/messages.json',
 
   'public/popup.html',
+  'public/setting.html',
 
   'dist/js/extension_background.js',
   'dist/js/inject_background.js',
   'dist/js/popup.js',
+  'dist/js/setting.js',
+  'dist/js/types.js',
 
   'dist/css/inject_background.css',
+  'dist/css/font.css',
   'dist/css/popup.css',
+  'dist/css/setting.css',
 
-  'public/icons/cc_icon128.png',
+  'dist/fonts/PoorStory-Regular.woff2',
+
+  'public/icons/cc_icon128.png'
 ];
 
 function run() {
