@@ -7,9 +7,8 @@
 
     <script type='module' src="../dist/js/setting.js" defer></script>
 
+    <link href="../dist/css/font.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/setting.css" rel="stylesheet" type="text/css" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
     <title>TBC - Setting</title>
 </head>
@@ -20,17 +19,24 @@
         <div id='title_container'>
             <h1>설정</h1>
         </div>
+        <button id='DEBUG_CURRENT_FILTER'>DEBUG_CURRENT_FILTER</button>
+        <button id='backup_filter'>파일 백업</button>
+        <div id='filter_upload'>
+            <label id='input_label' for="import_filter">파일 업로드</label>
+            <input type="file" id="import_filter" accept=".tbc"/>
+        </div>
+        
 
         <div id='setting_container'>
 
             조건 추가</br>
 
             <select name="Category" id="category-select">
-                <option value="badge_uuid">배지 링크</option>
                 <option value="login_name">닉네임</option>
+                <option value="badge_uuid">배지 링크</option>
             </select>
 
-            <input id ='condition_value' type='text' placeholder="배지 링크 입력">
+            <input id ='condition_value' type='text' placeholder="로그인 아이디 입력">
 
             <select name="Condition" id="condition-select">
                 <option value="include">포함</option>
@@ -50,11 +56,17 @@
 
         </div>
 
-
-        <div class='search_container'>
-            <input id='search_input' type='text' placeholder="">
-            <button id='remove_btn'>선택 항목 삭제</button>
+        <div class='container'>
+            <div class='search_container'>
+                <input id='search_input' type='text' placeholder="검색">
+            </div>
+            <div class='control_panel'>
+                <button id='remove_btn'>선택 항목 삭제</button>
+                <button id='remove_all_btn'>전체 삭제</button>
+            </div>
         </div>
+        
+        
 
 
         <div id='list_container'>
