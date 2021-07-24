@@ -30,24 +30,15 @@ function localizeHtmlPage() {
     homepage_link.textContent = chrome.i18n.getMessage('homepage');
 }
 
-function set_solar_system(){
-    var now = new Date();
-    var times = SunCalc.getTimes(now, 35.179444, 129.075556);
-    console.debug(times)
-    if(times.night < now < times.sunrise){
-        console.debug('밤과 일출 사이');
-    }
-}
-set_solar_system();
-
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
 
 //init popop setting value
-chrome.storage.local.get(['filter'], function (result) {
+chrome.storage.sync.get('filter', function (result) {
 
     let chboxs = Array.from(document.getElementsByClassName('badge_checkbox'));
+
     global_filter = result.filter;
 
     chboxs.forEach(e=>{
@@ -58,6 +49,7 @@ chrome.storage.local.get(['filter'], function (result) {
             }
         });
     });
+
 });
 
 chrome.storage.local.get(['container_ratio'], function (result) {
@@ -88,29 +80,25 @@ options.addEventListener('change', e => {
     let target = <HTMLInputElement>e.target;
 
     if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
-
-        // chrome.storage.local.get(['filter'], function (result) {
-            
-        // });
         let filter = global_filter;
 
         checkboxes.forEach(c => {
             const id = c.id; // 필터 타입 (include / exclude)
             
             let type = c.checked ? filter_type.Include : filter_type.Exclude;
+
             filter.forEach((e, i)=>{
                 let filter_id = e.filter_id;
                 let is_default = Object.values(default_badge).includes(filter_id);
+
                 if(is_default && filter_id === id){
-                    console.debug('다음 배지의 상태가 변경 됨 : %o : %o', id, type);
                     filter[i].filter_type = type;
                 }
-            })
+
+            });
         });
 
-        chrome.storage.local.set({ filter }, function () {
-            console.debug('popup 에서 배지 옵션이 변경되었습니다. filter : ', filter);
-        });
+        chrome.storage.sync.set({ filter }, ()=>{});
         
     }
 });

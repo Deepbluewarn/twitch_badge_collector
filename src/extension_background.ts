@@ -61,7 +61,7 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
 
     let version = chrome.runtime.getManifest().version;
     reason.to = version;
-
+    chrome.storage.local.set({ default_filter : filter }, function () { });
     chrome.storage.sync.set({ filter }, function () { });
     chrome.storage.local.set({ container_ratio: 30 }, function () { });
 

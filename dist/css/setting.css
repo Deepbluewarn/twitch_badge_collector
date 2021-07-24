@@ -1,10 +1,19 @@
 *{
-    background-color: #f9f9f9;
+    background-color: #222222;
+    color :rgb(218, 218, 218);
+    font-family: 'Poor Story', cursive;
+	font-size: 1rem;
 }
+
 html, body{
     display: flex;
     justify-content: center;
     margin-left: 1rem;
+}
+
+.container{
+    display: flex;
+    gap : 5px;
 }
 
 #setting_container{
@@ -16,5 +25,9 @@ html, body{
 
 .component{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 9fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr 9fr 1fr;
+}
+
+#import_filter{
+    display: none;
 }

@@ -33,7 +33,7 @@
     // chrome.storage.local.get(['badge_setting'], function (result) {
     //     badge_setting = result.badge_setting;
     // });
-    chrome.storage.local.get(['filter'], function (result) {
+    chrome.storage.sync.get(['filter'], function (result) {
         filter = result.filter;
     });
 
@@ -84,7 +84,6 @@
     }
 
     function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element) {
-        console.debug('add_chat');
         if (!(message_container && chat_clone)) return;
 
         message_container.appendChild(chat_clone);
@@ -273,13 +272,12 @@
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
 
-        if (namespace != 'local') return;
+        //if (namespace != 'local') return;
 
         for (var key in changes) {
             let newValue = changes[key].newValue;
 
             if (key === 'filter') {
-                console.debug('filter updated : ', filter);
                 filter = newValue;
             } else if (key === 'container_ratio') {
                 change_container_ratio(parseInt(newValue));
