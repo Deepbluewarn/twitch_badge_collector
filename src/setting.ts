@@ -449,24 +449,16 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         } 
     });
 
-    // // chrome.storage.onChanged.addListener(function (changes, namespace) {
-    // //     for (var key in changes) {
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (var key in changes) {
 
-    // //         let newValue = changes[key].newValue;
+            let newValue = changes[key].newValue;
 
-    // //         if (key === 'filter') {
-    // //             console.debug('filter updated : ', global_filter);
-    // //             global_filter = newValue;
-    // //         }
+            if (key === 'filter') {
+                global_filter = newValue;
+            }
 
-    // //     }
-    // // });
-
-    // DEBUG_CURRENT_FILTER.addEventListener('click', e=>{
-    //     console.debug('DEBUG_CURRENT_FILTER : %o', global_filter);
-    //     // chrome.storage.sync.get('filter', (result)=>{
-    //     //     console.debug('DEBUG_CURRENT_FILTER : %o', result.filter);
-    //     // });
-    // });
+        }
+    });
 
 })();
