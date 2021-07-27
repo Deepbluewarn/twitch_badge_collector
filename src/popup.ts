@@ -1,7 +1,7 @@
 // @ts-nocheck
 import {Filter, filter_category, filter_type, default_badge} from './types.js';
 let options = <HTMLDivElement>document.getElementById('options');
-let add_condition_btn = <HTMLButtonElement>document.getElementById('add_condition_btn');
+let add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
 let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
 let range_marks = <HTMLDivElement>document.getElementById('range_marks');
 let version_info = <HTMLSpanElement>document.getElementById('version_info');
@@ -109,12 +109,12 @@ slider.addEventListener('change', e => {
 });
 
 range_marks.addEventListener('click', e =>{
-    let target = (e.target as HTMLParagraphElement)
+    let target = (e.target as HTMLParagraphElement);
     if(target.nodeName != 'P') return;
     chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
 });
 
-add_condition_btn.addEventListener('click', e=>{
-    let url = chrome.extension.getURL('public/setting.html');
+add_filter_btn.addEventListener('click', e=>{
+    let url = chrome.extension.getURL('public/filter.html');
     chrome.tabs.create({ url: url });
 });
