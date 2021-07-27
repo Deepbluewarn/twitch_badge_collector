@@ -14,7 +14,7 @@ Chatting is filtered by badge and ID.
 
 Enter the ID or nickname of the user you want to add.
 
-#### 배지 추가하기
+#### Add Badge
 
 Enter the image link of the badge you want to add.
 Links can be obtained from chats in the Twitch chat window.

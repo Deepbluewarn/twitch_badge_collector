@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {Filter, filter_category, filter_type, default_badge} from './types.js';
+import {Filter, filter_category, filter_type, default_badge} from './types.js.js';
 let options = <HTMLDivElement>document.getElementById('options');
 let add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
 let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];

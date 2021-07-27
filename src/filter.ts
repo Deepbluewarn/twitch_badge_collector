@@ -68,7 +68,7 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         document.getElementById('add_title')!.textContent = chrome.i18n.getMessage('f_add_desc');
 
         let doc_link = document.createElement('a');
-        doc_link.setAttribute('href', '');
+        doc_link.setAttribute('href', chrome.i18n.getMessage('filter_desc_link'));
         doc_link!.textContent = chrome.i18n.getMessage('f_desc_link');
 
         let add_desc = document.getElementById('add_title');

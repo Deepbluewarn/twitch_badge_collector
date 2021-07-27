@@ -30,6 +30,10 @@
     "message" : "HOMEPAGE"
   },
 
+  "filter_desc_link" : {
+    "message" : "https://tbc.bluewarn.dev/F_README_en.html"
+  },
+
   "f_title" : {
     "message" : "Filter Setting"
   },
