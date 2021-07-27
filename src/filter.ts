@@ -69,6 +69,7 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
 
         let doc_link = document.createElement('a');
         doc_link.setAttribute('href', chrome.i18n.getMessage('filter_desc_link'));
+        doc_link.setAttribute('target', '_blank');
         doc_link!.textContent = chrome.i18n.getMessage('f_desc_link');
 
         let add_desc = document.getElementById('add_title');
