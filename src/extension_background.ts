@@ -20,9 +20,7 @@ function gaInit_background() {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.debug('sender.tab : %o', sender.tab);
     if (request.type === 'ga_sendEvent') {
-        console.debug('ga 메시지 도착');
         ga('send', 'event', request.obj);
         sendResponse({ 'ga_sendEvent': 'done' });
     }
