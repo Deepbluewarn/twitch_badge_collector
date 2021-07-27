@@ -1,4 +1,7 @@
 # Twitch Badge Collector
+
+For Korean [Link](https://tbc.bluewarn.dev/README.html)
+
 It's an extension that makes Twitch Chat easier to view.
 
 Collect and view the chat with a specific badge!
