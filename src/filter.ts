@@ -52,6 +52,12 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
 
             });
         }
+        let label_obj: any = {};
+        label_obj.filter_length = global_filter.length;
+        label_obj.version = chrome.runtime.getManifest().version;
+        let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'onStart', 'eventLabel' : JSON.stringify(label_obj)};
+        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
+
         display_filter_list(1);
     });
 
@@ -355,16 +361,21 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         });
         if(!meta_avail){
             toastr.error(chrome.i18n.getMessage('f_upload_error'));
+
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'upload_error', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
+
             return false;
         }
         chrome.storage.sync.set({filter}, ()=>{
             global_filter = filter as Array<Filter>;
             toastr.success(chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
+
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'upload_success', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     }
-
-
 
     add_btn.addEventListener('click', e => {
         let f_type = condition_select.value;
@@ -379,11 +390,16 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
             } else {
                 // 배지 추가인데 링크가 유효하지 않은 경우
                 toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
+
+                let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'add_btn_invalid_link', 'eventLabel' : chrome.runtime.getManifest().version};
+                chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
+
                 return false;
             }
 
         }
-
+        let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'add_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         add_filter_object(f_type, f_category, f_val, getRandomString());
     });
 
@@ -479,6 +495,9 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
 
             checkbox_head.checked = false;
             display_filter_list(parseInt(page_num));
+
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'rm_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     });
     remove_all_btn.addEventListener('click', e => {
@@ -493,8 +512,13 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         global_filter.splice(default_index[default_index.length - 1] + 1, global_filter.length);
 
         chrome.storage.sync.set({ filter: global_filter }, () => {
+
             toastr.success(chrome.i18n.getMessage('f_all_rm'));
+
             display_filter_list(1);
+
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'rm_all_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
 
     });
@@ -532,7 +556,11 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
             vLink.setAttribute('href', vUrl);
             vLink.setAttribute('download', vName);
             vLink.click();
+
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'backup_success', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
+        
     });
 
     import_filter.addEventListener('change', e=>{
@@ -542,7 +570,8 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         reader.onload = onReaderLoad;
         if(files){
             reader.readAsText(files[0]);
-        } 
+        }
+        
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
