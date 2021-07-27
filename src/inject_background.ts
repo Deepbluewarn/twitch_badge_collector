@@ -152,13 +152,14 @@
 
                     let display_name = chat_clone.getElementsByClassName('chat-author__display-name')[0];
                     let login_name = display_name.getAttribute('data-a-user');
+                    let nickname = display_name.textContent;
 
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
                     let filter_arr = Object.keys(filter).map(el => filter[el]);
 
-                    var id_include = filter_arr.filter(el => (el.value === login_name) && (el.filter_type === 'include'));
-                    var id_exclude = filter_arr.filter(el => (el.value === login_name) && (el.filter_type === 'exclude'));
+                    var id_include = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'include'));
+                    var id_exclude = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'exclude'));
                     let id_available = ((id_include.length != 0) && (id_exclude.length === 0));
 
                     Array.from(badges).some((badge) => {
