@@ -29,19 +29,97 @@
   "homepage" : {
     "message" : "HOMEPAGE"
   },
-  "ethereum" : {
-    "message" : "Ethereum"
+
+  "f_title" : {
+    "message" : "Filter Setting"
   },
-  "doge" : {
-    "message" : "Dogecoin"
+  "f_add_desc" : {
+    "message" : "You can add Filter you want. For details on how to use it, "
   },
-  "donate_help_msg" : {
-    "message" : "Click to copy Adddress"
+  "f_desc_link" : {
+    "message" : "see here."
   },
-  "donate_page_copied" : {
-    "message" : "Copied!"
+  "f_nickname" : {
+    "message" : "nickname"
   },
-  "donate_page_thank_you" : {
-    "message" : "Thanks to your donation!"
+  "f_badge" : {
+    "message" : "badge"
+  },
+  "f_badge_link" : {
+    "message" : "badge_link"
+  },
+  "f_nickname_ph" : {
+    "message" : "Login ID or Nickname"
+  },
+  "f_badge_ph" : {
+    "message" : "Badge Image Link"
+  },
+  "f_include" : {
+    "message" : "Include"
+  },
+  "f_exclude" : {
+    "message" : "Exclude"
+  },
+  "f_add" : {
+    "message" : "Add"
+  },
+  "f_search_ph" : {
+    "message" : "Search"
+  },
+  "f_category" : {
+    "message" : "Category"
+  },
+  "f_cond" : {
+    "message" : "Cond."
+  },
+  "f_contents" : {
+    "message" : "Contents"
+  },
+
+  "f_btn_rm_sel" : {
+    "message" : "Remove"
+  },
+  "f_btn_rm_all" : {
+    "message" : "Remove All"
+  },
+  "f_btn_bk" : {
+    "message" : "Backup"
+  },
+  "f_btn_up" : {
+    "message" : "Upload"
+  },
+
+  "f_msg_already" : {
+    "message" : "Filter has already been added."
+  },
+  "f_no_value" : {
+    "message" : "Please enter your content."
+  },
+  "f_added" : {
+    "message" : "Filter successfully added."
+  },
+  "f_upload_error" : {
+    "message" : "An error occurred while uploading the file. (Filter Info not found)"
+  },
+  "f_upload_done" : {
+    "message" : "Successfully applied backup file."
+  },
+  "f_link_invalid" : {
+    "message" : "Badge link is invalid."
+  },
+  "f_rm_default" : {
+    "message" : "You cannot delete the default badge."
+  },
+  "f_ask_rm_all" : {
+    "message" : "Delete all?"
+  },
+  "f_done" : {
+    "message" : "Done."
+  },
+  "f_all_rm" : {
+    "message" : "All filters have been deleted."
+  },
+  "f_rm_proceed" : {
+    "message" : "All data will be deleted and replaced. Proceed?"
   }
 }

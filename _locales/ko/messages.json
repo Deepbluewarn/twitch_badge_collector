@@ -29,19 +29,99 @@
   "homepage" : {
     "message" : "홈페이지"
   },
-  "ethereum" : {
-    "message" : "이더리움"
+
+  "f_title" : {
+    "message" : "필터 설정"
   },
-  "doge" : {
-    "message" : "도지코인"
+  "f_add_desc" : {
+    "message" : "원하는 필터링 조건을 추가할 수 있습니다. 자세한 사용방법은 "
   },
-  "donate_help_msg" : {
-    "message" : "클릭하면 주소가 복사됩니다."
+  "f_desc_link" : {
+    "message" : "이곳을 참고하세요."
   },
-  "donate_page_copied" : {
-    "message" : "복사 됨!"
+  "f_nickname" : {
+    "message" : "닉네임"
   },
-  "donate_page_thank_you" : {
-    "message" : "후원해 주셔서 감사합니다!"
+  "f_badge" : {
+    "message" : "배지"
+  },
+  "f_badge_link" : {
+    "message" : "배지 링크"
+  },
+  "f_nickname_ph" : {
+    "message" : "로그인 아이디 또는 닉네임"
+  },
+  "f_badge_ph" : {
+    "message" : "배지 이미지 링크"
+  },
+  "f_include" : {
+    "message" : "포함"
+  },
+  "f_exclude" : {
+    "message" : "제외"
+  },
+  "f_add" : {
+    "message" : "추가"
+  },
+  "f_search_ph" : {
+    "message" : "검색"
+  },
+  "f_category" : {
+    "message" : "카테고리"
+  },
+  "f_cond" : {
+    "message" : "조건"
+  },
+  "f_contents" : {
+    "message" : "내용"
+  },
+
+
+  "f_btn_rm_sel" : {
+    "message" : "선택 삭제"
+  },
+  "f_btn_rm_all" : {
+    "message" : "전체 삭제"
+  },
+  "f_btn_bk" : {
+    "message" : "파일 백업"
+  },
+  "f_btn_up" : {
+    "message" : "파일 업로드"
+  },
+
+
+  "f_msg_already" : {
+    "message" : "이미 추가된 필터입니다."
+  },
+  "f_no_value" : {
+    "message" : "내용을 입력하세요."
+  },
+  "f_added" : {
+    "message" : "필터를 추가했습니다."
+  },
+  "f_upload_error" : {
+    "message" : "파일 업로드 중 에러가 발생하였습니다. (필터 정보를 찾을 수 없음)"
+  },
+  "f_upload_done" : {
+    "message" : "백업 파일을 적용했습니다."
+  },
+  "f_link_invalid" : {
+    "message" : "배지 링크가 올바르지 않습니다."
+  },
+  "f_rm_default" : {
+    "message" : "기본 배지는 삭제할 수 없습니다."
+  },
+  "f_ask_rm_all" : {
+    "message" : "모두 삭제할까요?"
+  },
+  "f_done" : {
+    "message" : "완료."
+  },
+  "f_all_rm" : {
+    "message" : "모든 필터가 삭제되었습니다."
+  },
+  "f_rm_proceed" : {
+    "message" : "기존 데이터는 삭제됩니다. 계속 할까요?"
   }
 }

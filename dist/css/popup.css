@@ -11,6 +11,7 @@
 	--bottom-background-color: #0E1D31;
 
     --background-color: #F9F9F9;
+	--background-alpha-color: rgba(182, 182, 182, 0.404);
     --theme-button-color: #ffd800;
     --rate-button-color: #978fc7;
 
@@ -19,6 +20,11 @@
     --switch-button-color: #ffffff;
     --switch-border-color: #ffffff00;
     --switch-border-size: 2px;
+
+	--add-button-border-color : #ee4865;
+	--add-button-background-color : #F9F9F9;
+	--add-button-hover-background-color : #F9F9F9;
+
 
     --slider-background-color: #d6d6d6b0;
     /* --slider-border-size: px; */
@@ -114,6 +120,13 @@ img {
 	align-items: center;
 	margin: .5rem;
 }
+.bg_flex_cols {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	margin: .5rem;
+}
 
 .option {
 	display: grid;
@@ -163,6 +176,58 @@ img {
 	margin-left: 1rem;
 	margin-right: 1rem;
 }
+
+#add_filter_btn{
+	display: inline-flex;
+	justify-content: center;
+  	align-items: center;
+	font-size: .9rem;
+	color: var(--text-color-inverted);
+	background-color: var(--bottom-background-color);
+	/* color: var(--text-color); */
+	border : 2px solid var(--bottom-background-color);
+	border-radius: 4px;
+	width: 100%;
+	padding: 2px;
+	cursor: pointer;
+}
+#add_filter_btn:hover{
+	color : var(--text-highlight-color);
+}
+/* #add_condition_btn {
+	border: 0px solid var(--add-button-border-color);
+	background-color: var(--background-color);
+	font-size: 12px;
+	height: 2.5em;
+	width: 2.5em;
+	border-radius: 999px;
+	position: relative;
+}
+#add_condition_btn:after,
+#add_condition_btn:before {
+	content: "";
+	display: block;
+	background-color: var(--add-button-border-color);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#add_condition_btn:before {
+	height: 1em;
+	border-radius: 2px;
+	width: 0.2em;
+}
+
+#add_condition_btn:after {
+	height: 0.2em;
+	border-radius: 2px;
+	width: 1em;
+}
+#add_condition_btn:hover{
+	background-color: var(--background-alpha-color);
+} */
 
 #container_range{
 	margin-bottom: 0;
