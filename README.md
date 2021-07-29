@@ -15,9 +15,8 @@ Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpen
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
 
-## v1.2.19 Changlog
-   - 채팅창의 크기를 조절하기 위한 드래그 기능이 추가되었습니다.</br>(아래 채팅창의 실선 부분을 잡고 끌어당겨서 크기를 변경할 수 있습니다.)
-   - 하단 채팅창의 좌우 여백이 제거되었습니다.</br>(Thanks for ylemkimon)
+## v1.3.0 Changlog
+   - Add Filter addon
     
     
     
