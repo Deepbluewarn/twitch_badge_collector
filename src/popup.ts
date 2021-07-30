@@ -115,6 +115,6 @@ range_marks.addEventListener('click', e =>{
 });
 
 add_filter_btn.addEventListener('click', e=>{
-    let url = chrome.extension.getURL('public/filter.html');
+    let url = chrome.runtime.getURL('public/filter.html');
     chrome.tabs.create({ url: url });
 });
