@@ -38,7 +38,8 @@
     "message" : "Filter Setting"
   },
   "f_add_desc" : {
-    "message" : "You can add Filter you want. For details on how to use it, "
+    "message" : "You can add or exclude chat from specific badges or users with the filter feature. For details on how to use it, "
+    
   },
   "f_desc_link" : {
     "message" : "see here."

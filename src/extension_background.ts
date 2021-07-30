@@ -50,6 +50,11 @@ function isTwitch(url: string | undefined) {
     }
 }
 
+function show_filter_page(){
+    let url = chrome.extension.getURL('public/filter.html');
+    chrome.tabs.create({ url: url });
+}
+
 gaInit_background();
 
 chrome.runtime.onInstalled.addListener(function (reason: any) {
@@ -67,7 +72,23 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
         {filter_id : 'verified', category : 'badge_uuid', filter_type : 'include', value : 'd12a2e27-16f6-41d0-ab77-b780518f00a3'}
     ]
 
+    
+
     let version = chrome.runtime.getManifest().version;
+
+    if(version === '1.3.1'){
+        chrome.notifications.create('introduce_filter', {
+            title : "Twitch Badge Collector",
+            type : 'basic',
+            iconUrl : '../public/icons/cc_icon128.png',
+            message : "새로 추가된 필터 기능을 사용해보세요!",
+            requireInteraction : true,
+            buttons : [{
+                title : '바로가기'
+            }],
+            silent : true
+        });
+    }
     reason.to = version;
     chrome.storage.local.set({ default_filter : filter }, function () { });
     chrome.storage.sync.set({ filter }, function () { });
@@ -77,6 +98,13 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version });
     ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
 });
+
+chrome.notifications.onButtonClicked.addListener((id)=>{
+    if(id === 'introduce_filter') show_filter_page();
+});
+chrome.notifications.onClicked.addListener(id=>{
+    if(id === 'introduce_filter') show_filter_page();
+})
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
     heartbeat();
