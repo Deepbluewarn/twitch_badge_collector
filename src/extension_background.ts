@@ -81,7 +81,7 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
             title : "Twitch Badge Collector",
             type : 'basic',
             iconUrl : '../public/icons/cc_icon128.png',
-            message : "새로 추가된 필터 기능을 사용해보세요!",
+            message : chrome.i18n.getMessage('f_introduce'),
             requireInteraction : true,
             buttons : [{
                 title : '바로가기'
@@ -100,11 +100,17 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
 });
 
 chrome.notifications.onButtonClicked.addListener((id)=>{
-    if(id === 'introduce_filter') show_filter_page();
+    if(id === 'introduce_filter'){
+        show_filter_page();
+        chrome.notifications.clear(id);
+    };
 });
 chrome.notifications.onClicked.addListener(id=>{
-    if(id === 'introduce_filter') show_filter_page();
-})
+    if(id === 'introduce_filter'){
+        show_filter_page();
+        chrome.notifications.clear(id);
+    };
+});
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
     heartbeat();

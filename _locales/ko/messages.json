@@ -34,6 +34,10 @@
     "message" : "https://tbc.bluewarn.dev/F_README.html"
   },
 
+  "f_introduce" : {
+    "message" : "새로 추가된 필터 기능을 사용해보세요!"
+  },
+
   "f_title" : {
     "message" : "필터 설정"
   },
