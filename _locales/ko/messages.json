@@ -3,7 +3,7 @@
     "message" : "Twitch Badge Collector"
   },
   "ExtensionDesc" : {
-    "message" : "트위치 채팅에서 특별한 배지를 가진 채팅을 모아서 볼 수 있습니다!"
+    "message" : "트위치 생방송 채팅에서 원하는 배지를 가진 채팅을 모아보세요!"
   },
   "popup_title" : {
     "message" : "Twitch Badge Collector"
@@ -40,6 +40,9 @@
 
   "f_title" : {
     "message" : "필터 설정"
+  },
+  "p_filter_btn" : {
+    "message" : "필터 추가"
   },
   "f_add_desc" : {
     "message" : "필터 기능으로 특정 배지나 유저의 채팅을 추가하거나 제외할 수 있습니다. 자세한 사용방법은 "

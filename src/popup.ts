@@ -25,6 +25,8 @@ function localizeHtmlPage() {
         if (id) text[0].textContent = chrome.i18n.getMessage(id);
     });
 
+    add_filter_btn.textContent = chrome.i18n.getMessage('p_filter_btn');
+
     review_link.textContent = chrome.i18n.getMessage('review');
     support_link.textContent = chrome.i18n.getMessage('support');
     homepage_link.textContent = chrome.i18n.getMessage('homepage');

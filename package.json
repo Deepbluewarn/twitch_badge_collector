@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/clipboard": "^2.0.1",
     "@types/google.analytics": "0.0.42",
+    "@types/mixpanel": "^2.14.3",
     "@types/toastr": "^2.1.39"
   },
   "private": true,
