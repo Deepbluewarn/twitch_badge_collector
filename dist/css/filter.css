@@ -1,25 +1,24 @@
 .default{
-    --bg-color : #222222;
+    --bg-color : #0e0e0e;
     /* --bg-color : #f0cf61; */
-    --color : #f9f9f9;
+    --color : #e4e4e4;
     --add-desc-color : #a2a2a2;
 
-    --setting-container-bg-color : #2b2b2b;
-    --setting-container-bd-color : #1f1f1f;
+    --setting-container-bg-color : #1d1d1d;
     --control-container-bg-color : #ffffff00;
 
-    --sel-bd-color: #1d1d1d;
+    
 
     /* --list-head-bg-color: #393e461a; */
     
-    --list-container-bg-color : #2b2b2b;
-    --list-container-color: #f7f7f7;
+    --list-container-bg-color : #1d1d1d;
+    --list-container-color: #e4e4e4;
     --list-head-bg-color : var(--list-container-bg-color);
     --list-head-color: #eeeeee;
     --list-head-bd-color: #444444;
 
-    --page-links-color : #ffffff;
-    --page-links-highlight-color : #ee4865;
+    --page-links-color : #707070;
+    --page-links-highlight-color : #e4e4e4;
 
     --label-text-bg-color : #3a3a3a;
     --label-text-color : #EEEEEE;
@@ -27,8 +26,11 @@
 
     --input-label-bd-color : #2d2d2d;
 
-    --add-btn-bg-color : #0E1D31;
-    --add-btn-color : var(--color);
+    --add-btn-bg-color : #e4e4e4;
+    --add-btn-color : #101010;
+
+    --sel-bd-color: #2b2b2b;
+    --sel-bg-color : #2b2b2b;
 
     /* --rm-sel-btn-bg-color : #ff8484;
     --rm-sel-btn-color : #fafafa;
@@ -38,21 +40,26 @@
     --file-backup-color : #000000;
     --file-upload-bg-color : #fff170;
     --file-upload-color : #000000; */
-    --rm-sel-btn-bg-color : #353535;
-    --rm-sel-btn-color : #cccccc;
-    --rm-all-btn-bg-color : #353535;
-    --rm-all-btn-color : #cccccc;
-    --file-backup-bg-color : #353535;
-    --file-backup-color : #cccccc;
-    --file-upload-bg-color : #353535;
-    --file-upload-color : #cccccc;
+    --rm-sel-btn-bg-color : #e4e4e4;
+    --rm-sel-btn-color : #101010;
+    --rm-all-btn-bg-color : #e4e4e4;
+    --rm-all-btn-color : #101010;
+    --file-backup-bg-color : #e4e4e4;
+    --file-backup-color : #101010;
+    --file-upload-bg-color : #e4e4e4;
+    --file-upload-color : #101010;
 
-    --condition-include-color : #caee48;
-    --condition-exclude-color : #ee4865;
+    --condition-include-color : #e1ff74;
+    --condition-exclude-color : #ff5b76;
+    --condition-sleep-color : #3b3b3b;
 }
 *{
     font-family: 'Poor Story', cursive;
 	font-size: 20px;
+}
+
+#DEBUG_FILTER_ALL{
+    display: none;
 }
 
 html{
@@ -151,12 +158,21 @@ button:hover{
 .list{
     padding: 7px 0 7px 11px;
 }
-
+span.condition{
+    border-radius: 5px;
+    padding: 1px;
+    margin: 0 10px 0 0;
+    text-align: center;
+    cursor: pointer;
+}
 .condition[name='include']{
     color: var(--condition-include-color);
 }
 .condition[name='exclude']{
     color: var(--condition-exclude-color);
+}
+.condition[name='sleep']{
+    color: var(--condition-sleep-color);
 }
 
 .buttons{
@@ -173,15 +189,24 @@ button:hover{
 .component{
     display: grid;
     gap: 10px;
-    grid-template-columns: 1fr 2fr 1fr 9fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr 9fr 1.3fr;
     align-items: center;
 }
 .select_label{
     height: 100%;
 }
 .page_link{
-
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid; */
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
 }
+/* .page_link:first-child{
+    font-size: 3rem;    
+} */
 .page_link.curr{
     /* font-weight: bold; */
     color: var(--page-links-highlight-color);
@@ -218,7 +243,7 @@ button:hover{
 
 #list_container{
     /* width: 44rem; */
-    height: 22rem;
+    height: 22.7em;
     background-color: var(--list-container-bg-color);
     color: var(--list-container-color);
     border-radius: 5px;
@@ -302,6 +327,10 @@ button:hover{
     display: none;
 }
 
+#current_page_num{
+    display: none;
+}
+
 /* select tag design */
 
 .select_label {
@@ -326,7 +355,7 @@ button:hover{
     width: 100%;
     font-size: .9rem;
     border: 2px solid var(--sel-bd-color);
-    background-color: var(--bg-color);
+    background-color: var(--sel-bg-color);
     color: var(--color);
     height: 100%;
     border-radius: 4px;
