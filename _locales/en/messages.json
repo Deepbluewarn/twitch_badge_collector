@@ -1,6 +1,6 @@
 {
   "ExtensionName" : {
-    "message" : "Twitch Badge Collector"
+    "message" : "Twitch Badge Collector - Collect Twitch Chat"
   },
   "ExtensionDesc" : {
     "message" : "Collect chat with badges you want in Twitch Live Chat!"
@@ -71,6 +71,9 @@
   },
   "f_exclude" : {
     "message" : "Exclude"
+  },
+  "f_sleep" : {
+    "message" : "Sleep"
   },
   "f_add" : {
     "message" : "Add"

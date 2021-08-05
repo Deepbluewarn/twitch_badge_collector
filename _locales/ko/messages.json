@@ -1,6 +1,6 @@
 {
   "ExtensionName" : {
-    "message" : "Twitch Badge Collector"
+    "message" : "Twitch Badge Collector - 트위치 채팅 수집 "
   },
   "ExtensionDesc" : {
     "message" : "트위치 생방송 채팅에서 원하는 배지를 가진 채팅을 모아보세요!"
@@ -70,6 +70,9 @@
   },
   "f_exclude" : {
     "message" : "제외"
+  },
+  "f_sleep" : {
+    "message" : "꺼짐"
   },
   "f_add" : {
     "message" : "추가"
