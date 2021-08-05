@@ -12,7 +12,8 @@ export interface filter_metadata {
 
 export enum filter_type {
     Include = 'include',
-    Exclude = 'exclude'
+    Exclude = 'exclude',
+    Sleep = 'sleep'
 }
 
 export enum filter_category {
@@ -26,6 +27,10 @@ export enum default_badge {
     vip = 'vip',
     verified = 'verified'
 }
+
+export const filter_cond_list = [
+    'include', 'exclude', 'sleep'
+]
 
 export const filter = [
     {filter_id : 'streamer', category : 'badge_uuid', filter_type : 'include', value : '5527c58c-fb7d-422d-b71b-f309dcb85cc1'},

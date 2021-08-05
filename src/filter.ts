@@ -1,6 +1,7 @@
-import { Filter, filter_metadata, filter_category, filter_type, default_badge } from './types.js.js';
+import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list, default_badge, filter } from './types.js.js';
 (function () {
-    
+
+    let DEBUG_FILTER_ALL = <HTMLButtonElement>document.getElementById('DEBUG_FILTER_ALL');
     let backup_filter = <HTMLButtonElement>document.getElementById('backup_filter');
     let import_filter = <HTMLInputElement>document.getElementById('import_filter');
     let add_btn = <HTMLButtonElement>document.getElementById('add_condition');
@@ -13,6 +14,7 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
     let remove_all_btn = <HTMLButtonElement>document.getElementById('remove_all_btn');
 
     let search_input = <HTMLInputElement>document.getElementById('search_input');
+    let list_container = <HTMLDivElement>document.getElementById('list_container');
     let page_links = <HTMLDivElement>document.getElementById('page_links');
 
     let current_page_num = <HTMLSpanElement>document.getElementById('current_page_num');
@@ -157,8 +159,6 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
 
         current_page_num.setAttribute('cur_pg_num', String(page_num));
 
-        let list_container = <HTMLDivElement>document.getElementById('list_container');
-
         remove_filter_list(list_container);
 
         let filter_len = filter_.length;
@@ -175,11 +175,11 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         }
 
         for (let i = start_num; i < end_num; i++) {
-            add_filter_list(filter_[i], list_container);
+            add_filter_list(filter_[i]);
         }
     }
 
-    function add_filter_list(filter: Filter, list_container?: HTMLDivElement) {
+    function add_filter_list(filter: Filter) {
         if (!list_container) {
             list_container = <HTMLDivElement>document.getElementById('list_container');
         }
@@ -217,12 +217,18 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         } else if (f_category === filter_category.Login_name) {
             category.innerText = chrome.i18n.getMessage('f_nickname');
         }
+
         value.innerText = f_value;
-        if (f_filter_type === filter_type.Include) {
-            condition.innerText = chrome.i18n.getMessage('f_include');
-        } else if (f_filter_type === filter_type.Exclude) {
-            condition.innerText = chrome.i18n.getMessage('f_exclude');
-        }
+
+        // if (f_filter_type === filter_type.Include) {
+        //     condition.innerText = chrome.i18n.getMessage('f_include');
+        // } else if (f_filter_type === filter_type.Exclude) {
+        //     condition.innerText = chrome.i18n.getMessage('f_exclude');
+        // } else if (f_filter_type === filter_type.Sleep){
+        //     console.debug(chrome.i18n.getMessage('f_exclude'));
+        //     condition.innerText = chrome.i18n.getMessage('f_sleep');
+        // }
+        update_cond_elem(condition, f_filter_type);
 
         component.appendChild(input);
         component.appendChild(category);
@@ -306,6 +312,31 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         });
     }
 
+    /**
+     * 
+     * @param filter_id 변경하고자 하는 필터 id
+     */
+    function change_filter_cond(cond_elem: HTMLSpanElement, filter_id: string){
+        let new_filter = global_filter.map((f, i, a)=>{
+            if(f.filter_id === filter_id){
+                const type = f.filter_type;
+                const current_index = filter_cond_list.indexOf(type);
+                const nextIndex = (current_index + 1) % filter_cond_list.length;
+                const new_type = filter_cond_list[nextIndex];
+                f.filter_type = new_type;
+                cond_elem.setAttribute('name', new_type);
+                cond_elem.textContent = chrome.i18n.getMessage('f_' + new_type);
+                return f;
+            }
+            return f;
+        });
+
+        chrome.storage.sync.set({filter : new_filter}, ()=>{
+            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'cond_changed', 'eventLabel' : chrome.runtime.getManifest().version};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
+        });
+    }
+
     function set_page_links(page_links: HTMLDivElement, page_num: number, count: number) {
         Array.from(page_links.getElementsByClassName('page_link')).forEach(e => {
             e.remove();
@@ -313,19 +344,24 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         for (let i = 1; i <= count; i++) {
             let page_link = document.createElement('span');
             page_link.classList.add('page_link');
+
             if(i === page_num){
                 page_link.classList.add('curr');
             }
+            
             page_link.setAttribute('page_num', String(i));
-            page_link.textContent = "[" + i + "]";
-            page_links.appendChild(page_link)
-            // if (i >= 10) {
-            //     let next = document.createElement('span');
-            //     next.classList.add('next');
-            //     page_links.appendChild(next);
-            //     return;
-            // }
-            page_links.appendChild(page_link)
+            page_link.textContent = String(i);
+            page_links.appendChild(page_link);
+        }
+    }
+
+    function update_cond_elem(cond_elem: HTMLSpanElement, f_type: string){
+        if (f_type === filter_type.Include) {
+            cond_elem.textContent = chrome.i18n.getMessage('f_include');
+        } else if (f_type === filter_type.Exclude) {
+            cond_elem.textContent = chrome.i18n.getMessage('f_exclude');
+        } else if (f_type === filter_type.Sleep){
+            cond_elem.textContent = chrome.i18n.getMessage('f_sleep');
         }
     }
 
@@ -524,6 +560,13 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
 
     });
 
+    list_container.addEventListener('click', e=>{
+        let target = (e.target as HTMLSpanElement);
+        let id = <string>target.parentElement?.getAttribute('filter_id');
+        if(target.nodeName != 'span' && target.classList.contains('condition')){
+            change_filter_cond(target, id);
+        };
+    });
     page_links.addEventListener('click', function(e){
         let target = <HTMLSpanElement>e.target;
         let page_num = <string>target.getAttribute('page_num');
@@ -574,6 +617,10 @@ import { Filter, filter_metadata, filter_category, filter_type, default_badge } 
         }
         
     });
+
+    DEBUG_FILTER_ALL.addEventListener('click', e=>{
+        console.debug('global_filter : %o', global_filter);
+    })
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (var key in changes) {

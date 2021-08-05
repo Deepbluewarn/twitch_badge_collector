@@ -162,6 +162,8 @@
                     let id_exclude = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'exclude'));
                     let id_available = ((id_include.length != 0) && (id_exclude.length === 0));
 
+                    let badge_checked = false;
+
                     Array.from(badges).some((badge, index) => {
                         let badges_len = badges.length;
                         let badge_uuid = new URL(badge.getAttribute('src')!).pathname.split('/')[3];
@@ -171,24 +173,22 @@
                         // 빈 배열을 반환할 경우 제외 대상이 아니라는 의미. 배열에 값이 있는 경우 해당 배지는 제외 대상.
                         let badge_exclude = filter_arr.filter(el => (el.value === badge_uuid) && el.filter_type === 'exclude');
 
-                        // include 에 등록되어 있지 않으면 안됨.
-                        // exclude 에 등록되어 있으면 안됨.
-                        // 위 두 조건을 만족하고 include 에 하나라도 등록되어 있으면 통과.
-                        let condition_exclude = badge_exclude.length > 0 || id_exclude.length > 0;
-                        let condition_include = badge_include.length === 0 && id_include.length === 0;
+                        let condition_exclude = badge_exclude.length > 0 || id_exclude.length > 0; // 배지 또는 아이디가 제외 대상인 경우 true.
+                        let condition_include = badge_include.length === 0 && id_include.length === 0; // 배지 또는 아이디 둘 다 포함되지 않는 경우 true.
                         let condition_success = badge_include.length > 0 || id_include.length > 0;
 
+                        // include 에 없거나 exclude 에 있는 경우
                         if(condition_include || condition_exclude){
                             if(badges_len > index + 1) return false; // 모든 배지를 검사하지 않은 경우에는 false.
                             return true;
                         }
                         if(condition_success){
                             add_chat(nodeElement, chat_clone, scroll_area, message_container);
+                            badge_checked = true;
                             return true;
                         }
                     });
-                    if(id_available){
-                        //pass = true;
+                    if(badge_checked && id_available){
                         add_chat(nodeElement, chat_clone, scroll_area, message_container);
                     }
                     
