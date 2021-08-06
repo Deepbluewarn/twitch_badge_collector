@@ -2,7 +2,7 @@
 
 필터 추가 기능에 대한 설명입니다.
 
-For English [Link](https://tbc.bluewarn.dev/F_README_en.html)
+For [English](https://tbc.bluewarn.dev/F_README_en.html)
 
 ## 필터 추가하기
 
@@ -28,15 +28,21 @@ https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1
 https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 
 
-#### 필터 방식
+#### 필터 조건
 
-필터는 포함과 제외 두 가지 방식으로 설정할 수 있습니다.
+필터는 포함과 제외 두 가지 조건으로 설정할 수 있습니다.
 
 포함으로 설정하면 채팅을 복사하고, 제외로 설정하면 해당 채팅을 복사하지 않습니다.
 
 > 같은 조건의 필터가 함께 있으면 아이디 필터가 우선입니다.
 
+## 필터 상태 변경
 
+필터 목록 좌측의 조건을 클릭하여 필터의 작동 조건을 변경할 수 있습니다.
+
+![Filter_Cond_change]](/screenshot/ko/filter_cond_change.webp)
+
+포함, 제외, 꺼짐 세 가지 상태가 있습니다. 필터를 삭제하는 대신 필터의 상태를 꺼짐으로 설정할 수 있습니다.
 
 ## 필터 삭제하기
 

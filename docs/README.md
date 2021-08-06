@@ -34,9 +34,12 @@ For English [Link](https://tbc.bluewarn.dev/README_en.html)
 ![screenshot_3](/screenshot/ko/popup.png)
 
 브라우저 상단 우측의 확장 프로그램 아이콘을 클릭하면 프로그램을 설정 할 수 있는 팝업창이 나옵니다.<br>
-현재 지원하는 채팅 배지는 총 4 가지 입니다. (스트리머, 매니저, VIP, 인증 완료)
+
+총 4 가지 배지 (스트리머, 매니저, VIP, 인증 완료) 를 기본 조건으로 지원합니다.
 
 좌측 스위치로 원하는 배지만 설정할 수 있습니다.
+
+또한 필터 추가 버튼으로 다른 조건을 추가할 수 있습니다. 자세한 내용은 [이곳](https://tbc.bluewarn.dev/F_README.html) 을 참고하세요.
 
 바로 아래 슬라이더로 추가된 채팅창의 크기를 조절할 수 있습니다. 
 

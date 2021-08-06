@@ -28,7 +28,7 @@ https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1
 https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 
 
-#### Filter Method
+#### Filter Condition
 
 Filters can be set in two ways: Include and Exclude.
 
@@ -36,7 +36,13 @@ If set to Include, copy the chat; if set to Exclude, do not copy the chat.
 
 > If there is a filter with the same condition, the ID filter comes first.
 
+## Change Filter Condition
 
+You can change Filter Condition by clicking the left side of the filter list.
+
+![Filter_Cond_change]](/screenshot/ko/filter_cond_change.webp)
+
+There are three states: Include, Exclude, and Sleep. Instead of deleting the filter, you can set the filter's status to Sleep.
 
 ## Delete Filter
 

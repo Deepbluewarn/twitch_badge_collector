@@ -34,9 +34,13 @@ You can adjust the size by dragging the separator in the chat window.
 ![screenshot_3](/screenshot/en/popup.png)
 
 Click the extension icon on the top right of your browser to see a pop-up window where you can set up your extension.<br>
-Currently, there are 4 types of chat badges support. (Broadcaster, Moderator, VIP, Verified)
+
+Currently, TBC support default condition with 4 chat badge (Broadcaster, Moderator, VIP, Verified)
 
 You can use the switch to select the desired badge.
+
+Also, you can add the filter you want by clicking the Add Filter button.
+For more info : [see here!](https://tbc.bluewarn.dev/F_README_en.html)
 
 You can adjust the size of the chat window added with the slider below.
 
