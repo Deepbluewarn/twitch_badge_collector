@@ -270,13 +270,30 @@ span.condition{
     width: 5rem;
     height: 100%;
 }
+#search_result_container{
+    transition: .1s;
+    margin: 0 0 0 44px;
+}
+#search_result_container.hide{
+    height: 0;
+    margin: 0 0 0 44px;
+    padding: 0;
+}
+#se_result{
+    font-size: 0.9rem;
+    transition: .1s;
+}
+#se_result.hide{
+    display: none;
+}
+
 
 #page_links{
     display: flex;
     gap: 20px;
     color: var(--page-links-color);
     justify-content: center;
-    margin: 2rem 0 2rem 0;
+    margin: 1rem 0 1rem 0;
 }
 
 #add_title{

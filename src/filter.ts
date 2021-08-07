@@ -22,6 +22,9 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     const PAGE_FILTER_COUNT: number = 10;
 
     let global_filter: Array<Filter>;
+    let searched_filter: Array<Filter>;
+
+    let search_mode = false;
 
     toastr.options.preventDuplicates = true;
     toastr.options.timeOut = 4000;
@@ -155,6 +158,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         if (page_num <= 0 || !page_num) return false;
         let filter_ = global_filter;
+        if(search_mode) filter_ = searched_filter;
         //if (filter) filter_ = filter;
 
         current_page_num.setAttribute('cur_pg_num', String(page_num));
@@ -239,6 +243,26 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         list_container.appendChild(list);
     }
 
+    function display_search_result(search_text: string, f_len: number){
+
+        let se_res_container = <HTMLDivElement>document.getElementById('search_result_container');
+        let se_result = <HTMLSpanElement>document.getElementById('se_result');
+
+        if(search_text === ''){
+            se_res_container.classList.add('hide');
+            se_result.classList.add('hide');
+        }else{
+            se_res_container.classList.remove('hide');
+            se_result.classList.remove('hide');
+            let lang = <string>chrome.i18n.getUILanguage();
+            if(lang.includes('ko')){
+                se_result!.textContent = '\"' + search_text +'\" ' + '검색 결과 ' + f_len + ' 개의 필터가 있습니다.';
+            }else{
+                se_result!.textContent = 'search for \"' + search_text +'\", ' + f_len + ' Filter found.'
+            }
+        }
+    }
+
     function remove_filter_list(list_container?: HTMLDivElement) {
 
         if (!list_container) {
@@ -266,6 +290,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             f_val = condition_value.value;
             f_key = getRandomString();
         }
+        f_val = f_val.toLowerCase();
 
         //console.debug('f_type : %o, f_category : %o, f_val : %o, f_key : %o', f_type, f_category, f_val, f_key);
 
@@ -478,26 +503,25 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     });
 
     search_input.addEventListener('input', e => {
-
-        let searched_filter = global_filter.filter(f => {
+        const input_val = search_input.value;
+        searched_filter = global_filter.filter(f => {
             let val = <string>f.value.toLowerCase();
-            let input_val = search_input.value.toLowerCase();
-            if (val.includes(input_val)) return true;
+            if (val.includes(input_val.toLowerCase())) return true;
         });
-        let page_num = calc_page_num(searched_filter.length, PAGE_FILTER_COUNT);
+        const se_len = searched_filter.length;
 
-        if(search_input.value === ''){
-            page_num = 1;
+        if(input_val === ''){
+            search_mode = false;
             chrome.storage.sync.get('filter', e=>{
                 global_filter = e.filter;
-                display_filter_list(page_num);
+                display_filter_list(1);
             });
+            
         }else{
-            global_filter = searched_filter;
-            display_filter_list(page_num);
+            search_mode = true;
+            display_filter_list(1);
         }
-
-        //display_filter_list(page_num, searched_filter);
+        display_search_result(input_val, se_len);
     });
 
     remove_btn.addEventListener('click', e => {
@@ -627,7 +651,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     DEBUG_FILTER_ALL.addEventListener('click', e=>{
         console.debug('global_filter : %o', global_filter);
-    })
+
+        for(let i = 0; i < 100; i++){
+            add_filter_object(filter_type.Include, filter_category.Login_name, getRandomString(), getRandomString());
+        }
+    });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (var key in changes) {
