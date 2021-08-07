@@ -40,7 +40,7 @@ If set to Include, copy the chat; if set to Exclude, do not copy the chat.
 
 You can change Filter Condition by clicking the left side of the filter list.
 
-![Filter_Cond_change]](/screenshot/ko/filter_cond_change.webp)
+![Filter_Cond_change](/screenshot/ko/filter_cond_change.webp)
 
 There are three states: Include, Exclude, and Sleep. Instead of deleting the filter, you can set the filter's status to Sleep.
 
