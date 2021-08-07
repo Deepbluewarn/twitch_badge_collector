@@ -4,7 +4,6 @@
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let currunt_url: string;
-    //let badge_setting = {};
     let filter = {};
     let container_ratio: number;
 
@@ -30,9 +29,6 @@
         }
     })();
 
-    // chrome.storage.local.get(['badge_setting'], function (result) {
-    //     badge_setting = result.badge_setting;
-    // });
     chrome.storage.sync.get(['filter'], function (result) {
         filter = result.filter;
     });
@@ -78,7 +74,6 @@
 
         room_clone.classList.add('clone');
         chat_room.firstChild?.appendChild(room_clone);
-        //chat_room.appendChild(room_clone);
 
         change_container_ratio(container_ratio);
     }
@@ -151,8 +146,8 @@
                     chat_clone = <Element>nodeElement.cloneNode(true);
 
                     let display_name = chat_clone.getElementsByClassName('chat-author__display-name')[0];
-                    let login_name = display_name.getAttribute('data-a-user');
-                    let nickname = display_name.textContent;
+                    let login_name = display_name.getAttribute('data-a-user')?.toLowerCase();
+                    let nickname = display_name.textContent?.toLowerCase();
 
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
@@ -273,10 +268,7 @@
 
     observeStreamPage();
 
-    chrome.storage.onChanged.addListener(function (changes, namespace) {
-
-        //if (namespace != 'local') return;
-
+    chrome.storage.onChanged.addListener(function (changes) {
         for (var key in changes) {
             let newValue = changes[key].newValue;
 
