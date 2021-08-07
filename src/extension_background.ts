@@ -21,11 +21,19 @@ function gaInit_background() {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'ga_sendEvent') {
-        ga('send', 'event', request.obj);
+        send_ga_event(request.obj);
         sendResponse({ 'ga_sendEvent': 'done' });
     }
     return true;
-})
+});
+
+function send_ga_event(obj: any){
+    try{
+        ga('send', 'event', obj);
+    }catch(e){
+        console.debug(e); // ga undefined.
+    }
+}
 
 function heartbeat() {
 
@@ -36,7 +44,7 @@ function heartbeat() {
     });
     if (twitch_exist) {
         // 실시간 사용자 수 파악을 위한 Event.
-        ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'heartbeat', 'eventLabel': chrome.runtime.getManifest().version });
+        send_ga_event({ 'eventCategory': 'background', 'eventAction': 'heartbeat', 'eventLabel': chrome.runtime.getManifest().version });
     } else {
         chrome.alarms.clear('heartbeat');
     }
@@ -72,45 +80,43 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
         {filter_id : 'verified', category : 'badge_uuid', filter_type : 'include', value : 'd12a2e27-16f6-41d0-ab77-b780518f00a3'}
     ]
 
-    
-
     let version = chrome.runtime.getManifest().version;
 
-    if(version === '1.3.1'){
-        chrome.notifications.create('introduce_filter', {
-            title : "Twitch Badge Collector",
-            type : 'basic',
-            iconUrl : '../public/icons/cc_icon128.png',
-            message : chrome.i18n.getMessage('f_introduce'),
-            requireInteraction : true,
-            buttons : [{
-                title : '바로가기'
-            }],
-            silent : true
-        });
-    }
+    // if(version === '1.3.1'){
+    //     chrome.notifications.create('introduce_filter', {
+    //         title : "Twitch Badge Collector",
+    //         type : 'basic',
+    //         iconUrl : '../public/icons/cc_icon128.png',
+    //         message : chrome.i18n.getMessage('f_introduce'),
+    //         requireInteraction : true,
+    //         buttons : [{
+    //             title : '바로가기'
+    //         }],
+    //         silent : true
+    //     });
+    // }
     reason.to = version;
     chrome.storage.local.set({ default_filter : filter }, function () { });
     chrome.storage.sync.set({ filter }, function () { });
     chrome.storage.local.set({ container_ratio: 30 }, function () { });
 
     // 버전 정보 Google Analytics Event 전송
-    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version });
-    ga('send', 'event', { 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
+    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version })
+    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) })
 });
 
-chrome.notifications.onButtonClicked.addListener((id)=>{
-    if(id === 'introduce_filter'){
-        show_filter_page();
-        chrome.notifications.clear(id);
-    };
-});
-chrome.notifications.onClicked.addListener(id=>{
-    if(id === 'introduce_filter'){
-        show_filter_page();
-        chrome.notifications.clear(id);
-    };
-});
+// chrome.notifications.onButtonClicked.addListener((id)=>{
+//     if(id === 'introduce_filter'){
+//         show_filter_page();
+//         chrome.notifications.clear(id);
+//     };
+// });
+// chrome.notifications.onClicked.addListener(id=>{
+//     if(id === 'introduce_filter'){
+//         show_filter_page();
+//         chrome.notifications.clear(id);
+//     };
+// });
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
     heartbeat();
