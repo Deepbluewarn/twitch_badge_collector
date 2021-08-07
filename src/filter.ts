@@ -151,11 +151,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
      * 필터 목록을 새로고침 합니다.
      * @param page_num 표시하고자 하는 페이지 번호
      */
-    function display_filter_list(page_num: number, filter?: Array<Filter>) {
+    function display_filter_list(page_num: number/*, filter?: Array<Filter>*/) {
 
         if (page_num <= 0 || !page_num) return false;
         let filter_ = global_filter;
-        if (filter) filter_ = filter;
+        //if (filter) filter_ = filter;
 
         current_page_num.setAttribute('cur_pg_num', String(page_num));
 
@@ -298,7 +298,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         new_filter.category = f_category;
         new_filter.filter_type = f_type;
-        new_filter.value = f_val;
+        new_filter.value = f_val.toLowerCase();
         new_filter.filter_id = f_key;
 
         global_filter.push(new_filter);
@@ -488,9 +488,16 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         if(search_input.value === ''){
             page_num = 1;
+            chrome.storage.sync.get('filter', e=>{
+                global_filter = e.filter;
+                display_filter_list(page_num);
+            });
+        }else{
+            global_filter = searched_filter;
+            display_filter_list(page_num);
         }
 
-        display_filter_list(page_num, searched_filter);
+        //display_filter_list(page_num, searched_filter);
     });
 
     remove_btn.addEventListener('click', e => {
@@ -571,7 +578,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         let target = <HTMLSpanElement>e.target;
         let page_num = <string>target.getAttribute('page_num');
 
-        target.classList.add('curr')
+        target.classList.add('curr');
         display_filter_list(parseInt(page_num));
     });
 
