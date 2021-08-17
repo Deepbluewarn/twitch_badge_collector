@@ -43,7 +43,10 @@
      * Create chat window clone.
      */
     function Mirror_of_Erised() {
-        const chat_room: Element | null = document.querySelector('.chat-room__content .chat-list--default');
+        // 채팅창 폰트 크기 변경 시 css class 이름이 변경되어 element 를 찾을 수 없음. (chat-list--default, chat-list--other)
+        const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default'); // for default font size
+        const chat_room_other: Element | null = document.querySelector('.chat-room__content .chat-list--other'); // for default font size
+        const chat_room: Element | null = chat_room_default ? chat_room_default : chat_room_other;
         if (!chat_room) return false;
 
         let clone = chat_room.getElementsByClassName('scrollable-area clone')[0];
@@ -187,7 +190,8 @@
                         add_chat(nodeElement, chat_clone, scroll_area, message_container);
                     }
                     
-                } else if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
+                }
+                if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
                     //채팅방 재접속. (when re-connected to chat room)
                     Mirror_of_Erised();
                 }
@@ -211,7 +215,6 @@
     let observeChatRoom = function (target: Element) {
         //observer 가 중복 할당 되는것을 방지. 두번 할당되면 채팅이 두번씩 올라오는 끔찍한 일이 벌어진다.
         if (chat_room_observer) {
-            //chat-line__message class 는 observe 대상인 stream-chat class 의 direct child 가 아니기 때문에 subtree : true 이어야 한다.
             chat_room_observer.observe(target, default_config);
         } else {
             chat_room_observer = observeDOM(target, default_config, newChatCallback);
