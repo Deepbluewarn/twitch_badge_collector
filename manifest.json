@@ -1,20 +1,19 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
-  "default_locale": "en",
+  "default_locale": "ko",
   "icons": {
     "128": "public/icons/cc_icon128.png"
   },
   "permissions": [
     "webNavigation",
     "*://*.twitch.tv/*",
-    "storage",
-    "alarms"
-  ],  
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://ssl.google-analytics.com; object-src 'self'",
+    "*://*.google-analytics.com/*",
+    "storage"
+  ],
   "background": {
     "scripts": [
       "dist/js/extension_background.js"

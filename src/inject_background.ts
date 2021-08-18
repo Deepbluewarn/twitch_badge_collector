@@ -8,8 +8,10 @@
     let container_ratio: number;
 
     let chatIsAtBottom = true;// chat auto scroll [on / off]
+    let isLineMoved = false;
 
     const CLONE_CHAT_COUNT = 100;
+    const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
     currunt_url = location.href;
 
@@ -39,14 +41,22 @@
         }
     });
 
+    function get_chat_room(){
+        // 채팅창 폰트 크기 변경 시 css class 이름이 변경되어 element 를 찾을 수 없음. (chat-list--default, chat-list--other)
+        const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default'); // for default font size
+        const chat_room_other: Element | null = document.querySelector('.chat-room__content .chat-list--other'); // for default font size
+        return chat_room_default ? chat_room_default : chat_room_other;
+    }
+
     /**
      * Create chat window clone.
      */
     function Mirror_of_Erised() {
-        // 채팅창 폰트 크기 변경 시 css class 이름이 변경되어 element 를 찾을 수 없음. (chat-list--default, chat-list--other)
-        const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default'); // for default font size
-        const chat_room_other: Element | null = document.querySelector('.chat-room__content .chat-list--other'); // for default font size
-        const chat_room: Element | null = chat_room_default ? chat_room_default : chat_room_other;
+        
+        // const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default'); // for default font size
+        // const chat_room_other: Element | null = document.querySelector('.chat-room__content .chat-list--other'); // for default font size
+        // const chat_room: Element | null = chat_room_default ? chat_room_default : chat_room_other;
+        const chat_room = get_chat_room();
         if (!chat_room) return false;
 
         let clone = chat_room.getElementsByClassName('scrollable-area clone')[0];
@@ -125,19 +135,24 @@
 
                 // nodeElement 가 community-points-summary class 를 포함하거나 community-points-summary 의 자식 요소인 경우.
                 let point_summary = <HTMLDivElement>(nodeElement.getElementsByClassName(point_summary_className)[0] || nodeElement.closest('.' + point_summary_className));
-                let is_chat_msg = nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message';
+
+                //let is_chat_normal = nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message';
+                //let is_chat_notice = nodeElement.classList.contains('user-notice-line');
+                //const is_chat = is_chat_normal || is_chat_notice;
+
+                const is_chat = nodeElement.closest('.chat-scrollable-area__message-container');
 
                 if (point_summary) {
                     let point_button = point_summary.children[1].getElementsByTagName('button')[0];
 
                     if (point_button) {
                         point_button.click();
-                        console.log('points claimed, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
+                        console.log('TBC - points claimed, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
                     }
 
                 }
 
-                if (is_chat_msg) {
+                if (is_chat) {
                     let room_clone_parent = <Element>nodeElement.closest('.scrollable-area.origin')?.parentNode;
                     if (!room_clone_parent) return false; // nodeElement 가 .scrollable-area.origin 의 자식 요소가 아니면 return.
                     room_clone = room_clone_parent.getElementsByClassName('scrollable-area clone')[0];
@@ -149,8 +164,28 @@
                     chat_clone = <Element>nodeElement.cloneNode(true);
 
                     let display_name = chat_clone.getElementsByClassName('chat-author__display-name')[0];
-                    let login_name = display_name.getAttribute('data-a-user')?.toLowerCase();
-                    let nickname = display_name.textContent?.toLowerCase();
+                    let chatter_name = chat_clone.getElementsByClassName('intl-login')[0];
+
+                    if(!display_name && !chatter_name) return;
+                    
+                    let login_name: string = '';
+                    let nickname: string = '';
+                    let sub_login_name: string = '';
+                    let sub_nickname: string = '';
+
+                    if(display_name){
+                        login_name = <string>display_name.getAttribute('data-a-user')?.toLowerCase();
+                        nickname = <string>display_name.textContent?.toLowerCase();
+                    }
+                    if(chatter_name){
+                        sub_login_name = <string>chatter_name.textContent;
+                        sub_login_name = sub_login_name.substring(1, sub_login_name.length - 1);
+                        sub_nickname = <string>chatter_name.parentNode?.childNodes[0].textContent;
+                        console.debug('sub_login_name : %o, sub_nickname : %o', sub_login_name, sub_nickname);
+                    }
+
+                    login_name = login_name ? login_name : sub_login_name;
+                    nickname = nickname ? nickname : sub_nickname;
 
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
@@ -159,7 +194,6 @@
                     let id_include = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'include'));
                     let id_exclude = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'exclude'));
                     let id_available = ((id_include.length != 0) && (id_exclude.length === 0));
-
                     let badge_checked = false;
 
                     Array.from(badges).some((badge, index) => {
@@ -247,17 +281,21 @@
         window.addEventListener('touchmove', doDrag);
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('touchend', endDrag);
+
+        let ga_obj = {eventCategory : 'content_scripts', eventAction : 'startDrag', eventLabel : EXTENSION_VERSION};
+        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
     }
 
     let doDrag = function (e: MouseEvent | TouchEvent) {
 
-        const chat_room = document.querySelector('.chat-room__content .chat-list--default');
+        const chat_room = get_chat_room();
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
 
         if (chat_room) {
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
             container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
+            isLineMoved = true;
             chrome.storage.local.set({ container_ratio }, function () { });
         }
     }
@@ -267,6 +305,13 @@
         window.removeEventListener('touchmove', doDrag);
         window.removeEventListener('mouseup', endDrag);
         window.removeEventListener('touchend', endDrag);
+        if(isLineMoved){
+            isLineMoved = false;
+            let label: any = {version : EXTENSION_VERSION, container_ratio : container_ratio};
+            let ga_obj = {eventCategory : 'content_scripts', eventAction : 'endDrag', eventLabel : JSON.stringify(label)};
+            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
+        }
+        
     }
 
     observeStreamPage();

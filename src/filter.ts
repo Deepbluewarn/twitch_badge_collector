@@ -60,7 +60,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         let label_obj: any = {};
         label_obj.filter_length = global_filter.length;
         label_obj.version = chrome.runtime.getManifest().version;
-        let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'onStart', 'eventLabel' : JSON.stringify(label_obj)};
+        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'onStart', eventLabel : JSON.stringify(label_obj)};
         chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
         display_filter_list(1);
@@ -357,7 +357,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         chrome.storage.sync.set({filter : new_filter}, ()=>{
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'cond_changed', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'cond_changed', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     }
@@ -424,7 +424,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         if(!meta_avail){
             toastr.error(chrome.i18n.getMessage('f_upload_error'));
 
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'upload_error', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'upload_error', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
             return false;
@@ -434,7 +434,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             toastr.success(chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
 
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'upload_success', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'upload_success', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     }
@@ -453,14 +453,14 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                 // 배지 추가인데 링크가 유효하지 않은 경우
                 toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
 
-                let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'add_btn_invalid_link', 'eventLabel' : chrome.runtime.getManifest().version};
+                let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_invalid_link', eventLabel : chrome.runtime.getManifest().version};
                 chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
                 return false;
             }
 
         }
-        let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'add_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
         chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         add_filter_object(f_type, f_category, f_val, getRandomString());
     });
@@ -564,7 +564,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             checkbox_head.checked = false;
             display_filter_list(parseInt(page_num));
 
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'rm_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'rm_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     });
@@ -585,7 +585,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
             display_filter_list(1);
 
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'rm_all_btn_clicked', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'rm_all_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
 
@@ -632,7 +632,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             vLink.setAttribute('download', vName);
             vLink.click();
 
-            let ga_obj = {'eventCategory' : 'Filter_Setting', 'eventAction' : 'backup_success', 'eventLabel' : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'backup_success', eventLabel : chrome.runtime.getManifest().version};
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
         

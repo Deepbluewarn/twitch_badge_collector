@@ -1,23 +1,7 @@
-let gaNewElem: any = {};
-let gaElems: any = {};
+const tid = 'UA-194964708-5';
+const version = chrome.runtime.getManifest().version;
+
 let twitch_exist: boolean = false;
-const heartbeatInterval = 5;
-
-function gaInit_background() {
-
-    var currdate: any = new Date();
-    var url = 'https://www.google-analytics.com/analytics.js';
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * currdate; a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', url, 'ga', gaNewElem, gaElems);
-
-    ga('create', 'UA-194964708-5', 'auto'); // live
-    //ga('create', 'UA-194964708-6', 'auto'); // debug
-    ga('set', 'checkProtocolTask', null);
-}
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'ga_sendEvent') {
@@ -27,43 +11,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
 });
 
-function send_ga_event(obj: any){
-    try{
-        ga('send', 'event', obj);
-    }catch(e){
-        console.debug(e); // ga undefined.
-    }
+function send_ga_event(obj: any) {
+    var url = `http://www.google-analytics.com/collect?v=1&tid=${tid}&uid=555&t=event&ec=${obj.eventCategory}&ea=${obj.eventAction}&el=${obj.eventLabel}`;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.send();
 }
-
-function heartbeat() {
-
-    chrome.windows.getAll(windows => {
-        if (Array.isArray(windows) && windows.length === 0) {
-            chrome.alarms.clear('heartbeat');
-        }
-    });
-    if (twitch_exist) {
-        // 실시간 사용자 수 파악을 위한 Event.
-        send_ga_event({ 'eventCategory': 'background', 'eventAction': 'heartbeat', 'eventLabel': chrome.runtime.getManifest().version });
-    } else {
-        chrome.alarms.clear('heartbeat');
-    }
-
-}
-
-function isTwitch(url: string | undefined) {
-    if (url) {
-        twitch_exist = url.match(/https\:\/\/www\.twitch\.tv/) ? true : false;
-        return twitch_exist;
-    }
-}
-
-function show_filter_page(){
-    let url = chrome.extension.getURL('public/filter.html');
-    chrome.tabs.create({ url: url });
-}
-
-gaInit_background();
 
 chrome.runtime.onInstalled.addListener(function (reason: any) {
 
@@ -80,77 +33,24 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
         {filter_id : 'verified', category : 'badge_uuid', filter_type : 'include', value : 'd12a2e27-16f6-41d0-ab77-b780518f00a3'}
     ]
 
-    let version = chrome.runtime.getManifest().version;
-
-    // if(version === '1.3.1'){
-    //     chrome.notifications.create('introduce_filter', {
-    //         title : "Twitch Badge Collector",
-    //         type : 'basic',
-    //         iconUrl : '../public/icons/cc_icon128.png',
-    //         message : chrome.i18n.getMessage('f_introduce'),
-    //         requireInteraction : true,
-    //         buttons : [{
-    //             title : '바로가기'
-    //         }],
-    //         silent : true
-    //     });
-    // }
     reason.to = version;
     chrome.storage.local.set({ default_filter : filter }, function () { });
     chrome.storage.sync.set({ filter }, function () { });
     chrome.storage.local.set({ container_ratio: 30 }, function () { });
 
     // 버전 정보 Google Analytics Event 전송
-    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': version })
-    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) })
-});
-
-// chrome.notifications.onButtonClicked.addListener((id)=>{
-//     if(id === 'introduce_filter'){
-//         show_filter_page();
-//         chrome.notifications.clear(id);
-//     };
-// });
-// chrome.notifications.onClicked.addListener(id=>{
-//     if(id === 'introduce_filter'){
-//         show_filter_page();
-//         chrome.notifications.clear(id);
-//     };
-// });
-
-chrome.alarms.onAlarm.addListener(function (alarm) {
-    heartbeat();
+    send_ga_event({ eventCategory : 'background', eventAction : 'onInstalled', eventLabel : version });
+    send_ga_event({ eventCategory : 'background', eventAction : 'onInstalled', eventLabel : JSON.stringify(reason) });
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-
     let isCompleted = changeInfo.status === 'complete';
-    
+    let url = tab.url;
     chrome.pageAction.show(tabId);
 
-    if (!isCompleted) return;
-
-    let url = tab.url;
-
-    if (isTwitch(url)) {
-        chrome.alarms.get('heartbeat', (alarm) => {
-            if (!alarm) {
-                chrome.alarms.create('heartbeat', { periodInMinutes: heartbeatInterval });
-                heartbeat();
-            };
-        });
-    }
-
+    if (!isCompleted || !url) return;
     
-});
-
-chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-    chrome.tabs.query({}, function (tabs) {
-        twitch_exist = false;
-        tabs.forEach(tab => {
-            isTwitch(tab.url);
-        });
-    })
+    send_ga_event({ eventCategory : 'background', eventAction : 'onUpdated', eventLabel : version });
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
