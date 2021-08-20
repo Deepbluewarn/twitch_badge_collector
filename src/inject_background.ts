@@ -66,11 +66,14 @@
         let room_clone = <HTMLElement>room_origin.cloneNode(true);
 
         // resize handle (drag bar)
+        const handle_container = document.createElement('div');
         const resize_handle = document.createElement('div');
+        handle_container.classList.add('handle_container');
         resize_handle.classList.add('tbc_resize_handle');
-        resize_handle.addEventListener('mousedown', startDrag);
-        resize_handle.addEventListener('touchstart', startDrag);
-        chat_room.firstChild?.appendChild(resize_handle);
+        handle_container.addEventListener('mousedown', startDrag);
+        handle_container.addEventListener('touchstart', startDrag);
+        handle_container.appendChild(resize_handle);
+        chat_room.firstChild?.appendChild(handle_container);
 
         room_origin.classList.add('origin');
         //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
@@ -181,7 +184,6 @@
                         sub_login_name = <string>chatter_name.textContent;
                         sub_login_name = sub_login_name.substring(1, sub_login_name.length - 1);
                         sub_nickname = <string>chatter_name.parentNode?.childNodes[0].textContent;
-                        console.debug('sub_login_name : %o, sub_nickname : %o', sub_login_name, sub_nickname);
                     }
 
                     login_name = login_name ? login_name : sub_login_name;
@@ -255,6 +257,11 @@
         }
     }
 
+    /**
+     * 
+     * @param ratio 0 부터 100 사이의 값, 복제된 채팅창의 크기 비율입니다.
+     * @returns 
+     */
     let change_container_ratio = function (ratio: number) {
         if (ratio != 0) ratio = ratio ? ratio : 30;
 
