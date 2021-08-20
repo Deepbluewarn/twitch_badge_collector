@@ -264,6 +264,7 @@
      */
     let change_container_ratio = function (ratio: number) {
         if (ratio != 0) ratio = ratio ? ratio : 30;
+        container_ratio = ratio;
 
         let original_container = <HTMLElement>document.getElementsByClassName('scrollable-area origin')[0];
         let clone_container = <HTMLElement>document.getElementsByClassName('scrollable-area clone')[0];

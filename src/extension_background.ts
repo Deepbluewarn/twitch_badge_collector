@@ -1,3 +1,67 @@
+let gaNewElem: any = {};
+let gaElems: any = {};
+let USER_ID: string;
+const EXTENSION_VERSION = chrome.runtime.getManifest().version;
+
+
+function getRandomString() {
+    return Math.random().toString(36).substr(2,11);
+}
+
+function gaInit_background() {
+
+    var currdate: any = new Date();
+    var url = 'https://www.google-analytics.com/analytics.js';
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * currdate; a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', url, 'ga', gaNewElem, gaElems);
+
+    chrome.storage.sync.get('USER_ID', result=>{
+
+        let res = result.USER_ID;
+
+        if(res){
+            USER_ID = res;
+        }else{
+            USER_ID = getRandomString();
+            chrome.storage.sync.set({USER_ID});
+        }
+        ga('create', 'UA-194964708-5', 'auto', {
+            userId : USER_ID
+        }); // live
+        // ga('create', 'UA-194964708-6', 'auto',{
+        //     userId : USER_ID
+        // }); // debug
+        ga('set', 'checkProtocolTask', null);
+        send_ga_event({ 'eventCategory': 'background', 'eventAction': 'Started', 'eventLabel': EXTENSION_VERSION });
+    });
+
+    
+}
+
+gaInit_background();
+
+
+
+function send_ga_event(obj: any){
+    try{
+        ga('send', 'event', obj);
+    }catch(e){
+        console.debug(e); // ga undefined.
+    }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'ga_sendEvent') {
+        send_ga_event(request.obj);
+        sendResponse({ 'ga_sendEvent': 'done' });
+    }
+    return true;
+});
+
 chrome.runtime.onInstalled.addListener(function (reason: any) {
 
     const filter = [
@@ -9,6 +73,10 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     chrome.storage.local.set({ default_filter: filter }, function () { });
     chrome.storage.sync.set({ filter }, function () { });
     chrome.storage.local.set({ container_ratio: 30 }, function () { });
+
+    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': EXTENSION_VERSION });
+    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
+
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -20,10 +88,8 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         let id = tabs[0].id;
         let url = tabs[0].url;
         if (!(id && url)) return;
-        console.debug('chrome.tabs.query : %o', tabs);
         chrome.storage.local.set({ current_url: url }, function () { });
         chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
-            return true;
         });
     });
 });
