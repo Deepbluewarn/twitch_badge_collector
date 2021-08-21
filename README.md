@@ -15,8 +15,9 @@ Chrome : https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpen
 
 Firefox : https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/
 
-## v1.3.0 Changlog
-   - Add Filter addon
+## v1.3.9 Changlog
+   - Add Google Analytics
+   - Fix bug
     
     
     
