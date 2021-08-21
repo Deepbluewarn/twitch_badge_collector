@@ -126,6 +126,7 @@ input{
 
 input[type=checkbox] {
     width: .8rem;
+    height: .8rem;
 }
 input[type=text]{
     background-color: var(--label-text-bg-color);
@@ -250,6 +251,10 @@ span.condition{
     /* padding: 11px; */
     padding-bottom: 10px;
     padding-top: 10px;
+}
+
+#ga_agreement{
+    font-size: .8rem;
 }
 
 #remove_btn{

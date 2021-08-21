@@ -1,6 +1,7 @@
 let gaNewElem: any = {};
 let gaElems: any = {};
 let USER_ID: string;
+let GA_AGREEMENT = false;
 const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
 
@@ -36,17 +37,19 @@ function gaInit_background() {
         //     userId : USER_ID
         // }); // debug
         ga('set', 'checkProtocolTask', null);
-        send_ga_event({ 'eventCategory': 'background', 'eventAction': 'Started', 'eventLabel': EXTENSION_VERSION });
     });
 
     
 }
 
-gaInit_background();
-
-
+chrome.storage.sync.get('GA_AGREEMENT', result=>{
+    GA_AGREEMENT = result.GA_AGREEMENT;
+});
 
 function send_ga_event(obj: any){
+    
+    if(!GA_AGREEMENT) return;
+
     try{
         ga('send', 'event', obj);
     }catch(e){
@@ -92,4 +95,17 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
         });
     });
+});
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    for (var key in changes) {
+
+        let newValue = changes[key].newValue;
+
+        if (key === 'GA_AGREEMENT') {
+            GA_AGREEMENT = newValue;
+            if(GA_AGREEMENT) gaInit_background();
+        }
+
+    }
 });

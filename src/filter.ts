@@ -6,6 +6,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     let import_filter = <HTMLInputElement>document.getElementById('import_filter');
     let add_btn = <HTMLButtonElement>document.getElementById('add_condition');
 
+    let ga_agreement_ckbox = <HTMLInputElement>document.getElementById('ga_agreement_ckbox');
     let checkbox_head = <HTMLInputElement>document.getElementById('checkbox_head');
     let condition_value = <HTMLInputElement>document.getElementById('condition_value');
     let category_select = <HTMLSelectElement>document.getElementById('category-select');
@@ -64,6 +65,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
         display_filter_list(1);
+    });
+
+    chrome.storage.sync.get('GA_AGREEMENT', result=>{
+        ga_agreement_ckbox.checked = result.GA_AGREEMENT;
     });
 
     function translateHTML(){
@@ -491,6 +496,16 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             // 배지 링크가 유효하지 않은 경우
             category_select.value = filter_category.Login_name;
         }
+    });
+
+    ga_agreement_ckbox.addEventListener('change', e=>{
+        let GA_AGREEMENT = ga_agreement_ckbox.checked;
+        //if(!GA_AGREEMENT) return;
+        chrome.storage.sync.set({GA_AGREEMENT}, ()=>{
+            if(GA_AGREEMENT){
+                toastr.success('익명 정보 수집이 활성화되었습니다.');
+            }
+        });
     });
 
     checkbox_head.addEventListener('change', e => {
