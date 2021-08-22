@@ -87,10 +87,6 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
             const id = target.getAttribute('id');
             const type = target.checked ? filter_type.Include : filter_type.Exclude;
 
-            let label: any = {version : EXTENSION_VERSION, id : id, type : type};
-            let ga_obj = {eventCategory : 'popup', eventAction : 'badge_option_changed', eventLabel : JSON.stringify(label)};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-
             for (let i = 0; i < global_filter.length; i++) {
                 let f = global_filter[i];
                 if (f.filter_id === id) {
@@ -111,12 +107,8 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
     range_marks.addEventListener('click', e => {
         let target = (e.target as HTMLParagraphElement);
         if (target.nodeName != 'P') return;
-
-        let label: any = {version : EXTENSION_VERSION};
-        let ga_obj = {eventCategory : 'popup', eventAction : 'range_marks_clicked', eventLabel : JSON.stringify(label)};
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         
-        chrome.storage.local.set({ container_ratio: target.textContent }, function () { });
+        chrome.storage.local.set({container_ratio: target.textContent });
     });
 
     add_filter_btn.addEventListener('click', e => {

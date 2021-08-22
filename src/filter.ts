@@ -6,7 +6,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     let import_filter = <HTMLInputElement>document.getElementById('import_filter');
     let add_btn = <HTMLButtonElement>document.getElementById('add_condition');
 
-    let ga_agreement_ckbox = <HTMLInputElement>document.getElementById('ga_agreement_ckbox');
     let checkbox_head = <HTMLInputElement>document.getElementById('checkbox_head');
     let condition_value = <HTMLInputElement>document.getElementById('condition_value');
     let category_select = <HTMLSelectElement>document.getElementById('category-select');
@@ -58,18 +57,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
             });
         }
-        let label_obj: any = {};
-        label_obj.filter_length = global_filter.length;
-        label_obj.badge_count = global_filter.filter(e=>{if(e.category === filter_category.Badge_UUID) return true}).length;
-        //label_obj.version = chrome.runtime.getManifest().version;
-        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'onStart', eventLabel : JSON.stringify(label_obj)};
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-
         display_filter_list(1);
-    });
-
-    chrome.storage.sync.get('GA_AGREEMENT', result=>{
-        ga_agreement_ckbox.checked = result.GA_AGREEMENT;
     });
 
     function translateHTML(){
@@ -363,10 +351,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             return f;
         });
 
-        chrome.storage.sync.set({filter : new_filter}, ()=>{
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'cond_changed', eventLabel : new_type };
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-        });
+        chrome.storage.sync.set({filter : new_filter});
     }
 
     function set_page_links(page_links: HTMLDivElement, page_num: number, count: number) {
@@ -430,19 +415,12 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
         if(!meta_avail){
             toastr.error(chrome.i18n.getMessage('f_upload_error'));
-
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'upload_error', eventLabel : chrome.runtime.getManifest().version};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-
             return false;
         }
         chrome.storage.sync.set({filter}, ()=>{
             global_filter = filter as Array<Filter>;
             toastr.success(chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
-
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'upload_success', eventLabel : chrome.runtime.getManifest().version};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     }
 
@@ -460,16 +438,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             } else {
                 // 배지 추가인데 링크가 유효하지 않은 경우
                 toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
-
-                let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_invalid_link', eventLabel : label_str};
-                chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-
                 return false;
             }
 
         }
-        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_clicked', eventLabel : label_str};
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         add_filter_object(f_type, f_category, f_val, getRandomString());
     });
 
@@ -499,16 +471,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             // 배지 링크가 유효하지 않은 경우
             category_select.value = filter_category.Login_name;
         }
-    });
-
-    ga_agreement_ckbox.addEventListener('change', e=>{
-        let GA_AGREEMENT = ga_agreement_ckbox.checked;
-        //if(!GA_AGREEMENT) return;
-        chrome.storage.sync.set({GA_AGREEMENT}, ()=>{
-            if(GA_AGREEMENT){
-                toastr.success('익명 정보 수집이 활성화되었습니다.');
-            }
-        });
     });
 
     checkbox_head.addEventListener('change', e => {
@@ -581,9 +543,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
             checkbox_head.checked = false;
             display_filter_list(parseInt(page_num));
-
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'rm_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     });
     remove_all_btn.addEventListener('click', e => {
@@ -602,9 +561,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             toastr.success(chrome.i18n.getMessage('f_all_rm'));
 
             display_filter_list(1);
-
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'rm_all_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
 
     });
@@ -649,9 +605,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             vLink.setAttribute('href', vUrl);
             vLink.setAttribute('download', vName);
             vLink.click();
-
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'backup_success', eventLabel : chrome.runtime.getManifest().version};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
         
     });

@@ -8,10 +8,8 @@
     let container_ratio: number;
 
     let chatIsAtBottom = true;// chat auto scroll [on / off]
-    let isLineMoved = false;
 
     const CLONE_CHAT_COUNT = 100;
-    const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
     currunt_url = location.href;
 
@@ -52,10 +50,6 @@
      * Create chat window clone.
      */
     function Mirror_of_Erised() {
-        
-        // const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default'); // for default font size
-        // const chat_room_other: Element | null = document.querySelector('.chat-room__content .chat-list--other'); // for default font size
-        // const chat_room: Element | null = chat_room_default ? chat_room_default : chat_room_other;
         const chat_room = get_chat_room();
         if (!chat_room) return false;
 
@@ -139,10 +133,6 @@
                 // nodeElement 가 community-points-summary class 를 포함하거나 community-points-summary 의 자식 요소인 경우.
                 let point_summary = <HTMLDivElement>(nodeElement.getElementsByClassName(point_summary_className)[0] || nodeElement.closest('.' + point_summary_className));
 
-                //let is_chat_normal = nodeElement.className === 'chat-line__message' && nodeElement.getAttribute('data-a-target') === 'chat-line-message';
-                //let is_chat_notice = nodeElement.classList.contains('user-notice-line');
-                //const is_chat = is_chat_normal || is_chat_notice;
-
                 const is_chat = nodeElement.closest('.chat-scrollable-area__message-container');
 
                 if (point_summary) {
@@ -152,7 +142,6 @@
                         point_button.click();
                         console.log('TBC - points claimed, time : %o, channel_name : %o', new Date().toTimeString(), currunt_url);
                     }
-
                 }
 
                 if (is_chat) {
@@ -289,9 +278,6 @@
         window.addEventListener('touchmove', doDrag);
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('touchend', endDrag);
-
-        let ga_obj = {eventCategory : 'content_scripts', eventAction : 'startDrag', eventLabel : EXTENSION_VERSION};
-        chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
     }
 
     let doDrag = function (e: MouseEvent | TouchEvent) {
@@ -303,7 +289,6 @@
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
             container_ratio = Math.max(0, Math.min(100, Math.round(container_ratio)));
-            isLineMoved = true;
             chrome.storage.local.set({ container_ratio }, function () { });
         }
     }
@@ -313,13 +298,6 @@
         window.removeEventListener('touchmove', doDrag);
         window.removeEventListener('mouseup', endDrag);
         window.removeEventListener('touchend', endDrag);
-        if(isLineMoved){
-            isLineMoved = false;
-            let label: any = {version : EXTENSION_VERSION, container_ratio : container_ratio};
-            let ga_obj = {eventCategory : 'content_scripts', eventAction : 'endDrag', eventLabel : JSON.stringify(label)};
-            chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
-        }
-        
     }
 
     observeStreamPage();
