@@ -60,7 +60,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         }
         let label_obj: any = {};
         label_obj.filter_length = global_filter.length;
-        label_obj.version = chrome.runtime.getManifest().version;
+        label_obj.badge_count = global_filter.filter(e=>{if(e.category === filter_category.Badge_UUID) return true}).length;
+        //label_obj.version = chrome.runtime.getManifest().version;
         let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'onStart', eventLabel : JSON.stringify(label_obj)};
         chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
@@ -347,12 +348,13 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
      * @param filter_id 변경하고자 하는 필터 id
      */
     function change_filter_cond(cond_elem: HTMLSpanElement, filter_id: string){
+        let new_type: string;
         let new_filter = global_filter.map((f, i, a)=>{
             if(f.filter_id === filter_id){
                 const type = f.filter_type;
                 const current_index = filter_cond_list.indexOf(type);
                 const nextIndex = (current_index + 1) % filter_cond_list.length;
-                const new_type = filter_cond_list[nextIndex];
+                new_type = filter_cond_list[nextIndex];
                 f.filter_type = new_type;
                 cond_elem.setAttribute('name', new_type);
                 cond_elem.textContent = chrome.i18n.getMessage('f_' + new_type);
@@ -362,7 +364,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         chrome.storage.sync.set({filter : new_filter}, ()=>{
-            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'cond_changed', eventLabel : chrome.runtime.getManifest().version};
+            let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'cond_changed', eventLabel : new_type };
             chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         });
     }
@@ -450,6 +452,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         let f_val = condition_value.value;
 
         let valid = validate_badge_url(f_val);
+        let label_str = f_category + '_' + f_type;
 
         if (f_category === filter_category.Badge_UUID) {
             if (valid) {
@@ -458,14 +461,14 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                 // 배지 추가인데 링크가 유효하지 않은 경우
                 toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
 
-                let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_invalid_link', eventLabel : chrome.runtime.getManifest().version};
+                let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_invalid_link', eventLabel : label_str};
                 chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
 
                 return false;
             }
 
         }
-        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_clicked', eventLabel : chrome.runtime.getManifest().version};
+        let ga_obj = {eventCategory : 'Filter_Setting', eventAction : 'add_btn_clicked', eventLabel : label_str};
         chrome.runtime.sendMessage({type: 'ga_sendEvent', obj : ga_obj}, function(response) {});
         add_filter_object(f_type, f_category, f_val, getRandomString());
     });

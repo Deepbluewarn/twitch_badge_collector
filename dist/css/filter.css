@@ -187,6 +187,9 @@ span.condition{
     margin: 5px;
     padding: 5px;
 }
+.firefox{
+    display: none;
+}
 .component{
     display: grid;
     gap: 10px;

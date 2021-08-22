@@ -37,20 +37,24 @@ function gaInit_background() {
         //     userId : USER_ID
         // }); // debug
         ga('set', 'checkProtocolTask', null);
+        send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onLoaded', 'eventLabel': GA_AGREEMENT});
     });
-
-    
 }
+
+gaInit_background();
 
 chrome.storage.sync.get('GA_AGREEMENT', result=>{
     GA_AGREEMENT = result.GA_AGREEMENT;
 });
 
 function send_ga_event(obj: any){
-    
-    if(!GA_AGREEMENT) return;
+    let whitelist = ['onInstalled', 'onLoaded'].includes(obj.eventAction);
+    if(!whitelist && !GA_AGREEMENT) return;
+    let cat = obj.eventCategory
 
     try{
+        obj.eventCategory = cat + '_' + EXTENSION_VERSION;
+        console.debug(obj);
         ga('send', 'event', obj);
     }catch(e){
         console.debug(e); // ga undefined.
@@ -77,7 +81,7 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     chrome.storage.sync.set({ filter }, function () { });
     chrome.storage.local.set({ container_ratio: 30 }, function () { });
 
-    send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': EXTENSION_VERSION });
+    //send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': EXTENSION_VERSION });
     send_ga_event({ 'eventCategory': 'background', 'eventAction': 'onInstalled', 'eventLabel': JSON.stringify(reason) });
 
 });
@@ -104,7 +108,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
         if (key === 'GA_AGREEMENT') {
             GA_AGREEMENT = newValue;
-            if(GA_AGREEMENT) gaInit_background();
+            //if(GA_AGREEMENT) gaInit_background();
         }
 
     }
