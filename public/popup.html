@@ -7,8 +7,11 @@
     
     <script type='module' src="../dist/js/popup.js" defer></script>
 
-    <link href="../dist/css/font.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet"> 
 
     <title>Twitch Badge Collector</title>
 </head>
@@ -19,7 +22,36 @@
         <div id='title_container'>
             <h1 id='title_text'>Twitch Badge Collector</h1>
         </div>
-        
+
+        <div id='link_container'>
+            <div class="container" id='links'>
+                <div class='bg_flex_row foot_element'>
+                    <div class='link'>
+                        <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
+                            target='_blank'>
+                            <span class='text link' id='review_link'>
+                                REVIEW
+                            </span>
+                        </a>
+                    </div>
+                    <div class='link'>
+                        <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
+                            target='_blank'>
+                            <span class='text link' id='support_link'>
+                                SUPPORT
+                            </span>
+                        </a>
+                    </div>
+                    <div class='link'>
+                        <a href="https://tbc.bluewarn.dev/?from=popup" target='_blank'>
+                            <span class='text link' id='homepage_link'>
+                                HOME
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id='setting_container'>
             <div class='container'>
@@ -74,52 +106,7 @@
                     <button id='add_filter_btn'>필터 추가</button>
                 </div>
             </div>
-            <div class='container'>
-                <div class='bg_flex' id='container_range'>
-                    <input type="range" class="container_size" name="container_size" min="0" max="100">
-                </div>
-                <!-- Inspired by https://stackoverflow.com/questions/55437508/how-to-create-range-silder-with-marker-and-change-color-of-filled-range-->
-                <div class='text' id='range_marks'>
-                    <p>0</p>
-                    <p>25</p>
-                    <p>50</p>
-                    <p>75</p>
-                    <p>100</p>
-                </div>
-            </div>
-            
-        </div>
-        <!-- <div class='linebox'></div> -->
-        <div id='bottom_container'>
-            <div class="container" id='links'>
-                <div class='bg_flex_row foot_element'>
-                    <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
-                        target='_blank'>
-                        <div class='text link' id='review_link'>
-                            REVIEW
-                        </div>
-                    </a>
-                    <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
-                        target='_blank'>
-                        <div class='text link' id='support_link'>
-                            SUPPORT
-                        </div>
-                    </a>
-                    <a href="https://tbc.bluewarn.dev/?from=popup"
-                        target='_blank'>
-                        <div class='text link' id='homepage_link'>
-                            HOME
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class='bg_flex foot_element'>
-                <span class=footer_text id='version_info'>
-                    v4.4.4 made by nanana~
-                </span>
-            </div>
         </div>
     </div>
 </body>
-
 </html>

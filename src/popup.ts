@@ -3,9 +3,7 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
 (function () {
     let options = <HTMLDivElement>document.getElementById('options');
     let add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
-    let slider = <HTMLInputElement>document.getElementsByClassName('container_size')[0];
-    let range_marks = <HTMLDivElement>document.getElementById('range_marks');
-    let version_info = <HTMLSpanElement>document.getElementById('version_info');
+    //let version_info = <HTMLSpanElement>document.getElementById('version_info');
 
     let current_url = '';
 
@@ -13,7 +11,7 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
 
     const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
-    version_info.textContent = 'v' + EXTENSION_VERSION + ' made by bluewarn';
+    //version_info.textContent = 'v' + EXTENSION_VERSION + ' made by bluewarn';
 
     function localizeHtmlPage() {
 
@@ -57,10 +55,6 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
 
     });
 
-    chrome.storage.local.get(['container_ratio'], function (result) {
-        slider.value = result.container_ratio;
-    });
-
     chrome.storage.onChanged.addListener(function (changes, namespace) {
 
         if (namespace != 'local') return;
@@ -68,12 +62,9 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
         for (var key in changes) {
             let newValue = changes[key].newValue;
 
-            if (key === 'container_ratio') {
-                slider.value = newValue;
-            } else if (key === 'current_url') {
+            if (key === 'current_url') {
                 current_url = newValue;
             }
-
         }
     });
 
@@ -97,18 +88,6 @@ import { Filter, filter_category, filter_type, default_badge } from './types.js.
 
             chrome.storage.sync.set({ filter: global_filter }, () => { });
         }
-    });
-
-    slider.addEventListener('change', e => {
-        let value = (e.target as HTMLInputElement).value;
-        chrome.storage.local.set({ container_ratio: value }, function () { });
-    });
-
-    range_marks.addEventListener('click', e => {
-        let target = (e.target as HTMLParagraphElement);
-        if (target.nodeName != 'P') return;
-        
-        chrome.storage.local.set({container_ratio: target.textContent });
     });
 
     add_filter_btn.addEventListener('click', e => {

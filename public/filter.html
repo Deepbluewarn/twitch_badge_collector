@@ -5,29 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="../dist/js/jquery-3.6.0.min.js"></script>
-    <script src="../dist/js/toastr.min.js"></script>
     <script type='module' src="../dist/js/filter.js" defer></script>
 
-    <link href="../dist/css/toastr.min.css" rel="stylesheet"/>
-    <link href="../dist/css/font.css" rel="stylesheet" type="text/css" />
     <link href="../dist/css/filter.css" rel="stylesheet" type="text/css" />
 
-    <title>TBC - Filter Setting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet"> 
+    
+    <title></title>
 </head>
 
 <body class='default'>
+    
+    <div id='alert_container'></div>
+
     <div id='filter_setting'>
 
         <div class='container' id='title_container'>
-            <h1 id='f_title'>Filter Setting</h1>
+            <h1 id='f_title'></h1>
         </div>
 
-        <button id='DEBUG_FILTER_ALL'>필터 디버그</button>
+        <button id='DEBUG_FILTER_ALL'></button>
 
         <div class='container' id='setting_container'>
 
-            <div id='add_title'>필터 기능으로 특정 배지나 유저의 채팅을 추가하거나 제외할 수 있습니다. 자세한 사용방법은 <a href="https://tbc.bluewarn.dev" target="_blank">사용설명서</a> 를 참고하세요.</div>
+            <div id='add_title'> <a href="https://tbc.bluewarn.dev" target="_blank"></a></div>
 
             <div id='filter_info'>
                 <div class='select_container'>

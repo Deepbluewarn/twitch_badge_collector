@@ -26,12 +26,12 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     let search_mode = false;
 
-    toastr.options.preventDuplicates = true;
-    toastr.options.timeOut = 4000;
-    toastr.options.extendedTimeOut = 10000;
-    toastr.options.closeButton = true;
-    // toastr.options.progressBar = true;
-    toastr.options.positionClass = 'toast-top-full-width';
+    // toastr.options.preventDuplicates = true;
+    // toastr.options.timeOut = 4000;
+    // toastr.options.extendedTimeOut = 10000;
+    // toastr.options.closeButton = true;
+    // // toastr.options.progressBar = true;
+    // toastr.options.positionClass = 'toast-top-full-width';
 
     chrome.storage.sync.get('filter', result => {
         global_filter = result.filter;
@@ -99,6 +99,39 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         document.getElementById('badge_icon_head')!.textContent = chrome.i18n.getMessage('f_badge');
         document.getElementById('value_head')!.textContent = chrome.i18n.getMessage('f_contents');
         document.getElementById('condition_head')!.textContent = chrome.i18n.getMessage('f_cond');
+    }
+
+    function alert(type: string, msg: string){
+        const msg_id = getRandomString();
+        const delay_time = 3000;
+        const alert_container = document.getElementById('alert_container');
+        const latest_msg_container = document.getElementsByClassName('message_container')[0];
+        
+
+        if(latest_msg_container){
+            const l_type = latest_msg_container.getAttribute('type');
+            const l_msg = latest_msg_container.getElementsByTagName('span')[0].textContent;
+            if(type === l_type && msg === l_msg) return;
+        }
+        
+        const msg_container = document.createElement('div');
+        const msg_span = document.createElement('span');
+
+        msg_container.classList.add('message_container');
+        msg_span.classList.add('msg_span');
+        msg_span.textContent = msg;
+        msg_container.setAttribute('type', type);
+        msg_container.setAttribute('id', msg_id);
+        msg_container.appendChild(msg_span);
+        alert_container!.appendChild(msg_container);
+
+        setTimeout(()=>{
+            let msg_cont = <HTMLDivElement>document.getElementById(msg_id);
+            msg_cont!.style.opacity = '0';
+            setTimeout(()=>{
+                msg_cont?.parentNode?.removeChild(msg_cont!);
+            }, 200);
+        }, delay_time);
     }
 
     window.addEventListener('load', e => {
@@ -295,7 +328,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         if (searched_filter) {
-            toastr.warning(chrome.i18n.getMessage('f_msg_already'));
+            //toastr.warning(chrome.i18n.getMessage('f_msg_already'));
+            alert('warning', chrome.i18n.getMessage('f_msg_already'));
             init_filter_input();
             return;
         }
@@ -311,7 +345,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         if (f_val === '') {
-            toastr.warning(chrome.i18n.getMessage('f_no_value'));
+            //toastr.warning(chrome.i18n.getMessage('f_no_value'));
+            alert('warning', chrome.i18n.getMessage('f_no_value'));
             return;
         }
 
@@ -324,7 +359,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         chrome.storage.sync.set({ filter: global_filter }, function () {
             let page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
-            toastr.success(chrome.i18n.getMessage('f_added'));
+            //toastr.success(chrome.i18n.getMessage('f_added'));
+            alert('success', chrome.i18n.getMessage('f_added'))
             init_filter_input();
             condition_value.value = '';
             display_filter_list(page_num);
@@ -414,12 +450,14 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             }
         });
         if(!meta_avail){
-            toastr.error(chrome.i18n.getMessage('f_upload_error'));
+            //toastr.error(chrome.i18n.getMessage('f_upload_error'));
+            alert('error', chrome.i18n.getMessage('f_upload_error'));
             return false;
         }
         chrome.storage.sync.set({filter}, ()=>{
             global_filter = filter as Array<Filter>;
-            toastr.success(chrome.i18n.getMessage('f_upload_done'));
+            //toastr.success(chrome.i18n.getMessage('f_upload_done'));
+            alert('success', chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
         });
     }
@@ -437,7 +475,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                 f_val = uuid_from_url(f_val);
             } else {
                 // 배지 추가인데 링크가 유효하지 않은 경우
-                toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
+                //toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
+                alert('warning', chrome.i18n.getMessage('f_link_invalid'));
                 return false;
             }
 
@@ -467,9 +506,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         if(validate_badge_url(input_val)){
             category_select.value = filter_category.Badge_UUID;
+            condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
         }else{
             // 배지 링크가 유효하지 않은 경우
             category_select.value = filter_category.Login_name;
+            condition_value.placeholder = chrome.i18n.getMessage('f_nickname_ph');
         }
     });
 
@@ -527,13 +568,15 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                         }
                     }
                 } else {
-                    toastr.warning(chrome.i18n.getMessage('f_rm_default'));
+                    //toastr.warning(chrome.i18n.getMessage('f_rm_default'));
+                    alert('warning', chrome.i18n.getMessage('f_rm_default'));
                 }
             }
         });
 
         chrome.storage.sync.set({ filter: global_filter }, () => {
-            toastr.success(chrome.i18n.getMessage('f_done'));
+            //toastr.success(chrome.i18n.getMessage('f_done'));
+            alert('success', chrome.i18n.getMessage('f_done'));
             let page_num = <string>current_page_num.getAttribute('cur_pg_num');
             let new_page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
 
@@ -558,7 +601,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         chrome.storage.sync.set({ filter: global_filter }, () => {
 
-            toastr.success(chrome.i18n.getMessage('f_all_rm'));
+            //toastr.success(chrome.i18n.getMessage('f_all_rm'));
+            alert('success', chrome.i18n.getMessage('f_all_rm'));
 
             display_filter_list(1);
         });

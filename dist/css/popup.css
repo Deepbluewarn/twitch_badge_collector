@@ -81,7 +81,7 @@ img {
 #title_container {
 	background-color: var(--title-background-color);
 	/* border-radius: 0 0 10% 10%; */
-	margin-bottom: 17px;
+	/* margin-bottom: 17px; */
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
@@ -89,7 +89,7 @@ img {
 	margin: 7px;
 }
 
-#bottom_container{
+#link_container{
 	background-color: var(--bottom-background-color);
 	margin: 0;
 	padding: 0;
@@ -103,6 +103,12 @@ img {
 	margin-bottom: .7rem;
 	margin-left: .3rem;
 	margin-right: .3rem;
+}
+
+.link{
+    display: flex;
+    justify-content: center;
+    width: 3rem;
 }
 
 .bg_flex {
@@ -259,7 +265,7 @@ img {
 
 #links {
 	margin: 0 .7rem 0 .7rem;
-	padding: .3rem 0 0 0;
+	padding: 0 0 .3rem 0;
 }
 
 /* range css */
