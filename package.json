@@ -2,12 +2,7 @@
   "name": "twitch_badge_collector",
   "version": "1.2.14",
   "description": "Collect Badge and Channel Point in Twitch Chat Room",
-  "dependencies": {
-    "@types/clipboard": "^2.0.1",
-    "@types/google.analytics": "0.0.42",
-    "@types/mixpanel": "^2.14.3",
-    "@types/toastr": "^2.1.39"
-  },
+  "dependencies": {},
   "private": true,
   "devDependencies": {
     "@types/chrome": "0.0.128",
