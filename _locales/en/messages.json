@@ -3,7 +3,7 @@
     "message" : "Twitch Badge Collector - Collect Twitch Chat"
   },
   "ExtensionDesc" : {
-    "message" : "Collect chat with badges you want in Twitch Live Chat!"
+    "message" : "Collect only the chats you want in Twitch Chat!"
   },
   "popup_title": {
     "message": "Twitch Badge Collector"

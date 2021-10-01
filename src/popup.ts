@@ -1,17 +1,12 @@
-import { Filter, filter_category, filter_type, default_badge } from './types.js.js';
+import { Filter, filter_type } from './types.js.js';
 
 (function () {
     let options = <HTMLDivElement>document.getElementById('options');
     let add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
-    //let version_info = <HTMLSpanElement>document.getElementById('version_info');
-
+    
     let current_url = '';
 
     let global_filter: Array<Filter>;
-
-    const EXTENSION_VERSION = chrome.runtime.getManifest().version;
-
-    //version_info.textContent = 'v' + EXTENSION_VERSION + ' made by bluewarn';
 
     function localizeHtmlPage() {
 

@@ -26,13 +26,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     let search_mode = false;
 
-    // toastr.options.preventDuplicates = true;
-    // toastr.options.timeOut = 4000;
-    // toastr.options.extendedTimeOut = 10000;
-    // toastr.options.closeButton = true;
-    // // toastr.options.progressBar = true;
-    // toastr.options.positionClass = 'toast-top-full-width';
-
     chrome.storage.sync.get('filter', result => {
         global_filter = result.filter;
         let badge_list: string[] = [];
