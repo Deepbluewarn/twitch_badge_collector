@@ -19,7 +19,9 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     let current_page_num = <HTMLSpanElement>document.getElementById('current_page_num');
 
-    const PAGE_FILTER_COUNT: number = 10;
+    const PAGE_FILTER_COUNT: number = 10; // 한 페이지에 표시할 필터 개수.
+    const DEFAULT_FILTER_COUNT: number = 4; // 기본 필터 개수.
+    const ALERT_DELAY_TIME = 3000; // 알람 창 표시 시간.
 
     let global_filter: Array<Filter>;
     let searched_filter: Array<Filter>;
@@ -37,7 +39,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                 badge_list.push(id);
             }
         });
-        if(badge_list.length < 4){
+        if(badge_list.length < DEFAULT_FILTER_COUNT){
             chrome.storage.local.get('default_filter', result=>{
 
                 let default_filter: Array<Filter> = result.default_filter;
@@ -96,7 +98,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     function alert(type: string, msg: string){
         const msg_id = getRandomString();
-        const delay_time = 3000;
         const alert_container = document.getElementById('alert_container');
         const latest_msg_container = document.getElementsByClassName('message_container')[0];
         
@@ -124,7 +125,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             setTimeout(()=>{
                 msg_cont?.parentNode?.removeChild(msg_cont!);
             }, 200);
-        }, delay_time);
+        }, ALERT_DELAY_TIME);
     }
 
     window.addEventListener('load', e => {
@@ -277,6 +278,9 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             let lang = <string>chrome.i18n.getUILanguage();
             if(lang.includes('ko')){
                 se_result!.textContent = '\"' + search_text +'\" ' + '검색 결과 ' + f_len + ' 개의 필터가 있습니다.';
+            }else if(lang.includes('ru')){
+                // Поиск "Test", найдено 1 фильтр.
+                se_result!.textContent = 'Поиск \"' + search_text + '\", найдено ' + f_len + ' фильтр'
             }else{
                 se_result!.textContent = 'search for \"' + search_text +'\", ' + f_len + ' Filter found.'
             }

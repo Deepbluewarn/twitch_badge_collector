@@ -105,11 +105,11 @@ img {
 	margin-right: .3rem;
 }
 
-.link{
+/* .link{
     display: flex;
     justify-content: center;
     width: 3rem;
-}
+} */
 
 .bg_flex {
 	display: flex;
@@ -123,7 +123,7 @@ img {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	align-items: center;
+    gap: 1.4rem;
 	margin: .5rem;
 }
 .bg_flex_cols {

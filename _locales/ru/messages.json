@@ -58,7 +58,7 @@
     "message" : "значок"
   },
   "f_badge_link" : {
-    "message" : "badge_link"
+    "message" : "значка Ссылка"
   },
   "f_nickname_ph" : {
     "message" : "ID логина в систему или никнейм"
