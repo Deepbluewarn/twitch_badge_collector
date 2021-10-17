@@ -1,7 +1,5 @@
 # Twitch Badge Collector
 
-English description is [Here!](https://tbc.bluewarn.dev/README_en.html)
-
 > 트위치 채팅을 보기 쉽게 해주는 확장 프로그램입니다.
 > 
 > 원하는 채팅을 따로 모아서 볼 수 있도록 도와줍니다.
@@ -39,7 +37,7 @@ English description is [Here!](https://tbc.bluewarn.dev/README_en.html)
 또한 필터 추가 버튼으로 다른 조건을 추가할 수 있습니다. 자세한 내용은 아래 필터 항목을 참고하세요.
 
 ### 필터 기능 사용하기
-[이곳](https://tbc.bluewarn.dev/F_README.html) 을 참고하세요.
+[이곳](https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.md) 을 참고하세요.
 
 ## 더보기
 

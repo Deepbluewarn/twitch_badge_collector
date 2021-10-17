@@ -1,7 +1,5 @@
 # Twitch Badge Collector
 
-한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/F_README.html)에 있습니다.
-
 Description for Filter Add-on.
 
 ## Add Filter
@@ -40,7 +38,7 @@ If set to Include, copy the chat; if set to Exclude, do not copy the chat.
 
 You can change Filter Condition by clicking the left side of the filter list.
 
-![Filter_Cond_change](./screenshot/ko/filter_cond_change.webp)
+![Filter_Cond_change](./screenshot/en/filter_cond_change.webp)
 
 There are three states: Include, Exclude, and Sleep. Instead of deleting the filter, you can set the filter's status to Sleep.
 

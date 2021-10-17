@@ -4,7 +4,11 @@ layout: default
 
 # Twitch Badge Collector
 
-English description is [Here!](https://tbc.bluewarn.dev/README_en.html)
+## manuals
+
+* [English](https://tbc.bluewarn.dev/doc/main/en/manual.md)
+* [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.md)
+* [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.md)
 
 > 트위치 채팅을 보기 쉽게 해주는 확장 프로그램입니다.
 > 

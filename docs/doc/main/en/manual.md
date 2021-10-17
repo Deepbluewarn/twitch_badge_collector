@@ -1,7 +1,5 @@
 # Twitch Badge Collector
 
-한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/README.html)에 있습니다.
-
 > Extension that makes Twitch Chat easier to view.
 > 
 > Collect Twitch Chat what you want!
@@ -40,7 +38,7 @@ Also, you can add the filter you want by clicking the Add Filter button.
 See the filter section below for more details.
 
 ### How to Using Filter
-See [Here](https://tbc.bluewarn.dev/F_README.html)
+See [Here](https://tbc.bluewarn.dev/doc/filter/en/filter_manual.md)
 
 
 ## See more
