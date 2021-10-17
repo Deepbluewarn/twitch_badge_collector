@@ -1,14 +1,12 @@
 # Twitch Badge Collector
 
-For [Korean](https://tbc.bluewarn.dev/README.html)
+한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/README.html)에 있습니다.
 
 > Extension that makes Twitch Chat easier to view.
 > 
 > Collect Twitch Chat what you want!
 
-## Downloads
-
-[![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)<br>
+[![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
 
 ## Usage

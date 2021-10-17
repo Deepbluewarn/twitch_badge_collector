@@ -1,8 +1,8 @@
 # Twitch Badge Collector
 
-필터 추가 기능에 대한 설명입니다.
+English description is [Here!](https://tbc.bluewarn.dev/F_README_en.html)
 
-For [English](https://tbc.bluewarn.dev/F_README_en.html)
+필터 추가 기능에 대한 설명입니다.
 
 ## 필터 추가하기
 
