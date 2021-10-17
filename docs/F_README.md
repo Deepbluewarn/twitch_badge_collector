@@ -56,3 +56,5 @@ https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 > 주의 : 백업 파일을 임의로 수정하여 업로드 할 경우 예상치 못한 오류가 발생할 수 있습니다.
 
 파일 업로드 버튼을 누른 뒤 .tbc 파일을 선택한 뒤 확인 버튼을 누르면 파일이 적용됩니다.
+
+{% include disqus_comments.html %}

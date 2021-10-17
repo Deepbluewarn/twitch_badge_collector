@@ -1,5 +1,6 @@
 theme: jekyll-theme-cayman
 title: Twitch Badge Collector
+url: "https://tbc.bluewarn.dev"
 description: Collect and view chat with special badges in Twitch Chat!
 show_downloads: true
 google_analytics: UA-194964708-4
