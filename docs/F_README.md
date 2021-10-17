@@ -1,8 +1,8 @@
 # Twitch Badge Collector
 
-필터 추가 기능에 대한 설명입니다.
+English description is [Here!](https://tbc.bluewarn.dev/F_README_en.html)
 
-For [English](https://tbc.bluewarn.dev/F_README_en.html)
+필터 추가 기능에 대한 설명입니다.
 
 ## 필터 추가하기
 
@@ -40,7 +40,7 @@ https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 
 필터 목록 좌측의 조건을 클릭하여 필터의 작동 조건을 변경할 수 있습니다.
 
-![Filter_Cond_change](/screenshot/ko/filter_cond_change.webp)
+![Filter_Cond_change](./screenshot/ko/filter_cond_change.webp)
 포함, 제외, 꺼짐 세 가지 상태가 있습니다. 필터를 삭제하는 대신 필터의 상태를 꺼짐으로 설정할 수 있습니다.
 
 ## 필터 삭제하기
