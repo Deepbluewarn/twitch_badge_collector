@@ -1,6 +1,7 @@
 # Twitch Badge Collector
 
-한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/README.html)에 있습니다.
+한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/)에 있습니다.
+Описание на русском [здесь!](https://tbc.bluewarn.dev/README_ru.html).
 
 > Extension that makes Twitch Chat easier to view.
 > 

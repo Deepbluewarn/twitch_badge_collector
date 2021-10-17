@@ -1,6 +1,7 @@
 # Twitch Badge Collector
 
 Instructions in English can be found [here](https://tbc.bluewarn.dev/F_README_en.html).
+한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/F_README.html)에 있습니다.
 
 Описание фильтрации.
 

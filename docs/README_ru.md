@@ -1,5 +1,6 @@
 # Twitch Badge Collector
 
+한국어로 된 설명은 [여기](https://tbc.bluewarn.dev/)에 있습니다.
 Instructions in English can be found [here](https://tbc.bluewarn.dev/README_en.html).
 
 > Расширение, облегчающее просмотр чата Twitch.
