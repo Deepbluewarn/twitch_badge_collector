@@ -6,9 +6,9 @@ layout: default
 
 ## manuals
 
-* [English](https://tbc.bluewarn.dev/doc/main/en/manual.md)
-* [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.md)
-* [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.md)
+* [English](https://tbc.bluewarn.dev/doc/main/en/manual.html)
+* [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
+* [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.html)
 
 > 트위치 채팅을 보기 쉽게 해주는 확장 프로그램입니다.
 > 
