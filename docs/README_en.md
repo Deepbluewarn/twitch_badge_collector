@@ -7,7 +7,7 @@
 > Collect Twitch Chat what you want!
 
 [![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
-[![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
+[![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/en/firefox/addon/twitch-badge-collector/)
 
 ## Usage
 
@@ -40,7 +40,7 @@ Also, you can add the filter you want by clicking the Add Filter button.
 See the filter section below for more details.
 
 ### How to Using Filter
-See [Here](https://tbc.bluewarn.dev/F_README.html)
+See [Here](https://tbc.bluewarn.dev/F_README_en.html)
 
 
 ## See more
