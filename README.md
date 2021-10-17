@@ -2,7 +2,7 @@
 
 Chrome Extension for Twitch Chat.
 
-> Collect chats with specific badge.
+> Collect Twitch Chat what you want!
 >
 > Auto clicker for channel point.
 
