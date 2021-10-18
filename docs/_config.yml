@@ -1,4 +1,4 @@
-remote_theme: lewismiddleton/cayman-dark
+theme: jekyll-theme-cayman
 title: Twitch Badge Collector
 url: "https://tbc.bluewarn.dev"
 description: Collect and view chat with special badges in Twitch Chat!
