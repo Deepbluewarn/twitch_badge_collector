@@ -11,7 +11,7 @@ layout: default
 [![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
 
-## 사용법
+## **사용법**
 
 ### 트위치 채팅창
 확장 프로그램을 설치하고 트위치 실시간 방송에 접속하면 아래 사진처럼 채팅창 아래 구분선과 빈 공간이 생성됩니다.
@@ -43,10 +43,11 @@ layout: default
 ### 필터 기능 사용하기
 [이곳](https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html) 을 참고하세요.
 
-## 더보기
+## **더보기**
 
 > [이메일](mailto:n5lp97@gmail.com)<br>
 > [지원](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support)<br>
 > [리뷰](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
 
+***
 

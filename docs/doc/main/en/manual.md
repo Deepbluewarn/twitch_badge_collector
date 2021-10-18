@@ -11,7 +11,7 @@ layout: default
 [![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/en/firefox/addon/twitch-badge-collector/)
 
-## Usage
+## **Usage**
 
 ### Twitch Chat window
 Installing the extension and accessing Twitch live broadcasting creates a dividing line and an empty space below the chat window as shown in the picture below.
@@ -45,8 +45,10 @@ See the filter section below for more details.
 See [Here](https://tbc.bluewarn.dev/doc/filter/en/filter_manual.html)
 
 
-## See more
+## **See more**
 
 > [Email](emailto:n5lp97@gmail.com)<br>
 > [Support](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support)<br>
 > [Review](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews)
+
+***
