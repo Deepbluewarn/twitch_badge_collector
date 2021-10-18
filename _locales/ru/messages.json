@@ -3,7 +3,7 @@
     "message" : "Twitch Badge Collector - Фильтр чата Twitch"
   },
   "ExtensionDesc" : {
-    "message" : "Фильтр пользователей чата по привелегии Twitch!"
+    "message" : "Собирерите в чате Twitch тех, кто вам нужен!"
   },
   "popup_title": {
     "message": "Twitch Badge Collector"
@@ -58,7 +58,7 @@
     "message" : "значок"
   },
   "f_badge_link" : {
-    "message" : "значка Ссылка"
+    "message" : "ссылка на значок"
   },
   "f_nickname_ph" : {
     "message" : "ID логина в систему или никнейм"
