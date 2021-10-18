@@ -16,21 +16,21 @@ layout: default
 ### Окно чата Twitch
 Установка расширения и доступ к прямой трансляции Twitch создаёт разделительную линию и пустое пространство под окном чата, как показано на изображении ниже.
 
-![screenshot_1](/docs/screenshot/en/chat_room_example.png)
+![screenshot_1](../../../docs/screenshot/en/chat_room_example.png)
 
 Если значок в чате соответствует заданным условиям, то расширение скопирует чат в окно ниже.
 
-![screenshot_2](/docs/screenshot/en/chat_room_example_2.png)
+![screenshot_2](../../../docs/screenshot/en/chat_room_example_2.png)
 
 Выше представлен оригинальный чат, а ниже - скопированный.
 После копирования чата он будет отображаться красным цветом в левой части чата, чтобы было легче найти источник чата.
 
-![screenshot_drag](/docs/screenshot/en/drag.webp)
+![screenshot_drag](../../../docs/screenshot/en/drag.webp)
 
 Вы можете настроить размер, перетащив разделитель в окне чата.
 
 ### Настройки
-![screenshot_3](/docs/screenshot/en/popup.png)
+![screenshot_3](../../../docs/screenshot/en/popup.png)
 
 Нажмите на значок расширения в правом верхнем углу браузера, чтобы появилось всплывающее окно, в котором можно настроить расширение.<br>
 

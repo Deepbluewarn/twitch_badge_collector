@@ -16,21 +16,21 @@ layout: default
 ### Twitch Chat window
 Installing the extension and accessing Twitch live broadcasting creates a dividing line and an empty space below the chat window as shown in the picture below.
 
-![screenshot_1](/docs/screenshot/en/chat_room_example.png)
+![screenshot_1](../../../screenshot/en/chat_room_example.png)
 
 If your chat's badge meets the set conditions, copy the chat to the window below.
 
-![screenshot_2](/docs/screenshot/en/chat_room_example_2.png)
+![screenshot_2](../../../screenshot/en/chat_room_example_2.png)
 
 Above is the original chat and below is the copied chat.
 Once the chat is copied, it will appear in red on the left side of the chat to make it easier to find the source of the chat.
 
-![screenshot_drag](/docs/screenshot/en/drag.webp)
+![screenshot_drag](../../../screenshot/en/drag.webp)
 
 You can adjust the size by dragging the separator in the chat window.
 
 ### Settings
-![screenshot_3](/docs/screenshot/en/popup.png)
+![screenshot_3](../../../screenshot/en/popup.png)
 
 Click the extension icon on the top right of your browser to see a pop-up window where you can set up your extension.<br>
 

@@ -42,7 +42,7 @@ https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 
 Условие фильтрации можно изменить, нажав на левую часть списка фильтров.
 
-![Filter_Cond_change](/docs/screenshot/en/filter_cond_change.webp)
+![Filter_Cond_change](../../../screenshot/en/filter_cond_change.webp)
 
 Существует три состояния: Включено, Отключено и Спящий режим. Вместо удаления фильтра можно установить для него состояние Спящего режима.
 
