@@ -42,7 +42,7 @@ layout: default
 Более подробную информацию см. в разделе фильтрации ниже.
 
 ### Как использовать фильтр
-Смотрите [здесь](https://tbc.bluewarn.dev/filter/ru/filter_manual.html)
+Смотрите [здесь](https://tbc.bluewarn.dev/doc/filter/ru/filter_manual.html)
 
 
 ## **См. подробнее**
