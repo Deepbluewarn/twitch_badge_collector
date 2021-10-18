@@ -12,9 +12,10 @@ layout: default
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
 
 ## Manuals
-> manual provided by 3 language.
+> Provided by 3 language.
 
 * [English](https://tbc.bluewarn.dev/doc/main/en/manual.html)
 * [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
 * [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.html) (Translated by [Blueberryy](https://github.com/Blueberryy))
 
+***
