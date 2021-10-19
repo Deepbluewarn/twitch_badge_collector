@@ -1,15 +1,19 @@
 # Twitch Badge Collector
 
-Chrome Extension for Twitch Chat.
+Extension for Twitch Chat.
 
-> Collect Twitch Chat what you want!
->
-> Auto clicker for channel point.
+## Introduction
+With this extension, you can see only the chats you want in one place.
+Helpful when you have a chat you don't want to miss.
 
-See [Docs](https://tbc.bluewarn.dev/) for more details!
+## Downloads
 
 [![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
+
+## Documentation
+
+See [Docs](https://tbc.bluewarn.dev/) for more details!
 
 ## v1.3.15 Changlog
    - Add Russian translation
