@@ -88,11 +88,18 @@
         change_container_ratio(container_ratio);
     }
 
-    function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element) {
+    function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element, filter_category: string) {
         if (!(message_container && chat_clone)) return;
 
         message_container.appendChild(chat_clone);
-        origNodeElement.classList.add('tbc_highlight');
+        
+        if(filter_category === 'login_name'){
+            origNodeElement.classList.add('tbc_highlight_login_name');
+        }else if(filter_category === 'keyword'){
+            origNodeElement.classList.add('tbc_highlight_keyword');
+        }else{
+            origNodeElement.classList.add('tbc_highlight'); // default
+        }
 
         if (message_container.childElementCount > CLONE_CHAT_COUNT) {
             message_container.removeChild(<Element>message_container.firstElementChild);
@@ -117,6 +124,7 @@
         let room_clone: Element;
         let chat_clone: Element;
         let badges: HTMLCollection;
+        let text_contents: HTMLCollection;
         let scroll_area: Element;
         let message_container: Element;
 
@@ -178,41 +186,52 @@
                     login_name = login_name ? login_name : sub_login_name;
                     nickname = nickname ? nickname : sub_nickname;
 
+                    text_contents = chat_clone.getElementsByClassName('text-fragment');
+
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
-                    let filter_arr = Object.keys(filter).map(el => filter[el]);
+                    // 각 필터 카테고리의 확인 로직을 분리하고 우선순위를 사용자가 직접 설정할 수 있도록 하기..
 
-                    let id_include = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'include'));
-                    let id_exclude = filter_arr.filter(el => ((el.value === login_name) || el.value === nickname) && (el.filter_type === 'exclude'));
-                    let id_available = ((id_include.length != 0) && (id_exclude.length === 0));
-                    let badge_checked = false;
+                    let avail_obj: any = {
+                        badge_uuid : false, 
+                        login_name : false, 
+                        keyword : false
+                    };
 
+                    // Check with Nickname Filter.
+                    avail_obj['login_name'] = checkFilter('login_name', login_name, false) || checkFilter('login_name', nickname, false);
+
+                    // Check with Badge Filter.
                     Array.from(badges).some((badge, index) => {
-                        let badges_len = badges.length;
                         let badge_uuid = new URL(badge.getAttribute('src')!).pathname.split('/')[3];
 
-                        let badge_include = filter_arr.filter(el => (el.value === badge_uuid) && el.filter_type === 'include');
-
-                        // 빈 배열을 반환할 경우 제외 대상이 아니라는 의미. 배열에 값이 있는 경우 해당 배지는 제외 대상.
-                        let badge_exclude = filter_arr.filter(el => (el.value === badge_uuid) && el.filter_type === 'exclude');
-
-                        let condition_exclude = badge_exclude.length > 0 || id_exclude.length > 0; // 배지 또는 아이디가 제외 대상인 경우 true.
-                        let condition_include = badge_include.length === 0 && id_include.length === 0; // 배지 또는 아이디 둘 다 포함되지 않는 경우 true.
-                        let condition_success = badge_include.length > 0 || id_include.length > 0;
-
-                        // include 에 없거나 exclude 에 있는 경우
-                        if(condition_include || condition_exclude){
-                            if(badges_len > index + 1) return false; // 모든 배지를 검사하지 않은 경우에는 false.
-                            return true;
-                        }
-                        if(condition_success){
-                            add_chat(nodeElement, chat_clone, scroll_area, message_container);
-                            badge_checked = true;
+                        let res = checkFilter('badge_uuid', badge_uuid, false);
+                        if(res){
+                            avail_obj['badge_uuid'] = res;
                             return true;
                         }
                     });
-                    if(badge_checked && id_available){
-                        add_chat(nodeElement, chat_clone, scroll_area, message_container);
+
+                    // Check with Keyword Filter.
+                    Array.from(text_contents).some((text, index)=>{
+                        let keyword = text.textContent;
+                        if(!keyword) return true;
+                        let res = checkFilter('keyword', keyword, true);
+
+                        if(res){
+                            avail_obj['keyword'] = res;
+                            return true;
+                        }
+                    });
+
+                    // 우선순위 구현
+                    let priority = ['login_name', 'badge_uuid', 'keyword'];
+
+                    for(let i = 0; i < priority.length; i++){
+                        if(avail_obj[priority[i]]){
+                            add_chat(nodeElement, chat_clone, scroll_area, message_container, priority[i]);
+                            break;
+                        }
                     }
                     
                 }
@@ -222,6 +241,27 @@
                 }
             });
         })
+    }
+
+    /**
+     * 
+     * @param category 필터 카테고리.
+     * @param value 필터에서 찾고자 하는 값.
+     * @returns 필터의 Category 와 Value 에 맞는 필터 중 filter_type 이 include 이면서 동시에 exclude 인 경우가 없으면 true 반환.
+     */
+    function checkFilter(category: string, value: string, match: boolean){
+        let filter_arr = Object.keys(filter).map(el => filter[el]).filter(f => f.category === category);
+        let include;
+
+        if(match){
+            include = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'include'));
+            //exclude = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'exclude'));
+        }else{
+            include = filter_arr.filter(el => (value.toLowerCase().includes(el.value.toLowerCase())) && (el.filter_type === 'include'));
+            //exclude = filter_arr.filter(el => (value.toLowerCase().includes(el.value.toLowerCase())) && (el.filter_type === 'exclude'));
+        }
+        
+        return include.length != 0; //&& (exclude.length === 0));
     }
 
     /**

@@ -14,3 +14,9 @@
 .tbc_highlight{
     border-left: 5px solid #ea5656;
 }
+.tbc_highlight_login_name{
+    border-left: 5px solid #F2DE77;
+}
+.tbc_highlight_keyword{
+    border-left: 5px solid #EBF2F2;
+}

@@ -72,6 +72,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         document.getElementById('cat_option_login')!.textContent = chrome.i18n.getMessage('f_nickname');
         document.getElementById('cat_option_badge')!.textContent = chrome.i18n.getMessage('f_badge_link');
+        document.getElementById('cat_option_keyword')!.textContent = chrome.i18n.getMessage('f_keyword');
         document.getElementById('cond_option_include')!.textContent = chrome.i18n.getMessage('f_include');
         document.getElementById('cond_option_exclude')!.textContent = chrome.i18n.getMessage('f_exclude');
 
@@ -241,6 +242,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             badge_icon.setAttribute('src', 'https://static-cdn.jtvnw.net/badges/v1/' + f_value + '/1');
         } else if (f_category === filter_category.Login_name) {
             category.innerText = chrome.i18n.getMessage('f_nickname');
+        } else if (f_category === filter_category.Keyword){
+            category.innerText = chrome.i18n.getMessage('f_keyword');
         }
 
         value.innerText = f_value;
@@ -325,7 +328,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         if (searched_filter) {
-            //toastr.warning(chrome.i18n.getMessage('f_msg_already'));
             alert('warning', chrome.i18n.getMessage('f_msg_already'));
             init_filter_input();
             return;
@@ -342,7 +344,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
 
         if (f_val === '') {
-            //toastr.warning(chrome.i18n.getMessage('f_no_value'));
             alert('warning', chrome.i18n.getMessage('f_no_value'));
             return;
         }
@@ -356,7 +357,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         chrome.storage.sync.set({ filter: global_filter }, function () {
             let page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
-            //toastr.success(chrome.i18n.getMessage('f_added'));
             alert('success', chrome.i18n.getMessage('f_added'))
             init_filter_input();
             condition_value.value = '';
@@ -447,13 +447,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             }
         });
         if(!meta_avail){
-            //toastr.error(chrome.i18n.getMessage('f_upload_error'));
             alert('error', chrome.i18n.getMessage('f_upload_error'));
             return false;
         }
         chrome.storage.sync.set({filter}, ()=>{
             global_filter = filter as Array<Filter>;
-            //toastr.success(chrome.i18n.getMessage('f_upload_done'));
             alert('success', chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
         });
@@ -472,7 +470,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                 f_val = uuid_from_url(f_val);
             } else {
                 // 배지 추가인데 링크가 유효하지 않은 경우
-                //toastr.warning(chrome.i18n.getMessage('f_link_invalid'));
                 alert('warning', chrome.i18n.getMessage('f_link_invalid'));
                 return false;
             }
@@ -489,6 +486,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
         } else if (value === filter_category.Login_name) {
             condition_value.placeholder = chrome.i18n.getMessage('f_nickname_ph');
+        } else if (value === filter_category.Keyword) {
+            condition_value.placeholder = chrome.i18n.getMessage('f_keyword_ph');
         }
 
     });
@@ -497,17 +496,13 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         if (e.key === 'Enter') add_btn.click();
     });
 
+    // TODO : Badge URL 을 입력했을때 카테고리가 배지 링크로 변경 안되는 버그 수정.
     condition_value.addEventListener('input', e => {
-
         let input_val = condition_value.value;
 
         if(validate_badge_url(input_val)){
             category_select.value = filter_category.Badge_UUID;
             condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
-        }else{
-            // 배지 링크가 유효하지 않은 경우
-            category_select.value = filter_category.Login_name;
-            condition_value.placeholder = chrome.i18n.getMessage('f_nickname_ph');
         }
     });
 
@@ -521,10 +516,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     });
 
     search_input.addEventListener('input', e => {
-        const input_val = search_input.value;
+        const input_val = search_input.value.toLowerCase();
         searched_filter = global_filter.filter(f => {
             let val = <string>f.value.toLowerCase();
-            if (val.includes(input_val.toLowerCase())) return true;
+            if (val.includes(input_val)) return true;
         });
         const se_len = searched_filter.length;
 
@@ -565,14 +560,12 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
                         }
                     }
                 } else {
-                    //toastr.warning(chrome.i18n.getMessage('f_rm_default'));
                     alert('warning', chrome.i18n.getMessage('f_rm_default'));
                 }
             }
         });
 
         chrome.storage.sync.set({ filter: global_filter }, () => {
-            //toastr.success(chrome.i18n.getMessage('f_done'));
             alert('success', chrome.i18n.getMessage('f_done'));
             let page_num = <string>current_page_num.getAttribute('cur_pg_num');
             let new_page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
@@ -597,8 +590,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         global_filter.splice(default_index[default_index.length - 1] + 1, global_filter.length);
 
         chrome.storage.sync.set({ filter: global_filter }, () => {
-
-            //toastr.success(chrome.i18n.getMessage('f_all_rm'));
             alert('success', chrome.i18n.getMessage('f_all_rm'));
 
             display_filter_list(1);
@@ -664,9 +655,9 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     DEBUG_FILTER_ALL.addEventListener('click', e=>{
         console.debug('global_filter : %o', global_filter);
 
-        for(let i = 0; i < 100; i++){
-            add_filter_object(filter_type.Include, filter_category.Login_name, getRandomString(), getRandomString());
-        }
+        // for(let i = 0; i < 100; i++){
+        //     add_filter_object(filter_type.Include, filter_category.Login_name, getRandomString(), getRandomString());
+        // }
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {

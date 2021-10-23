@@ -59,11 +59,17 @@
   "f_badge_link" : {
     "message" : "ссылка на значок"
   },
+  "f_keyword" : {
+    "message" : "Keyword"
+  },
   "f_nickname_ph" : {
     "message" : "ID логина в систему или никнейм"
   },
   "f_badge_ph" : {
     "message" : "Ссылка на изображение значка"
+  },
+  "f_keyword_ph" : {
+    "message" : "Enter a keyword"
   },
   "f_include" : {
     "message" : "Включено"

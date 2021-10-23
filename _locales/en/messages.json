@@ -60,11 +60,17 @@
   "f_badge_link" : {
     "message" : "Badge link"
   },
+  "f_keyword" : {
+    "message" : "Keyword"
+  },
   "f_nickname_ph" : {
     "message" : "Login ID or Nickname"
   },
   "f_badge_ph" : {
     "message" : "Badge Image Link"
+  },
+  "f_keyword_ph" : {
+    "message" : "Enter a keyword"
   },
   "f_include" : {
     "message" : "Include"

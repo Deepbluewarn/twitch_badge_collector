@@ -59,11 +59,17 @@
   "f_badge_link" : {
     "message" : "배지 링크"
   },
+  "f_keyword" : {
+    "message" : "키워드"
+  },
   "f_nickname_ph" : {
     "message" : "로그인 아이디 또는 닉네임"
   },
   "f_badge_ph" : {
     "message" : "배지 이미지 링크"
+  },
+  "f_keyword_ph" : {
+    "message" : "키워드를 입력하세요."
   },
   "f_include" : {
     "message" : "포함"

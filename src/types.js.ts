@@ -17,8 +17,9 @@ export enum filter_type {
 }
 
 export enum filter_category {
-    Badge_UUID = 'badge_uuid',
-    Login_name = 'login_name'
+    Badge_UUID = 'badge_uuid', // f_badge
+    Login_name = 'login_name', // f_nickname
+    Keyword = 'keyword' // f_keyword
 }
 
 export enum default_badge {
