@@ -11,8 +11,7 @@ layout: default
 [![Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png)](https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj)
 [![Firefox Addon](https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/ko/firefox/addon/twitch-badge-collector/)
 
-## Manuals
-> Provided by 3 language.
+## Documentation
 
 * [English](https://tbc.bluewarn.dev/doc/main/en/manual.html)
 * [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
