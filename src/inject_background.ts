@@ -4,7 +4,7 @@
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let currunt_url: string;
-    let filter = {};
+    let filter = new Map();
     let container_ratio: number;
 
     let chatIsAtBottom = true;// chat auto scroll [on / off]
@@ -30,7 +30,7 @@
     })();
 
     chrome.storage.sync.get(['filter'], function (result) {
-        filter = result.filter;
+        filter = new Map(result.filter);
     });
 
     chrome.storage.local.get(['container_ratio'], function (result) {
@@ -250,7 +250,9 @@
      * @returns 필터의 Category 와 Value 에 맞는 필터 중 filter_type 이 include 이면서 동시에 exclude 인 경우가 없으면 true 반환.
      */
     function checkFilter(category: string, value: string, match: boolean){
-        let filter_arr = Object.keys(filter).map(el => filter[el]).filter(f => f.category === category);
+        let _filter = Array.from(filter.values());
+        let filter_arr = Object.keys(_filter).map(el => _filter[el]).filter(f => f.category === category);
+        console.debug(filter_arr);
         let include;
 
         if(match){
@@ -347,7 +349,7 @@
             let newValue = changes[key].newValue;
 
             if (key === 'filter') {
-                filter = newValue;
+                filter = new Map(newValue);
             } else if (key === 'container_ratio') {
                 change_container_ratio(parseInt(newValue));
             }

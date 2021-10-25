@@ -2,6 +2,7 @@ export interface Filter {
     filter_id: string;
     category: string;
     filter_type: string;
+    note: string;
     value: string;
 }
 

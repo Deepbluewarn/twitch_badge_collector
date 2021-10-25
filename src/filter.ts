@@ -8,6 +8,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     let checkbox_head = <HTMLInputElement>document.getElementById('checkbox_head');
     let condition_value = <HTMLInputElement>document.getElementById('condition_value');
+    let condition_note = <HTMLInputElement>document.getElementById('condition_note');
     let category_select = <HTMLSelectElement>document.getElementById('category-select');
     let condition_select = <HTMLSelectElement>document.getElementById('condition-select');
     let remove_btn = <HTMLButtonElement>document.getElementById('remove_btn');
@@ -20,38 +21,26 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     let current_page_num = <HTMLSpanElement>document.getElementById('current_page_num');
 
     const PAGE_FILTER_COUNT: number = 10; // 한 페이지에 표시할 필터 개수.
-    const DEFAULT_FILTER_COUNT: number = 4; // 기본 필터 개수.
     const ALERT_DELAY_TIME = 3000; // 알람 창 표시 시간.
 
-    let global_filter: Array<Filter>;
-    let searched_filter: Array<Filter>;
+    let global_filter: Map<string, Filter> = new Map();
+    let searched_filter: Map<string, Filter> = new Map();
 
     let search_mode = false;
 
     chrome.storage.sync.get('filter', result => {
-        global_filter = result.filter;
-        let badge_list: string[] = [];
-        let default_list = Object.keys(default_badge);
+        global_filter = new Map(result.filter);
 
-        global_filter.find(e => {
-            let id = e.filter_id;
-            if (default_list.includes(id)) {
-                badge_list.push(id);
+        chrome.storage.local.get('default_filter', result=>{
+            let default_filter: Map<string, Filter> = new Map(result.default_filter);
+        
+            for(const [k, v] of default_filter){
+                if(!global_filter.has(k)){
+                    add_filter_object(filter_type.Include, v.note, filter_category.Badge_UUID, v.value, k);
+                }
             }
         });
-        if(badge_list.length < DEFAULT_FILTER_COUNT){
-            chrome.storage.local.get('default_filter', result=>{
-
-                let default_filter: Array<Filter> = result.default_filter;
-                
-                default_filter.forEach(df=>{
-                    if(default_list.includes(df.filter_id)){
-                        add_filter_object(filter_type.Include, filter_category.Badge_UUID, df.value, df.filter_id);
-                    }
-                });
-
-            });
-        }
+        
         display_filter_list(1);
     });
 
@@ -79,10 +68,12 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         document.getElementById('add_condition')!.textContent = chrome.i18n.getMessage('f_add');
 
         let search_input = <HTMLInputElement>document.getElementById('search_input');
-        let cond_input = <HTMLInputElement>document.getElementById('condition_value');
+        let cond_value_input = <HTMLInputElement>document.getElementById('condition_value');
+        let cond_note_input = <HTMLInputElement>document.getElementById('condition_note');
 
         search_input.placeholder = chrome.i18n.getMessage('f_search_ph');
-        cond_input.placeholder = chrome.i18n.getMessage('f_nickname_ph');
+        cond_value_input.placeholder = chrome.i18n.getMessage('f_nickname_ph');
+        cond_note_input.placeholder = chrome.i18n.getMessage('f_note_ph');
 
         document.getElementById('search_input')!.textContent = chrome.i18n.getMessage('f_search_ph');
 
@@ -133,8 +124,15 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         translateHTML();
     });
 
-    function FilterToArray(filter: Filter) {
-        return Object.keys(filter).map(el => filter[el]);
+    function get_empty_filter(){
+        let filter: Filter = {
+            'filter_id' : '',
+            'category' : '',
+            'filter_type' : '',
+            'note' : '',
+            'value' : ''
+        }
+        return filter;
     }
 
     function getRandomString() {
@@ -156,6 +154,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     function init_filter_input(){
         category_select.value = filter_category.Login_name;
         condition_value.value = '';
+        condition_note.value = '';
+        condition_note.classList.add('hide');
         condition_value.placeholder = chrome.i18n.getMessage('f_nickname_ph');
         condition_select.value = filter_type.Include;
     }
@@ -187,7 +187,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         remove_filter_list(list_container);
 
-        let filter_len = filter_.length;
+        let filter_len = filter_.size;
 
         let link_count = calc_page_num(filter_len, PAGE_FILTER_COUNT);
         set_page_links(page_links, page_num, link_count);
@@ -200,18 +200,22 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             end_num = end_num - (end_num - filter_len);
         }
 
+        let filter_keys = Array.from(filter_.keys());
         for (let i = start_num; i < end_num; i++) {
-            add_filter_list(filter_[i]);
+            let key = filter_keys[i];
+            let value = filter_.get(key);
+            if(value) add_filter_list(key, value);
         }
     }
 
-    function add_filter_list(filter: Filter) {
+    function add_filter_list(id: string, filter: Filter) {
         if (!list_container) {
             list_container = <HTMLDivElement>document.getElementById('list_container');
         }
-        let f_filter_id = filter.filter_id;
+        let f_filter_id = id;
         let f_category = filter.category;
         let f_filter_type = filter.filter_type;
+        let f_note = filter.note;
         let f_value = filter.value;
 
         let list = <HTMLDivElement>document.createElement('div');
@@ -219,7 +223,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         let input = <HTMLInputElement>document.createElement('input');
         let category = <HTMLSpanElement>document.createElement('span');
         let badge_icon = <HTMLImageElement>document.createElement('img');
-        let value = <HTMLSpanElement>document.createElement('span');
+        let note = <HTMLSpanElement>document.createElement('span');
         let condition = <HTMLSpanElement>document.createElement('span');
 
         list.classList.add('list');
@@ -230,11 +234,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         category.classList.add('category');
         badge_icon.classList.add('badge_icon')
-        value.classList.add('value');
+        note.classList.add('value');
         condition.classList.add('condition');
 
         category.setAttribute('name', f_category);
-        value.setAttribute('name', f_value);
+        note.setAttribute('name', f_value);
         condition.setAttribute('name', f_filter_type);
 
         if (f_category === filter_category.Badge_UUID) {
@@ -246,7 +250,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             category.innerText = chrome.i18n.getMessage('f_keyword');
         }
 
-        value.innerText = f_value;
+        if(f_note === ''){
+            f_note = f_value;
+        }
+        note.innerText = f_note;
 
         // if (f_filter_type === filter_type.Include) {
         //     condition.innerText = chrome.i18n.getMessage('f_include');
@@ -261,10 +268,23 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         component.appendChild(input);
         component.appendChild(category);
         component.appendChild(badge_icon);
-        component.appendChild(value);
+        component.appendChild(note);
         component.appendChild(condition);
         list.appendChild(component);
         list_container.appendChild(list);
+    }
+
+    function update_searched_filter(){
+        const input_val = search_input.value.toLowerCase();
+        searched_filter.clear();
+        
+        for(const [key, value] of global_filter){
+            let val = <string>value.value.toLowerCase();
+            if (val.includes(input_val)) {
+                searched_filter.set(key, value);
+            }
+        }
+        display_search_result(input_val, searched_filter.size);
     }
 
     function display_search_result(search_text: string, f_len: number){
@@ -304,60 +324,53 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         });
     }
 
-    function add_filter_object(f_type?:string, f_category?:string, f_val?:string, f_key?: string){
+    function add_filter_object(f_type:string, f_note:string, f_category:string, f_val:string, f_key: string){
 
+        console.debug('f_type?: %o, f_note?: %o, f_category?: %o, f_val?: %o, f_key?:  %o', f_type, f_note, f_category, f_val, f_key);
         if(!global_filter) return;
 
-        let new_filter: any = {};
+        let new_filter: Filter = get_empty_filter();
 
-        if(!(f_type && f_category && f_val && f_key)){
-            // 사용자 입력을 가져와 추가.
-            f_type = condition_select.value;
-            f_category = category_select.value;
-            f_val = condition_value.value;
-            f_key = getRandomString();
-        }
+        // if(!(f_type && f_note && f_category && f_val && f_key)){
+        //     // 사용자 입력을 가져와 추가.
+        //     f_type = condition_select.value;
+        //     f_category = category_select.value;
+        //     f_val = condition_value.value;
+        //     f_note = condition_note.value;
+        //     f_key = getRandomString();
+        // }
         f_val = f_val.toLowerCase();
 
-        //console.debug('f_type : %o, f_category : %o, f_val : %o, f_key : %o', f_type, f_category, f_val, f_key);
-
-        let searched_filter = global_filter.some(f => {
-            let v = <string>f.value;
-            let c = <string>f.category;
-            if (f_category === c && f_val === v) return true;
-        });
-
-        if (searched_filter) {
-            alert('warning', chrome.i18n.getMessage('f_msg_already'));
-            init_filter_input();
-            return;
+        for(const [key, val] of global_filter){
+            let v = <string>val.value;
+            let c = <string>val.category;
+            if (f_category === c && f_val === v){
+                alert('warning', chrome.i18n.getMessage('f_msg_already'));
+                init_filter_input();
+                return;
+            } 
         }
 
-        global_filter.some(f => {
-            let id = <string>f.filter_id;
-
-            while(f_key === id){
-                // f_key 와 id 가 같으면 중복이므로, 조건을 만족하지 않을 때까지 f_key 를 재생성합니다. 
-                f_key = getRandomString();
-            }
-            return true;
-        });
+        while(global_filter.has(f_key)){
+            f_key = getRandomString();
+        }
 
         if (f_val === '') {
             alert('warning', chrome.i18n.getMessage('f_no_value'));
             return;
         }
 
+        new_filter.filter_id = f_key;
         new_filter.category = f_category;
         new_filter.filter_type = f_type;
         new_filter.value = f_val.toLowerCase();
-        new_filter.filter_id = f_key;
+        new_filter.note = f_note;
 
-        global_filter.push(new_filter);
+        global_filter.set(f_key, new_filter);
 
-        chrome.storage.sync.set({ filter: global_filter }, function () {
-            let page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
-            alert('success', chrome.i18n.getMessage('f_added'))
+        chrome.storage.sync.set({ filter: Array.from(global_filter) }, function () {
+            let page_num = calc_page_num(global_filter.size, PAGE_FILTER_COUNT);
+            alert('success', chrome.i18n.getMessage('f_added'));
             init_filter_input();
             condition_value.value = '';
             display_filter_list(page_num);
@@ -369,28 +382,28 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
      * @param filter_id 변경하고자 하는 필터 id
      */
     function change_filter_cond(cond_elem: HTMLSpanElement, filter_id: string){
-        let new_type: string;
-        let new_filter = global_filter.map((f, i, a)=>{
-            if(f.filter_id === filter_id){
-                const type = f.filter_type;
-                const current_index = filter_cond_list.indexOf(type);
-                const nextIndex = (current_index + 1) % filter_cond_list.length;
-                new_type = filter_cond_list[nextIndex];
-                f.filter_type = new_type;
-                cond_elem.setAttribute('name', new_type);
-                cond_elem.textContent = chrome.i18n.getMessage('f_' + new_type);
-                return f;
-            }
-            return f;
-        });
 
-        chrome.storage.sync.set({filter : new_filter});
+        let filter = global_filter.get(filter_id);
+
+        if(!filter) return;
+
+        let filter_type = filter?.filter_type;
+        const current_index = filter_cond_list.indexOf(filter_type!);
+        const nextIndex = (current_index + 1) % filter_cond_list.length;
+        const new_type = filter_cond_list[nextIndex];
+        filter.filter_type = new_type;
+        global_filter.set(filter_id, filter);
+
+        cond_elem.setAttribute('name', new_type);
+        cond_elem.textContent = chrome.i18n.getMessage('f_' + new_type);
+
+        chrome.storage.sync.set({filter : Array.from(global_filter)});
     }
 
     function set_page_links(page_links: HTMLDivElement, page_num: number, count: number) {
         Array.from(page_links.getElementsByClassName('page_link')).forEach(e => {
             e.remove();
-        })
+        });
         for (let i = 1; i <= count; i++) {
             let page_link = document.createElement('span');
             page_link.classList.add('page_link');
@@ -406,13 +419,14 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     }
 
     function update_cond_elem(cond_elem: HTMLSpanElement, f_type: string){
-        if (f_type === filter_type.Include) {
-            cond_elem.textContent = chrome.i18n.getMessage('f_include');
-        } else if (f_type === filter_type.Exclude) {
-            cond_elem.textContent = chrome.i18n.getMessage('f_exclude');
-        } else if (f_type === filter_type.Sleep){
-            cond_elem.textContent = chrome.i18n.getMessage('f_sleep');
-        }
+        cond_elem.textContent = chrome.i18n.getMessage('f_' + f_type);
+        // if (f_type === filter_type.Include) {
+        //     cond_elem.textContent = chrome.i18n.getMessage('f_include');
+        // } else if (f_type === filter_type.Exclude) {
+        //     cond_elem.textContent = chrome.i18n.getMessage('f_exclude');
+        // } else if (f_type === filter_type.Sleep){
+        //     cond_elem.textContent = chrome.i18n.getMessage('f_sleep');
+        // }
     }
 
     function validate_badge_url(badge_url: string){
@@ -438,7 +452,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         if(!proceed) return proceed;
 
         let target = <FileReader>event.target;
-        let filter:Array<Filter | filter_metadata> = JSON.parse(String(target.result));
+        let filter: Array<Filter | filter_metadata> = JSON.parse(String(target.result));
         let meta_avail = filter.some((f, i)=>{
             let fm = f as filter_metadata;
             if(fm.date && fm.version){
@@ -450,8 +464,14 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             alert('error', chrome.i18n.getMessage('f_upload_error'));
             return false;
         }
-        chrome.storage.sync.set({filter}, ()=>{
-            global_filter = filter as Array<Filter>;
+
+        global_filter.clear();
+        filter.forEach(e=>{
+            let f = e as Filter;
+            global_filter.set(f.filter_id, f);
+        });
+
+        chrome.storage.sync.set({filter : Array.from(global_filter)}, ()=>{
             alert('success', chrome.i18n.getMessage('f_upload_done'));
             display_filter_list(1);
         });
@@ -459,11 +479,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     add_btn.addEventListener('click', e => {
         let f_type = condition_select.value;
+        let f_note = condition_note.value;
         let f_category = category_select.value;
         let f_val = condition_value.value;
 
         let valid = validate_badge_url(f_val);
-        let label_str = f_category + '_' + f_type;
 
         if (f_category === filter_category.Badge_UUID) {
             if (valid) {
@@ -475,15 +495,19 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             }
 
         }
-        add_filter_object(f_type, f_category, f_val, getRandomString());
+        add_filter_object(f_type, f_note, f_category, f_val, getRandomString());
     });
 
     category_select.addEventListener('change', e => {
-
         let value = category_select.value;
+
+        let input_note = document.getElementById('condition_note');
+        input_note?.classList.add('hide');
+        console.debug('category_select change value : %o', value);
 
         if (value === filter_category.Badge_UUID) {
             condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
+            input_note?.classList.remove('hide');
         } else if (value === filter_category.Login_name) {
             condition_value.placeholder = chrome.i18n.getMessage('f_nickname_ph');
         } else if (value === filter_category.Keyword) {
@@ -499,9 +523,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     // TODO : Badge URL 을 입력했을때 카테고리가 배지 링크로 변경 안되는 버그 수정.
     condition_value.addEventListener('input', e => {
         let input_val = condition_value.value;
-
+        let input_note = document.getElementById('condition_note');
         if(validate_badge_url(input_val)){
             category_select.value = filter_category.Badge_UUID;
+            input_note?.classList.remove('hide');
             condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
         }
     });
@@ -517,28 +542,23 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     search_input.addEventListener('input', e => {
         const input_val = search_input.value.toLowerCase();
-        searched_filter = global_filter.filter(f => {
-            let val = <string>f.value.toLowerCase();
-            if (val.includes(input_val)) return true;
-        });
-        const se_len = searched_filter.length;
+
+        update_searched_filter();
+        const se_len = searched_filter.size;
 
         if(input_val === ''){
             search_mode = false;
-            chrome.storage.sync.get('filter', e=>{
-                global_filter = e.filter;
-                display_filter_list(1);
-            });
+            display_filter_list(1);
             
         }else{
             search_mode = true;
             display_filter_list(1);
         }
-        display_search_result(input_val, se_len);
     });
 
     remove_btn.addEventListener('click', e => {
-        // create filter object by elements
+        if(!confirm(chrome.i18n.getMessage('f_rm_selected'))) return;
+
         let component = document.getElementsByClassName('component');
         let comp_arr = Array.from(component);
 
@@ -552,23 +572,21 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
             if (checked) {
                 let filter_id = <string>e.getAttribute('filter_id');
                 let is_default = Object.keys(default_badge).includes(filter_id);
+
                 if (!is_default) {
-                    for (let i = 0; i < global_filter.length; i++) {
-                        if (global_filter[i].filter_id === filter_id) {
-                            global_filter.splice(i, 1);
-                            return;
-                        }
-                    }
+                    global_filter.delete(filter_id);
                 } else {
                     alert('warning', chrome.i18n.getMessage('f_rm_default'));
                 }
             }
         });
 
-        chrome.storage.sync.set({ filter: global_filter }, () => {
+        update_searched_filter();
+
+        chrome.storage.sync.set({ filter: Array.from(global_filter) }, () => {
             alert('success', chrome.i18n.getMessage('f_done'));
             let page_num = <string>current_page_num.getAttribute('cur_pg_num');
-            let new_page_num = calc_page_num(global_filter.length, PAGE_FILTER_COUNT);
+            let new_page_num = calc_page_num(global_filter.size, PAGE_FILTER_COUNT);
 
             if (parseInt(page_num) > new_page_num) {
                 page_num = String(new_page_num);
@@ -580,21 +598,13 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     });
     remove_all_btn.addEventListener('click', e => {
         if(!confirm(chrome.i18n.getMessage('f_ask_rm_all'))) return;
-        let default_index: Array<number> = []; // filter 객체에서 default 배지의 인덱스 값을 저장합니다.
-        global_filter.forEach((e, i) => {
-            if (Object.keys(default_badge).includes(e.filter_id)) {
-                default_index.push(i);
-            }
+
+        chrome.storage.local.get('default_filter', result=>{
+            chrome.storage.sync.set({ filter: Array.from(result.default_filter)}, () => {
+                alert('success', chrome.i18n.getMessage('f_all_rm'));
+                display_filter_list(1);
+            });
         });
-        default_index.sort();
-        global_filter.splice(default_index[default_index.length - 1] + 1, global_filter.length);
-
-        chrome.storage.sync.set({ filter: global_filter }, () => {
-            alert('success', chrome.i18n.getMessage('f_all_rm'));
-
-            display_filter_list(1);
-        });
-
     });
 
     list_container.addEventListener('click', e=>{
@@ -614,31 +624,28 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     backup_filter.addEventListener('click', e => {
         // 확장 버전, 파일 생성 날짜
-        chrome.storage.sync.get('filter', result => {
-            let filter: Array<Filter | filter_metadata> = result.filter;
 
-            let today = new Date();
-            let year = today.getFullYear();
-            let month = ('0' + (today.getMonth() + 1)).slice(-2);
-            let day = ('0' + today.getDate()).slice(-2);
-            let dateString = year + '-' + month + '-' + day;
+        let filter: Array<Filter | filter_metadata> = Array.from(global_filter.values());
 
-            filter.unshift({
-                version : chrome.runtime.getManifest().version,
-                date : new Date().getTime()
-            });
-
-            let FilterArray = JSON.stringify(filter, null, 4);
-
-            let vLink = document.createElement('a'),
-                vBlob = new Blob([FilterArray], { type: "octet/stream" }),
-                vName = dateString + '_filter_backup.tbc',
-                vUrl = window.URL.createObjectURL(vBlob);
-            vLink.setAttribute('href', vUrl);
-            vLink.setAttribute('download', vName);
-            vLink.click();
-        });
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = ('0' + (today.getMonth() + 1)).slice(-2);
+        let day = ('0' + today.getDate()).slice(-2);
+        let dateString = year + '-' + month + '-' + day;
         
+        filter.unshift({
+            version : chrome.runtime.getManifest().version,
+            date : new Date().getTime()
+        });
+        let serialized = JSON.stringify(filter, null, 4);
+
+        let vLink = document.createElement('a'),
+            vBlob = new Blob([serialized], { type: "octet/stream" }),
+            vName = dateString + '_filter_backup.tbc',
+            vUrl = window.URL.createObjectURL(vBlob);
+        vLink.setAttribute('href', vUrl);
+        vLink.setAttribute('download', vName);
+        vLink.click();
     });
 
     import_filter.addEventListener('change', e=>{
@@ -661,12 +668,13 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
+        console.debug(changes);
         for (var key in changes) {
 
             let newValue = changes[key].newValue;
-
+            
             if (key === 'filter') {
-                global_filter = newValue;
+                global_filter = new Map(newValue);
             }
 
         }

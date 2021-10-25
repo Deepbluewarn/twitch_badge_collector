@@ -6,7 +6,7 @@ import { Filter, filter_type } from './types.js.js';
     
     let current_url = '';
 
-    let global_filter: Array<Filter>;
+    let global_filter: Map<string, Filter> = new Map();
 
     function localizeHtmlPage() {
 
@@ -37,15 +37,13 @@ import { Filter, filter_type } from './types.js.js';
 
         let chboxs = Array.from(document.getElementsByClassName('badge_checkbox'));
 
-        global_filter = result.filter;
+        global_filter = new Map(result.filter);
 
         chboxs.forEach(e => {
-            global_filter.some(filter => {
-                if (filter.filter_id === e.id) {
-                    (e as HTMLInputElement).checked = filter.filter_type === filter_type.Include ? true : false;
-                    return true;
-                }
-            });
+            let id = e.getAttribute('id')!;
+            let f = global_filter.get(id)!;
+
+            (e as HTMLInputElement).checked = f.filter_type === filter_type.Include ? true : false;
         });
 
     });
@@ -70,18 +68,23 @@ import { Filter, filter_type } from './types.js.js';
         let target = <HTMLInputElement>e.target;
 
         if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
-            const id = target.getAttribute('id');
+            // id 에 해당하는 filter 객체의 type 을 변경.
+            const id = target.getAttribute('id')!;
             const type = target.checked ? filter_type.Include : filter_type.Exclude;
 
-            for (let i = 0; i < global_filter.length; i++) {
-                let f = global_filter[i];
-                if (f.filter_id === id) {
-                    f.filter_type = type;
-                    break;
-                }
-            }
+            let filter: Filter = global_filter.get(id)!;
+            filter.filter_type = type;
+            global_filter.set(id, filter);
+            
+            // for (let i = 0; i < global_filter.size; i++) {
+            //     let f = global_filter[i];
+            //     if (f.filter_id === id) {
+            //         f.filter_type = type;
+            //         break;
+            //     }
+            // }
 
-            chrome.storage.sync.set({ filter: global_filter }, () => { });
+            chrome.storage.sync.set({ filter: Array.from(global_filter) }, () => { });
         }
     });
 

@@ -71,6 +71,9 @@
   "f_keyword_ph" : {
     "message" : "Enter a keyword"
   },
+  "f_note_ph" : {
+    "message" : "Please type a memo"
+  },
   "f_include" : {
     "message" : "Включено"
   },
@@ -129,6 +132,9 @@
   },
   "f_rm_default" : {
     "message" : "Вы не можете удалить значок по умолчанию."
+  },
+  "f_rm_selected" : {
+    "message" : "Delete the selected filter?"
   },
   "f_ask_rm_all" : {
     "message" : "Удалить все?"

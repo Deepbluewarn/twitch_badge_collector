@@ -173,6 +173,11 @@ span.condition{
     color: var(--condition-sleep-color);
 }
 
+.condition_input{
+    width: 25rem;
+    height: 33px;
+}
+
 .buttons{
     display: flex;
     gap: 5px;
@@ -190,7 +195,7 @@ span.condition{
 .component{
     display: grid;
     gap: 10px;
-    grid-template-columns: 1fr 2fr 1.3fr 7fr 4fr;
+    grid-template-columns: 1fr 2fr 1.3fr 7fr 4fr; /*1fr 2fr 1fr 2.5fr 7fr 3fr;*/
     align-items: center;
 }
 .select_label{
@@ -238,6 +243,9 @@ span.condition{
 }
 .msg_span{
     font-size: .8rem;
+}
+.hide{
+    display: none;
 }
 
 #alert_container{
@@ -354,10 +362,6 @@ span.condition{
     height: 35px;
 }
 
-#condition_value{
-    width: 25rem;
-    height: 33px;
-}
 #add_condition{
     background-color: var(--add-btn-bg-color);
     color : var(--add-btn-color);

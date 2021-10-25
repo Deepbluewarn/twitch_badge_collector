@@ -71,6 +71,9 @@
   "f_keyword_ph" : {
     "message" : "키워드를 입력하세요."
   },
+  "f_note_ph" : {
+    "message" : "메모를 입력하세요."
+  },
   "f_include" : {
     "message" : "포함"
   },
@@ -131,6 +134,9 @@
   },
   "f_rm_default" : {
     "message" : "기본 배지는 삭제할 수 없습니다."
+  },
+  "f_rm_selected" : {
+    "message" : "선택한 필터를 삭제할까요?"
   },
   "f_ask_rm_all" : {
     "message" : "모두 삭제할까요?"
