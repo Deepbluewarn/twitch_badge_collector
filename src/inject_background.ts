@@ -121,6 +121,7 @@
     }
 
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+        
         let room_clone: Element;
         let chat_clone: Element;
         let badges: HTMLCollection;
@@ -190,50 +191,51 @@
 
                     badges = chat_clone.getElementsByClassName('chat-badge');
 
-                    // 각 필터 카테고리의 확인 로직을 분리하고 우선순위를 사용자가 직접 설정할 수 있도록 하기..
+                    let badge_priority = new Map();
+                    let bp_res: string[] = [];
+                    // badge_priority.set('login_name', false);
+                    // badge_priority.set('nickname', false);
+                    // badge_priority.set('badge_uuid', false);
+                    // badge_priority.set('keyword', false);
 
-                    let avail_obj: any = {
-                        badge_uuid : false, 
-                        login_name : false, 
-                        keyword : false
-                    };
-
+                    // TODO :: 제외 필터를 우선으로 함. 
+                    // 카테고리가 같은 필터가 [포함, 제외] 두가지로 존재하는 경우 제외 필터를 최우선으로 적용함.
+                    
                     // Check with Nickname Filter.
-                    avail_obj['login_name'] = checkFilter('login_name', login_name, false) || checkFilter('login_name', nickname, false);
-
+                    let login_res = checkFilter('login_name', login_name, true);
+                    let nick_res = checkFilter('login_name', nickname, true);
+                    badge_priority.set('login_name', login_res);
+                    badge_priority.set('nickname', nick_res);
+                    
                     // Check with Badge Filter.
                     Array.from(badges).some((badge, index) => {
                         let badge_uuid = new URL(badge.getAttribute('src')!).pathname.split('/')[3];
 
-                        let res = checkFilter('badge_uuid', badge_uuid, false);
-                        if(res){
-                            avail_obj['badge_uuid'] = res;
-                            return true;
-                        }
+                        let res = checkFilter('badge_uuid', badge_uuid, true);
+                        bp_res.push(res);
                     });
+
+                    badge_priority.set('badge_uuid', select_cf_result(bp_res));
 
                     // Check with Keyword Filter.
+                    bp_res = [];
                     Array.from(text_contents).some((text, index)=>{
+
                         let keyword = text.textContent;
                         if(!keyword) return true;
-                        let res = checkFilter('keyword', keyword, true);
 
-                        if(res){
-                            avail_obj['keyword'] = res;
-                            return true;
-                        }
+                        let res = checkFilter('keyword', keyword, false);
+                        bp_res.push(res);
                     });
+                    badge_priority.set('keyword', select_cf_result(bp_res));
 
-                    // 우선순위 구현
-                    let priority = ['login_name', 'badge_uuid', 'keyword'];
-
-                    for(let i = 0; i < priority.length; i++){
-                        if(avail_obj[priority[i]]){
-                            add_chat(nodeElement, chat_clone, scroll_area, message_container, priority[i]);
-                            break;
+                    for(const[k, v] of badge_priority){
+                        if(v === 'FILTER_NOT_FOUND') continue;
+                        if(v === 'FILTER_INCLUDE'){
+                            add_chat(nodeElement, chat_clone, scroll_area, message_container, k);
                         }
+                        break;
                     }
-                    
                 }
                 if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
                     //채팅방 재접속. (when re-connected to chat room)
@@ -251,19 +253,45 @@
      */
     function checkFilter(category: string, value: string, match: boolean){
         let _filter = Array.from(filter.values());
-        let filter_arr = Object.keys(_filter).map(el => _filter[el]).filter(f => f.category === category);
-        console.debug(filter_arr);
-        let include;
+        let filter_arr = Object.keys(_filter).map(el => _filter[el]).filter(f => f.category === category && f.filter_type != 'sleep');
+    
+        let include, exclude;
 
         if(match){
             include = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'include'));
-            //exclude = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'exclude'));
+            exclude = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'exclude'));
         }else{
-            include = filter_arr.filter(el => (value.toLowerCase().includes(el.value.toLowerCase())) && (el.filter_type === 'include'));
-            //exclude = filter_arr.filter(el => (value.toLowerCase().includes(el.value.toLowerCase())) && (el.filter_type === 'exclude'));
+            include = filter_arr.filter(el => value.toLowerCase().includes(el.value.toLowerCase()) && el.filter_type === 'include');
+            exclude = filter_arr.filter(el => value.toLowerCase().includes(el.value.toLowerCase()) && el.filter_type === 'exclude');
         }
-        
-        return include.length != 0; //&& (exclude.length === 0));
+
+        let i_len = include.length;
+        let e_len = exclude.length;
+
+        if(i_len === 0 && e_len === 0){
+            return 'FILTER_NOT_FOUND'
+        }else if(i_len != 0 && e_len === 0){
+            return 'FILTER_INCLUDE';
+        }else{
+            return 'FILTER_EXCLUDE';
+        }
+    }
+
+    function select_cf_result(bp_res: string[]) {
+
+        if(bp_res.length === 0) return 'FILTER_NOT_FOUND';
+
+        let f_ex_inc = bp_res.includes('FILTER_EXCLUDE');
+        let f_in_inc = bp_res.includes('FILTER_INCLUDE');
+        let f_nf_inc = bp_res.includes('FILTER_NOT_FOUND');
+
+        if (f_ex_inc) {
+            return 'FILTER_EXCLUDE';
+        } else if (!f_ex_inc && f_in_inc) {
+            return 'FILTER_INCLUDE';
+        } else if (!f_ex_inc && !f_in_inc && f_nf_inc) {
+            return 'FILTER_NOT_FOUND';
+        }
     }
 
     /**
@@ -342,6 +370,9 @@
         window.removeEventListener('touchend', endDrag);
     }
 
+    // setTimeout(e=>{
+    //     observeStreamPage();
+    // }, 10000);
     observeStreamPage();
 
     chrome.storage.onChanged.addListener(function (changes) {

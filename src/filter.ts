@@ -249,20 +249,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         } else if (f_category === filter_category.Keyword){
             category.innerText = chrome.i18n.getMessage('f_keyword');
         }
-
-        if(f_note === ''){
-            f_note = f_value;
-        }
         note.innerText = f_note;
 
-        // if (f_filter_type === filter_type.Include) {
-        //     condition.innerText = chrome.i18n.getMessage('f_include');
-        // } else if (f_filter_type === filter_type.Exclude) {
-        //     condition.innerText = chrome.i18n.getMessage('f_exclude');
-        // } else if (f_filter_type === filter_type.Sleep){
-        //     console.debug(chrome.i18n.getMessage('f_exclude'));
-        //     condition.innerText = chrome.i18n.getMessage('f_sleep');
-        // }
         update_cond_elem(condition, f_filter_type);
 
         component.appendChild(input);
@@ -279,8 +267,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         searched_filter.clear();
         
         for(const [key, value] of global_filter){
-            let val = <string>value.value.toLowerCase();
-            if (val.includes(input_val)) {
+            let note = <string>value.note.toLowerCase();
+            if (note.includes(input_val)) {
                 searched_filter.set(key, value);
             }
         }
@@ -326,19 +314,10 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
     function add_filter_object(f_type:string, f_note:string, f_category:string, f_val:string, f_key: string){
 
-        console.debug('f_type?: %o, f_note?: %o, f_category?: %o, f_val?: %o, f_key?:  %o', f_type, f_note, f_category, f_val, f_key);
+        //console.debug('f_type?: %o, f_note?: %o, f_category?: %o, f_val?: %o, f_key?:  %o', f_type, f_note, f_category, f_val, f_key);
         if(!global_filter) return;
 
         let new_filter: Filter = get_empty_filter();
-
-        // if(!(f_type && f_note && f_category && f_val && f_key)){
-        //     // 사용자 입력을 가져와 추가.
-        //     f_type = condition_select.value;
-        //     f_category = category_select.value;
-        //     f_val = condition_value.value;
-        //     f_note = condition_note.value;
-        //     f_key = getRandomString();
-        // }
         f_val = f_val.toLowerCase();
 
         for(const [key, val] of global_filter){
@@ -364,6 +343,11 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         new_filter.category = f_category;
         new_filter.filter_type = f_type;
         new_filter.value = f_val.toLowerCase();
+
+        if(!f_note || f_note === ''){
+            f_note = f_val;
+        }
+
         new_filter.note = f_note;
 
         global_filter.set(f_key, new_filter);
@@ -468,6 +452,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         global_filter.clear();
         filter.forEach(e=>{
             let f = e as Filter;
+            if(!f.note) f.note = f.value;
             global_filter.set(f.filter_id, f);
         });
 
@@ -503,7 +488,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         let input_note = document.getElementById('condition_note');
         input_note?.classList.add('hide');
-        console.debug('category_select change value : %o', value);
 
         if (value === filter_category.Badge_UUID) {
             condition_value.placeholder = chrome.i18n.getMessage('f_badge_ph');
@@ -544,16 +528,8 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
         const input_val = search_input.value.toLowerCase();
 
         update_searched_filter();
-        const se_len = searched_filter.size;
-
-        if(input_val === ''){
-            search_mode = false;
-            display_filter_list(1);
-            
-        }else{
-            search_mode = true;
-            display_filter_list(1);
-        }
+        search_mode = input_val === '' ? false : true;
+        display_filter_list(1);
     });
 
     remove_btn.addEventListener('click', e => {
@@ -668,7 +644,6 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
-        console.debug(changes);
         for (var key in changes) {
 
             let newValue = changes[key].newValue;

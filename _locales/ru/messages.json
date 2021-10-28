@@ -72,7 +72,7 @@
     "message" : "Enter a keyword"
   },
   "f_note_ph" : {
-    "message" : "Please type a memo"
+    "message" : "Please type a note (optional)"
   },
   "f_include" : {
     "message" : "Включено"
