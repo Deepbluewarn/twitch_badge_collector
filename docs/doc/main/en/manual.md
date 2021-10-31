@@ -23,7 +23,7 @@ If your chat's badge meets the set conditions, copy the chat to the window below
 ![screenshot_2](../../../screenshot/en/chat_room_example_2.png)
 
 Above is the original chat and below is the copied chat.
-Once the chat is copied, it will appear in red on the left side of the chat to make it easier to find the source of the chat.
+When a chat is copied, it is colored to the left of the chat so that you can easily find the original chat.
 
 ![screenshot_drag](../../../screenshot/en/drag.webp)
 

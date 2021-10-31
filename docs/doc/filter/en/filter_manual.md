@@ -12,13 +12,17 @@ Description for Filter Add-on.
 
 ### Filter Settings
 
-Chatting is filtered by badge and ID.
+There are three types of filters.
 
-#### *Add ID*
+* Badge Filter
+* ID or Nickname Filter
+* Keyword Filter
+
+#### ***Add ID***
 
 Enter the ID or nickname of the user you want to add.
 
-#### *Add Badge*
+#### ***Add Badge***
 
 Enter the image link of the badge you want to add.
 Links can be obtained from chats in the Twitch chat window.
@@ -31,14 +35,23 @@ https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1
 
 https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 ```
+You can set notes for badge filter. If not entered, the badge's UUID is the default.
 
-#### *Filter Condition*
+#### ***Keyword Filter***
 
-Filters can be set in two ways: Include and Exclude.
+Enter the keywords you want to add.
+
+> Keywords are not case-sensitive.
+
+#### ***Filter Condition***
+
+Filters can be set in three ways: `Include`, `Exclude`, `Sleep`.
 
 If set to Include, copy the chat; if set to Exclude, do not copy the chat.
 
-> If there is a filter with the same condition, the ID filter comes first.
+> It works in the following order: ID Filter -> Badge Filter -> Keyword Filter.
+>
+> If the ID filter is set to "Exclude", the rest of the badge and keyword filters are ignored.
 
 ***
 

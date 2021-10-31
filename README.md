@@ -15,8 +15,9 @@ Helpful when you have a chat you don't want to miss.
 
 See [Docs](https://tbc.bluewarn.dev/) for more details!
 
-## v1.3.15 Changlog
-   - Add Russian translation
+## *1.3.17 Changelog*
+    > 2021-10-30
+    Add Keyword Filter.
     
     
     

@@ -18,12 +18,12 @@ layout: default
 
 ![screenshot_1](../../../screenshot/ko/chat_room_example.png)
 
-올라오는 채팅의 배지가 설정된 조건과 맞으면 아래 창에 채팅을 복사합니다.
+채팅이 설정된 조건과 맞으면 채팅을 복사합니다.
 
 ![screenshot_2](../../../screenshot/ko/chat_room_example_2.png)
 
 위는 원본 채팅이고 아래는 복사된 채팅입니다.
-채팅이 복사되면 해당 채팅의 원본을 쉽게 찾을 수 있도록 채팅 좌측에 빨간색으로 표시됩니다.
+채팅이 복사되면 해당 채팅의 원본을 쉽게 찾을 수 있도록 채팅 좌측에 표시됩니다.
 
 ![screenshot_drag](../../../screenshot/ko/drag.webp)
 

@@ -17,4 +17,11 @@ layout: default
 * [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
 * [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.html) (Translated by [Blueberryy](https://github.com/Blueberryy))
 
+## *1.3.17 Changelog*
+    > 2021-10-30
+    Add Keyword Filter.
+
+## Changelogs
+* [Korean Only](https://tbc.bluewarn.dev/doc/versions.html)
+
 ***
