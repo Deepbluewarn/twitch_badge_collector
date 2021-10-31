@@ -11,6 +11,7 @@
   "permissions": [
     "webNavigation",
     "storage",
+    "notifications",
     "*://*.twitch.tv/*"
   ],
   "background": {

@@ -34,10 +34,6 @@
     "message" : "https://tbc.bluewarn.dev/doc/filter/ru/filter_manual.html"
   },
 
-  "f_introduce" : {
-    "message" : "Новая функция: Попробуйте фильтры!"
-  },
-
   "f_title" : {
     "message" : "Настройка фильтра"
   },
@@ -147,5 +143,8 @@
   },
   "f_rm_proceed" : {
     "message" : "Все данные будут удалены и заменены. Приступить?"
+  },
+  "f_introduce" : {
+    "message" : "[1.3.17 Update]\nAdd Keyword Filter."
   }
 }
