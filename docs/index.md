@@ -22,6 +22,6 @@ layout: default
     Add Keyword Filter.
 
 ## Changelogs
-* [Korean Only](https://tbc.bluewarn.dev/doc/versions.html)
+* [Korean Only](https://tbc.bluewarn.dev/versions.html)
 
 ***
