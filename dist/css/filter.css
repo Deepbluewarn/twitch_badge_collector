@@ -1,15 +1,10 @@
 .default{
     --bg-color : #0e0e0e;
-    /* --bg-color : #f0cf61; */
     --color : #e4e4e4;
     --add-desc-color : #a2a2a2;
 
     --setting-container-bg-color : #1d1d1d;
     --control-container-bg-color : #ffffff00;
-
-    
-
-    /* --list-head-bg-color: #393e461a; */
     
     --list-container-bg-color : #1d1d1d;
     --list-container-color: #e4e4e4;
@@ -24,22 +19,17 @@
     --label-text-color : #EEEEEE;
     --label-ph-text-color : #949494;
 
+    --search-label-text-bg-color : #3a3a3a;
+
     --input-label-bd-color : #2d2d2d;
 
     --add-btn-bg-color : #e4e4e4;
     --add-btn-color : #101010;
 
+    --sel-color : #ffffff;
     --sel-bd-color: #2b2b2b;
     --sel-bg-color : #2b2b2b;
 
-    /* --rm-sel-btn-bg-color : #ff8484;
-    --rm-sel-btn-color : #fafafa;
-    --rm-all-btn-bg-color : #ff4040;
-    --rm-all-btn-color : #070606;
-    --file-backup-bg-color : #c4ff20;
-    --file-backup-color : #000000;
-    --file-upload-bg-color : #fff170;
-    --file-upload-color : #000000; */
     --rm-sel-btn-bg-color : #e4e4e4;
     --rm-sel-btn-color : #101010;
     --rm-all-btn-bg-color : #e4e4e4;
@@ -52,6 +42,53 @@
     --condition-include-color : #e1ff74;
     --condition-exclude-color : #ff5b76;
     --condition-sleep-color : #3b3b3b;
+}
+@media (prefers-color-scheme: light) {
+    .default {
+        --bg-color : #fff8ee;
+        --color : #424242;
+        --add-desc-color : #020202;
+
+        --setting-container-bg-color : #ffffff;
+        --setting-container-bd-color : #ededed;
+        --control-container-bg-color : #fff8ee;
+
+        --list-container-bg-color : #ffffff;
+        --list-container-color: #1f1f1f;
+        --list-head-bg-color : var(--list-container-bg-color);
+        --list-head-color: #1f1f1f;
+        --list-head-bd-color: #42424236;
+
+        --page-links-color: #d7d7d7;
+        --page-links-highlight-color: #1c1c1c;
+
+        --label-text-bg-color : #ebebeb;
+        --label-text-color : #1e1e1e;
+        --label-ph-text-color : #949494;
+
+        --search-label-text-bg-color : #e1cfb45e;
+
+        --add-btn-bg-color : #2a2a2a;
+        --add-btn-color : #ffffff;
+
+        --sel-color : #1c1c1c;
+        --sel-bd-color: #e5e5e5;
+        --sel-bg-color: #f3f3f3;
+
+        --rm-sel-btn-bg-color: #ff6464;
+        --rm-sel-btn-color: #ffffff;
+        --rm-all-btn-bg-color: #ff6464;
+        --rm-all-btn-color: #ffffff;
+        --file-backup-bg-color: #add;
+        --file-backup-color: #000000;
+        --file-upload-bg-color: #cddc39;
+        --file-upload-color: #000000;
+
+        --condition-include-color : #9ac500;
+        --condition-exclude-color : #ff002a;
+        --condition-sleep-color : #d5d5d5;
+        
+    }
 }
 *{
     font-family: 'Poor Story', cursive;
@@ -89,7 +126,6 @@ input, label, button{
 	font-size: .9rem;
 	color: var(--text-color-inverted);
     height: 1.8rem;
-    /* height: 100%; */
 	border : 1px solid var(--bottom-background-color);
     margin: 0 3px 0 3px;
 }
@@ -114,7 +150,6 @@ input{
     background-color: #5c5c5c;
     padding-left: 10px;
     border-radius: 4px;
-    /* height: 25px; */
     height: 100%;
     border: none;
     outline: none;
@@ -127,7 +162,6 @@ input[type=checkbox] {
 input[type=text]{
     background-color: var(--label-text-bg-color);
     color: var(--label-text-color);
-    /* border: 2px solid var(--input-label-bd-color); */
 }
 input[type=text]::placeholder{
     color: var(--label-ph-text-color);
@@ -145,13 +179,6 @@ button:hover{
 	color : var(--text-highlight-color);
 }
 
-/*******************************************/
-/* .toast{
-    width: 20rem;
-} */
-/* #toast-container > .toast {
-    width: 20rem;
-} */
 .list{
     padding: 7px 0 7px 11px;
 }
@@ -174,7 +201,7 @@ span.condition{
 }
 
 .condition_input{
-    width: 25rem;
+    width: 27rem;
     height: 33px;
 }
 
@@ -195,7 +222,7 @@ span.condition{
 .component{
     display: grid;
     gap: 10px;
-    grid-template-columns: 1fr 2fr 1.3fr 7fr 4fr; /*1fr 2fr 1fr 2.5fr 7fr 3fr;*/
+    grid-template-columns: 1fr 2fr 1.3fr 7fr 4fr;
     align-items: center;
 }
 .select_label{
@@ -205,16 +232,11 @@ span.condition{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* border: 1px solid; */
     width: 1rem;
     height: 1rem;
     cursor: pointer;
 }
-/* .page_link:first-child{
-    font-size: 3rem;    
-} */
 .page_link.curr{
-    /* font-weight: bold; */
     color: var(--page-links-highlight-color);
 }
 
@@ -271,7 +293,6 @@ span.condition{
 #title_container{
     color: var(--color);
     font-size: 5rem;
-    /* width: 44rem; */
 }
 
 #setting_container{
@@ -290,12 +311,10 @@ span.condition{
 }
 
 #list_container{
-    /* width: 44rem; */
     height: 22.7em;
     background-color: var(--list-container-bg-color);
     color: var(--list-container-color);
     border-radius: 5px;
-    /* padding: 11px; */
     padding-bottom: 10px;
     padding-top: 10px;
 }
@@ -335,11 +354,6 @@ span.condition{
     font-size: 0.9rem;
     transition: .1s;
 }
-#se_result.hide{
-    display: none;
-}
-
-
 #page_links{
     display: flex;
     gap: 20px;
@@ -357,8 +371,7 @@ span.condition{
 #filter_info{
     display: flex;
     align-items: center;
-    margin: 0px 0 5px 8px;
-    /* height: 25px; */
+    margin: 0px 27px 5px 8px;
     height: 35px;
 }
 
@@ -368,6 +381,7 @@ span.condition{
     width: 4rem;
 }
 #search_input{
+    background-color: var(--search-label-text-bg-color);
     margin-left: .6rem;
     width: 17rem;
 }
@@ -383,9 +397,8 @@ span.condition{
     background-color: var(--list-head-bg-color);
     font-weight: bold;
     margin: 0 0 6px 0;
-    /* border-radius: 5px; */
     padding-bottom: 6px;
-    border-bottom: 2px solid var(--list-head-bd-color);
+    border-bottom: 1px solid var(--list-head-bd-color);
 }
 
 #import_filter{
@@ -417,26 +430,16 @@ span.condition{
 .select_label select {
     -webkit-appearance: none;
     padding: 3px 40px 3px 12px;
-    /* width: 100%; */
     font-size: .9rem;
     border: 2px solid var(--sel-bd-color);
     background-color: var(--sel-bg-color);
-    color: var(--color);
+    color: var(--sel-color);
     height: 100%;
     border-radius: 4px;
     cursor: pointer;
     font-family: inherit;
     transition: all 150ms ease;
 }
-/* .select_label select:required:invalid {
-    color: #5a667f;
-}
-.select_label select option {
-    color: #223254;
-} */
-/* .select_label select option[value=""][disabled] {
-    display: none;
-} */
 .select_label select:focus {
     outline: none;
 }
