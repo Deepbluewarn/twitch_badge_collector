@@ -33,7 +33,7 @@
   "filter_desc_link" : {
     "message" : "https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html"
   },
-  
+
   "f_title" : {
     "message" : "필터 설정"
   },
@@ -147,6 +147,6 @@
     "message" : "기존 데이터는 삭제됩니다. 계속 할까요?"
   },
   "f_introduce" : {
-    "message" : "[1.3.17 업데이트]\n키워드 필터가 추가되었습니다."
+    "message" : "[1.3.17 업데이트]\n - 키워드 필터 기능이 추가되었습니다."
   }
 }

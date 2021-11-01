@@ -1,4 +1,4 @@
-import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list, default_badge, filter } from './types.js.js';
+import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list, default_badge } from './types.js.js';
 (function () {
 
     let DEBUG_FILTER_ALL = <HTMLButtonElement>document.getElementById('DEBUG_FILTER_ALL');
@@ -33,7 +33,7 @@ import { Filter, filter_metadata, filter_category, filter_type, filter_cond_list
 
         chrome.storage.local.get('default_filter', result=>{
             let default_filter: Map<string, Filter> = new Map(result.default_filter);
-        
+            
             for(const [k, v] of default_filter){
                 if(!global_filter.has(k)){
                     add_filter_object(filter_type.Include, v.note, filter_category.Badge_UUID, v.value, k);
