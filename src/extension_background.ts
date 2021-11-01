@@ -1,17 +1,40 @@
-chrome.runtime.onInstalled.addListener(function (reason: any) {
-
-    // 카테고리 배지를 선택하면 메모를 입력할 수 있는 Input Element 를 표시.
+function get_new_filter() {
     const filter = new Map();
     filter.set('streamer', { filter_id: 'streamer', category: 'badge_uuid', filter_type: 'include', value: '5527c58c-fb7d-422d-b71b-f309dcb85cc1', note: '스트리머' });
     filter.set('manager', { filter_id: 'manager', category: 'badge_uuid', filter_type: 'include', value: '3267646d-33f0-4b17-b3df-f923a41db1d0', note: '매니저' });
     filter.set('vip', { filter_id: 'vip', category: 'badge_uuid', filter_type: 'include', value: 'b817aba4-fad8-49e2-b88a-7cc744dfa6ec', note: 'VIP' });
     filter.set('verified', { filter_id: 'verified', category: 'badge_uuid', filter_type: 'include', value: 'd12a2e27-16f6-41d0-ab77-b780518f00a3', note: '인증 완료' });
 
-    let filter_arr = Array.from(filter);
+    return filter;
+}
 
-    chrome.storage.local.set({ default_filter: filter_arr }, function () { });
-    chrome.storage.sync.set({ filter: filter_arr }, function () { });
-    chrome.storage.local.set({ container_ratio: 30 }, function () { });
+chrome.runtime.onInstalled.addListener(function (reason: any) {
+    let r = reason.reason;
+    let f_arr = Array.from(get_new_filter());
+    if (r === 'install') {
+        chrome.storage.sync.set({ filter: f_arr }, function () { });
+        chrome.storage.local.set({ container_ratio: 30 }, function () { });
+    } else {
+        chrome.storage.sync.get('filter', function (res) {
+            let sto_filter = res.filter;
+            let filter_arr: any;
+            if (Object.keys(sto_filter).length === 0) {
+                filter_arr = get_new_filter();
+            } else {
+                filter_arr = new Map();
+                if(typeof sto_filter[0].filter_id === 'string'){
+                    sto_filter.forEach((f:any) => {
+                        if(!f.note) f.note = f.value;
+                        filter_arr.set(f.filter_id, f);
+                    });
+                }else{
+                    filter_arr = sto_filter;
+                }
+            }
+            chrome.storage.local.set({ default_filter: f_arr }, function () { });
+            chrome.storage.sync.set({ filter: Array.from(filter_arr) }, function () { });
+        });
+    }
 
     let version = chrome.runtime.getManifest().version;
 
@@ -27,8 +50,6 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
     }
 
 });
-
-
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     chrome.pageAction.show(tabId);
