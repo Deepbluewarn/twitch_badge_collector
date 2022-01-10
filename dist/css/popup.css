@@ -134,7 +134,7 @@ img {
 	margin: .5rem;
 }
 
-.option {
+.badge_filter_option {
 	display: grid;
     align-items: center;
     grid-template-columns: 1fr 10fr 1fr;
@@ -142,8 +142,12 @@ img {
     margin: .1rem;
 }
 
-.option_icon{
+.badge_filter_option_icon {
 	width: 18px;
+}
+
+.misc_option{
+	margin-top: 4px;
 }
 
 .foot_element{

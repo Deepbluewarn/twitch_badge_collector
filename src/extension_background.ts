@@ -11,17 +11,21 @@ function get_new_filter() {
 chrome.runtime.onInstalled.addListener(function (reason: any) {
     let r = reason.reason;
     let f_arr = Array.from(get_new_filter());
+
     if (r === 'install') {
         chrome.storage.sync.set({ filter: f_arr }, function () { });
         chrome.storage.local.set({ container_ratio: 30 }, function () { });
+        chrome.storage.local.set({ topDisplay : false }, function () { });
     } else {
         chrome.storage.sync.get('filter', function (res) {
             let sto_filter = res.filter;
             let filter_arr: any;
+
             if (Object.keys(sto_filter).length === 0) {
                 filter_arr = get_new_filter();
             } else {
                 filter_arr = new Map();
+                
                 if(typeof sto_filter[0].filter_id === 'string'){
                     sto_filter.forEach((f:any) => {
                         if(!f.note) f.note = f.value;
@@ -35,20 +39,6 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
             chrome.storage.sync.set({ filter: Array.from(filter_arr) }, function () { });
         });
     }
-
-    let version = chrome.runtime.getManifest().version;
-
-    if (version === '1.3.17') {
-        chrome.notifications.create('intro_kwd_ft', {
-            title: "Twitch Badge Collector",
-            type: 'basic',
-            iconUrl: '../public/icons/cc_icon128.png',
-            message: chrome.i18n.getMessage('f_introduce'),
-            requireInteraction: true,
-            silent: true
-        });
-    }
-
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {

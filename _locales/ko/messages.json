@@ -29,6 +29,9 @@
   "homepage" : {
     "message" : "홈페이지"
   },
+  "p_topDisplay" : {
+    "message" : "복사된 채팅을 상단에 표시"
+  },
 
   "filter_desc_link" : {
     "message" : "https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html"

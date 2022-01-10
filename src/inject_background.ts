@@ -33,10 +33,8 @@
         filter = new Map(result.filter);
     });
 
-    chrome.storage.local.get(['container_ratio'], function (result) {
-        if (result.container_ratio) {
-            container_ratio = parseInt(result.container_ratio);
-        }
+    chrome.storage.local.get(['container_ratio'], (result) => {
+        container_ratio = parseInt(result.container_ratio);
     });
 
     function get_chat_room(){
@@ -67,7 +65,7 @@
         handle_container.addEventListener('mousedown', startDrag);
         handle_container.addEventListener('touchstart', startDrag);
         handle_container.appendChild(resize_handle);
-        chat_room.firstChild?.appendChild(handle_container);
+        //chat_room.firstChild?.appendChild(handle_container);
 
         room_origin.classList.add('origin');
         //'chat_room' will has two 'scrollable-area' div elements. One is original chat area, second one is our cloned chat area.
@@ -83,7 +81,16 @@
         message_container.textContent = '';//remove all chat lines.
 
         room_clone.classList.add('clone');
-        chat_room.firstChild?.appendChild(room_clone);
+
+        chrome.storage.local.get('topDisplay', (result) =>{
+            if(result.topDisplay){
+                chat_room.firstChild?.insertBefore(room_clone, room_origin);
+                chat_room.firstChild?.insertBefore(handle_container, room_origin);
+            }else{
+                chat_room.firstChild?.appendChild(handle_container);
+                chat_room.firstChild?.appendChild(room_clone);
+            }
+        });
 
         change_container_ratio(container_ratio);
     }
@@ -193,13 +200,6 @@
 
                     let badge_priority = new Map();
                     let bp_res: string[] = [];
-                    // badge_priority.set('login_name', false);
-                    // badge_priority.set('nickname', false);
-                    // badge_priority.set('badge_uuid', false);
-                    // badge_priority.set('keyword', false);
-
-                    // TODO :: 제외 필터를 우선으로 함. 
-                    // 카테고리가 같은 필터가 [포함, 제외] 두가지로 존재하는 경우 제외 필터를 최우선으로 적용함.
                     
                     // Check with Nickname Filter.
                     let login_res = checkFilter('login_name', login_name, true);
@@ -330,12 +330,18 @@
 
         if (!original_container || !clone_container) return;
 
+        let istopDisplay = original_container.parentElement?.getElementsByClassName('scrollable-area')[0].classList.contains('clone');
+
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
 
         if (1 <= ratio && ratio <= 100) {
             clone_size = parseFloat((ratio * 0.01).toFixed(2));
             orig_size = parseFloat((1 - clone_size).toFixed(2));
+        }
+
+        if(istopDisplay){
+            [orig_size, clone_size] = [clone_size, orig_size];
         }
 
         original_container.style.flex = String(orig_size);

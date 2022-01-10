@@ -29,6 +29,9 @@
   "homepage" : {
     "message" : "ГЛАВНАЯ"
   },
+  "p_topDisplay" : {
+    "message" : "Show copied chats at the top"
+  },
 
   "filter_desc_link" : {
     "message" : "https://tbc.bluewarn.dev/doc/filter/ru/filter_manual.html"

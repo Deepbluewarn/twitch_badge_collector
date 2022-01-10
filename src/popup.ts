@@ -10,12 +10,13 @@ import { Filter, filter_type } from './types.js.js';
 
     function localizeHtmlPage() {
 
-        let options = document.getElementsByClassName('option');
+        let bf_op = document.getElementsByClassName('badge_filter_option');
         let review_link = <HTMLDivElement>document.getElementById('review_link');
         let support_link = <HTMLDivElement>document.getElementById('support_link');
         let homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
+        let topDisplay = <HTMLDivElement>document.getElementById('topDisplay_text');
 
-        Array.from(options).forEach(e => {
+        Array.from(bf_op).forEach(e => {
             let text = e.getElementsByClassName('text');
             let id = text[0].getAttribute('id');
             if (id) text[0].textContent = chrome.i18n.getMessage(id);
@@ -26,6 +27,7 @@ import { Filter, filter_type } from './types.js.js';
         review_link.textContent = chrome.i18n.getMessage('review');
         support_link.textContent = chrome.i18n.getMessage('support');
         homepage_link.textContent = chrome.i18n.getMessage('homepage');
+        topDisplay.textContent = chrome.i18n.getMessage('p_topDisplay');
     }
 
     window.addEventListener('load', e => {
@@ -35,17 +37,22 @@ import { Filter, filter_type } from './types.js.js';
     //init popop setting value
     chrome.storage.sync.get('filter', function (result) {
 
-        let chboxs = Array.from(document.getElementsByClassName('badge_checkbox'));
+        let chboxes = Array.from(document.getElementsByClassName('badge_checkbox'));
 
         global_filter = new Map(result.filter);
 
-        chboxs.forEach(e => {
+        chboxes.forEach(e => {
             let id = e.getAttribute('id')!;
             let f = global_filter.get(id)!;
 
             (e as HTMLInputElement).checked = f.filter_type === filter_type.Include ? true : false;
         });
 
+    });
+
+    chrome.storage.local.get('topDisplay', function (result) {
+        let chboxes = <HTMLInputElement>document.getElementById('topDisplay');
+        chboxes.checked = result.topDisplay;
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
@@ -67,24 +74,26 @@ import { Filter, filter_type } from './types.js.js';
 
         let target = <HTMLInputElement>e.target;
 
-        if (target.getAttribute('name') === 'badge' || target.getAttribute('checkbox')) {
-            // id 에 해당하는 filter 객체의 type 을 변경.
-            const id = target.getAttribute('id')!;
-            const type = target.checked ? filter_type.Include : filter_type.Exclude;
+        if(target.getAttribute('type') === 'checkbox'){
+            if(target.getAttribute('name') === 'badge'){
+                const id = target.getAttribute('id')!;
+                const checked = target.checked;
+                const type = checked ? filter_type.Include : filter_type.Exclude;
+    
+                let filter: Filter | undefined = global_filter.get(id);
+                if(!filter){
+                    target.checked = !checked;
+                    return;
+                }
+                filter.filter_type = type;
+                global_filter.set(id, filter);
+    
+                chrome.storage.sync.set({ filter: Array.from(global_filter) }, () => { });
+            }else if(target.getAttribute('name') == 'topDisplay'){
+                const type = target.checked;
 
-            let filter: Filter = global_filter.get(id)!;
-            filter.filter_type = type;
-            global_filter.set(id, filter);
-            
-            // for (let i = 0; i < global_filter.size; i++) {
-            //     let f = global_filter[i];
-            //     if (f.filter_id === id) {
-            //         f.filter_type = type;
-            //         break;
-            //     }
-            // }
-
-            chrome.storage.sync.set({ filter: Array.from(global_filter) }, () => { });
+                chrome.storage.local.set({topDisplay : type});
+            }
         }
     });
 
