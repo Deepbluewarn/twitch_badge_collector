@@ -90,9 +90,8 @@
                 chat_room.firstChild?.appendChild(handle_container);
                 chat_room.firstChild?.appendChild(room_clone);
             }
+            change_container_ratio(container_ratio);
         });
-
-        change_container_ratio(container_ratio);
     }
 
     function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element, filter_category: string) {
