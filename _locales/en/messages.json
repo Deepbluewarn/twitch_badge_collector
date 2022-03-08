@@ -2,6 +2,9 @@
   "ExtensionName" : {
     "message" : "Twitch Badge Collector - Collect Twitch Chat"
   },
+  "language" : {
+    "message" : "en"
+  },
   "ExtensionDesc" : {
     "message" : "Collect only the chats you want in Twitch Chat!"
   },

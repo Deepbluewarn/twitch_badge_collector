@@ -2,6 +2,9 @@
   "ExtensionName" : {
     "message" : "Twitch Badge Collector - 트위치 채팅 수집"
   },
+  "language" : {
+    "message" : "ko"
+  },
   "ExtensionDesc" : {
     "message" : "트위치 채팅에서 원하는 채팅만 모아 볼 수 있는 확장 프로그램입니다!"
   },

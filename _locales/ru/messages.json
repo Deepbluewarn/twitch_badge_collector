@@ -2,6 +2,9 @@
   "ExtensionName" : {
     "message" : "Twitch Badge Collector - Фильтр чата Twitch"
   },
+  "language" : {
+    "message" : "ru"
+  },
   "ExtensionDesc" : {
     "message" : "Собирерите в чате Twitch тех, кто вам нужен!"
   },
