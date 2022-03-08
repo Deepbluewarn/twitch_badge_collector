@@ -9,36 +9,16 @@ function get_new_filter() {
 }
 
 chrome.runtime.onInstalled.addListener(function (reason: any) {
-    let r = reason.reason;
-    let f_arr = Array.from(get_new_filter());
+    chrome.storage.local.get(['position', 'theme', 'font_size', 'language'], (res) => {
+        const language = res.language ? res.language : chrome.i18n.getMessage('language');
+        const theme = res.theme ? res.theme : 'dark';
+        const font_size = res.font_size ? res.font_size : 'default';
+        const position = res.position ? res.position : 'position-down';
 
-    if (r === 'install') {
-        chrome.storage.sync.set({ filter: f_arr }, function () { });
-        chrome.storage.local.set({ container_ratio: 30 }, function () { });
-        chrome.storage.local.set({ topDisplay : false }, function () { });
-    } else {
-        chrome.storage.sync.get('filter', function (res) {
-            let sto_filter = res.filter;
-            let filter_arr: any;
+        chrome.storage.local.set({language : language, theme : theme, font_size : font_size, position : position});
+    });
 
-            if (Object.keys(sto_filter).length === 0) {
-                filter_arr = get_new_filter();
-            } else {
-                filter_arr = new Map();
-                
-                if(typeof sto_filter[0].filter_id === 'string'){
-                    sto_filter.forEach((f:any) => {
-                        if(!f.note) f.note = f.value;
-                        filter_arr.set(f.filter_id, f);
-                    });
-                }else{
-                    filter_arr = sto_filter;
-                }
-            }
-            chrome.storage.local.set({ default_filter: f_arr }, function () { });
-            chrome.storage.sync.set({ filter: Array.from(filter_arr) }, function () { });
-        });
-    }
+    chrome.tabs.create({ url: 'https://tbc.bluewarn.dev/' });
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -50,7 +30,6 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         let id = tabs[0].id;
         let url = tabs[0].url;
         if (!(id && url)) return;
-        chrome.storage.local.set({ current_url: url }, function () { });
         chrome.tabs.sendMessage(id, { action: "onHistoryStateUpdated", url: url }, function (response) {
         });
     });
