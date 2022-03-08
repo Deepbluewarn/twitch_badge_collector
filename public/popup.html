@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +8,8 @@
 
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet"> 
+    <link rel="preload" as="style" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
 
     <title>Twitch Badge Collector</title>
 </head>
@@ -48,60 +46,42 @@
         </div>
 
         <div id='setting_container'>
-            <div class='container'>
-                <div id='options'>
-                    <div class='bg_flex'>
-                        <div class='badge_filter_option'>
-                            <img class='badge_filter_option_icon' src='https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1'></img>
-                            <span class='text' id='Broadcaster'>Broadcaster</span>
-                            <div class='switch'>
-                                <input class='badge_checkbox' uuid='5527c58c-fb7d-422d-b71b-f309dcb85cc1' id="streamer"
-                                    type="checkbox" name='badge'>
-                                <label class='switch_label' for="streamer"></label>
-                            </div>
-                        </div>
-                        <div class='badge_filter_option'>
-                            <img class='badge_filter_option_icon' src='https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'></img>
-                            <span class='text' id='Moderator'>Moderator</span>
-                            <div class='switch'>
-                                <input class='badge_checkbox' uuid='3267646d-33f0-4b17-b3df-f923a41db1d0' id="manager"
-                                    type="checkbox" name='badge'>
-                                <label class='switch_label' for="manager"></label>
-                            </div>
-                        </div>
-                        <div class='badge_filter_option'>
-                            <img class='badge_filter_option_icon' src='https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1'></img>
-                            <span class='text' id='VIP'>VIP</span>
-                            <div class='switch'>
-                                <input class='badge_checkbox' uuid='b817aba4-fad8-49e2-b88a-7cc744dfa6ec' id="vip"
-                                    type="checkbox" name='badge'>
-                                <label class='switch_label' for="vip"></label>
-                            </div>
-                        </div>
-                        <div class='badge_filter_option'>
-                            <img class='badge_filter_option_icon' src='https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1'></img>
-                            <span class='text' id='Verified'>Verified</span>
-                            <div class='switch'>
-                                <input class='badge_checkbox' uuid='d12a2e27-16f6-41d0-ab77-b780518f00a3' id="verified"
-                                    type="checkbox" name='badge'>
-                                <label class='switch_label' for="verified"></label>
-                            </div>
-                        </div>
-
-                        <div class='misc_option'>
-                            <span class='text' id='topDisplay_text'>복사된 채팅을 상단에 표시</span>
-                            <input type="checkbox" name="topDisplay" id="topDisplay">
-                        </div>
-
-                    </div>
-
-                </div>
+            <div class="container">
+                <span>언어</span>
+                <select name="select_language" id="select_language">
+                    <option value="language__ko">한국어</option>
+                    <option value="language__en">English</option>
+                </select>
             </div>
-            <div class='container'>
-                <div class='bg_flex_cols'>
-                    <button id='add_filter_btn'>필터 추가</button>
-                </div>
+
+            <div class="container">
+                <span>채팅창 테마</span>
+                <select name="select_theme" id="select_theme">
+                    <option value="theme__dark">어두운 테마</option>
+                    <option value="theme__light">밝은 테마</option>
+                </select>
             </div>
+
+            <div class="container">
+                <span>폰트 크기</span>
+                <select name="select_font-size" id="select_font-size">
+                    <option value="small">작게</option>
+                    <option value="default">기본값</option>
+                    <option value="big">크게</option>
+                    <option value="bigger">더 크게</option>
+                </select>
+            </div>
+
+            <div class="container">
+                <span>채팅 위치</span>
+                <select name="select_chat-position" id="select_chat-position">
+                    <option value="position-up">위쪽</option>
+                    <option value="position-down">아래쪽</option>
+                </select>
+            </div>
+        </div>
+        <div class='container'>
+            <button id='add_filter_btn'>필터 설정</button>
         </div>
     </div>
 </body>
