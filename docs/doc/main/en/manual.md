@@ -42,7 +42,7 @@ Also, you can add the filter you want by clicking the Add Filter button.
 See the filter section below for more details.
 
 ### How to Using Filter
-See [Here](https://tbc.bluewarn.dev/doc/filter/en/filter_manual.html)
+See [Docs for Filter]](https://tbc.bluewarn.dev/doc/filter/en/filter_manual.html)
 
 
 ## **See more**

@@ -20,18 +20,11 @@ layout: default
 
 #### *Добавление значка*
 
-Введите ссылку на изображение значка, который вы хотите добавить.
-Ссылки можно получить из чатов в окне чата Twitch.
+You can search for and add badges from the Badge Search menu.
 
-> Щёлкните правой кнопкой мыши по значку, который вы хотите добавить в окно чата -> Скопировать ссылку изображения
+If you omit the channel name, you can search for the Twitch Global Badge.
 
-Пример ссылки на значок
-```
-https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1
-
-https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
-```
-
+Badge content defaults to "Channel / Badge Name", and can be modified as desired.
 
 #### *Состояние фильтра*
 
@@ -46,8 +39,6 @@ https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
 ## **Изменение состояние фильтра**
 
 Условие фильтрации можно изменить, нажав на левую часть списка фильтров.
-
-![Filter_Cond_change](../../../screenshot/en/filter_cond_change.webp)
 
 Существует три состояния: Включено, Отключено и Спящий режим. Вместо удаления фильтра можно установить для него состояние Спящего режима.
 

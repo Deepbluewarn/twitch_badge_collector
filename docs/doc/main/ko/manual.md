@@ -18,7 +18,7 @@ layout: default
 
 ![screenshot_1](../../../screenshot/ko/chat_room_example.png)
 
-채팅이 설정된 조건과 맞으면 채팅을 복사합니다.
+채팅이 설정된 필터 조건과 맞으면 채팅을 복사합니다.
 
 ![screenshot_2](../../../screenshot/ko/chat_room_example_2.png)
 
@@ -29,19 +29,8 @@ layout: default
 
 구분선을 잡아 끌어서 채팅창의 크기를 조절할 수 있습니다.
 
-### 설정
-![screenshot_3](../../../screenshot/ko/popup.png)
-
-브라우저 상단 우측의 확장 프로그램 아이콘을 클릭하면 프로그램을 설정 할 수 있는 팝업창이 나옵니다.<br>
-
-총 4 가지 배지 (스트리머, 매니저, VIP, 인증 완료) 를 기본 조건으로 지원합니다.
-
-좌측 스위치로 원하는 배지만 설정할 수 있습니다.
-
-또한 필터 추가 버튼으로 다른 조건을 추가할 수 있습니다. 자세한 내용은 아래 필터 항목을 참고하세요.
-
 ### 필터 기능 사용하기
-[이곳](https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html) 을 참고하세요.
+[필터 기능 설명서](https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html) 를 참고하세요.
 
 ## **더보기**
 

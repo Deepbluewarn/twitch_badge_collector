@@ -1,6 +1,12 @@
 # Twitch Badge Collector
 ## ChangeLog
 
+### v1.4.0
+    2022년 03월 10일
+    필터 설정 페이지를 개선했습니다.
+    트위치 UI (또는 FFZ 와 같은 프로그램) 와의 호환성 문제를 해결하기 위해 복제 채팅 영역을 iframe 으로 교체했습니다.
+    Twitch Badge Collector for Web (WTBC) 를 출시했습니다. (https://wtbc.bluewarn.dev)
+
 ### v1.3.20
     2022년 01월 11일
     버그 수정. (채팅창의 비율이 제대로 설정되지 않는 문제)

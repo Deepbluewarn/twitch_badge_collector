@@ -24,18 +24,11 @@ Enter the ID or nickname of the user you want to add.
 
 #### ***Add Badge***
 
-Enter the image link of the badge you want to add.
-Links can be obtained from chats in the Twitch chat window.
+You can search for and add badges from the Badge Search menu.
 
-> Right-click the badge you want to add in the chat window -> Copy Image Link
+If you omit the channel name, you can search for the Twitch Global Badge.
 
-Badge Link Example
-```
-https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1
-
-https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/1
-```
-You can set notes for badge filter. If not entered, the badge's UUID is the default.
+Badge content defaults to "Channel / Badge Name", and can be modified as desired.
 
 #### ***Keyword Filter***
 
@@ -58,8 +51,6 @@ If set to Include, copy the chat; if set to Exclude, do not copy the chat.
 ## **Change Filter Condition**
 
 You can change Filter Condition by clicking the left side of the filter list.
-
-![Filter_Cond_change](../../../screenshot/en/filter_cond_change.webp)
 
 There are three states: Include, Exclude, and Sleep. Instead of deleting the filter, you can set the filter's status to Sleep.
 

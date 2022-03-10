@@ -15,9 +15,10 @@ Helpful when you have a chat you don't want to miss.
 
 See [Docs](https://tbc.bluewarn.dev/) for more details!
 
-## *1.3.17 Changelog*
-    > 2021-10-30
-    Add Keyword Filter.
+## *1.4.0 Changelog*
+    > 2022-03-10
+    Renewal Filter Setting page.
+    Copied chat window changed to an iframe for compatibility with FFZ extension.
     
     
     
