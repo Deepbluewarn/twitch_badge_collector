@@ -148,6 +148,7 @@ select{
 }
 
 .foot_element{
+	width: 100%;
 	margin: 0 .5rem 0 .5rem;
 	padding: .4rem 0 .4rem 0;
 }
