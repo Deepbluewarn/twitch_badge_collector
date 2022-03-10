@@ -6,6 +6,20 @@
         let support_link = <HTMLDivElement>document.getElementById('support_link');
         let homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
 
+        (document.getElementById('i18n-language') as HTMLSpanElement).textContent = chrome.i18n.getMessage('language_text');
+        (document.getElementById('i18n-theme') as HTMLSpanElement).textContent = chrome.i18n.getMessage('chatTheme');
+
+        (document.getElementById('i18n-theme__dark') as HTMLSpanElement).textContent = chrome.i18n.getMessage('i18n_theme__dark');
+        (document.getElementById('i18n-theme__light') as HTMLSpanElement).textContent = chrome.i18n.getMessage('i18n_theme__light');
+        (document.getElementById('i18n-fontSize') as HTMLSpanElement).textContent = chrome.i18n.getMessage('fontSize');
+        (document.getElementById('i18n-fontSize__small') as HTMLSpanElement).textContent = chrome.i18n.getMessage('fontSize_small');
+        (document.getElementById('i18n-fontSize__default') as HTMLSpanElement).textContent = chrome.i18n.getMessage('fontSize_default');
+        (document.getElementById('i18n-fontSize__big') as HTMLSpanElement).textContent = chrome.i18n.getMessage('fontSize_big');
+        (document.getElementById('i18n-fontSize__bigger') as HTMLSpanElement).textContent = chrome.i18n.getMessage('fontSize_bigger');
+        (document.getElementById('i18n-position') as HTMLSpanElement).textContent = chrome.i18n.getMessage('chatPosition');
+        (document.getElementById('i18n-position__up') as HTMLSpanElement).textContent = chrome.i18n.getMessage('chatPositionUp');
+        (document.getElementById('i18n-position__down') as HTMLSpanElement).textContent = chrome.i18n.getMessage('chatPositionDown');
+
         add_filter_btn.textContent = chrome.i18n.getMessage('p_filter_btn');
         review_link.textContent = chrome.i18n.getMessage('review');
         support_link.textContent = chrome.i18n.getMessage('support');
