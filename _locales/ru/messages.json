@@ -36,6 +36,43 @@
     "message" : "Show copied chats at the top"
   },
 
+  "language_text" : {
+    "message" : "Language"
+  },
+  "chatTheme" : {
+    "message" : "Chat Theme"
+  },
+  "i18n-theme__dark" : {
+    "message" : "Dark Theme"
+  },
+  "i18n-theme__light" : {
+    "message" : "Light Theme"
+  },
+  "fontSize" : {
+    "message" : "Font size"
+  },
+  "fontSize_small" : {
+    "message" : "Small"
+  },
+  "fontSize_default" : {
+    "message" : "Default"
+  },
+  "fontSize_big" : {
+    "message" : "Big"
+  },
+  "fontSize_bigger" : {
+    "message" : "Bigger"
+  },
+  "chatPosition" : {
+    "message" : "Chat Position"
+  },
+  "chatPositionUp" : {
+    "message" : "Up"
+  },
+  "chatPositionDown" : {
+    "message" : "Down"
+  },
+
   "filter_desc_link" : {
     "message" : "https://tbc.bluewarn.dev/doc/filter/ru/filter_manual.html"
   },
