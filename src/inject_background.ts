@@ -54,6 +54,7 @@
     }
 
     function createChatPage(channel: string, theme: string){
+        if(channel === '') return;
         const chat_room = get_chat_room();
         if (!chat_room) return false;
 
@@ -64,9 +65,6 @@
         
         messageId = Math.random().toString(36).substring(2,12);
         chrome.storage.local.get(['position', 'theme', 'font_size', 'language'], (res) => {
-
-            console.log(res);
-
             const params = new URLSearchParams();
             params.set('channel', channel);
             params.set('theme', res.theme);
@@ -97,10 +95,20 @@
             handle_container = <HTMLDivElement>document.getElementById('handle_container');
             frame = _frame;
 
+            frame.onload = () => {
+                chrome.storage.sync.get('filter', result => {
+                    const filter = result.filter;
+                    const messageObj = {
+                        messageId : messageId,
+                        type : 'filter',
+                        value : filter
+                    }
+                    frame.contentWindow?.postMessage(messageObj, 'https://wtbc.bluewarn.dev');
+                });
+            }
+
             reverseChatContainer(res.position);
         });
-
-        
     }
 
     let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
@@ -110,9 +118,20 @@
         if (!stream_chat) return;
 
         observeChatRoom(stream_chat);
-        const channel = window.location.pathname.split('/')[1];
+        const paths = window.location.pathname.split('/');
+        let channel = paths[1];
         const classls = document.documentElement.classList
         const theme = classls.contains('tw-root--theme-light') ? 'light' : 'dark';
+
+        if(paths.length > 2){
+            if(channel === 'popout'){
+                channel = paths[2];
+            }else if(channel === 'moderator'){
+                channel = paths[2];
+            }else{
+                channel = '';
+            }
+        }
         createChatPage(channel, theme);
 
         if (stream_page_observer) stream_page_observer.disconnect();
