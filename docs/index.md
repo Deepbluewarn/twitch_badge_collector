@@ -24,6 +24,11 @@ Try the web version of TBC, which allows you to use chat filters on mobile witho
 * [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
 * [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.html) (Translated by [Blueberryy](https://github.com/Blueberryy))
 
+## *v1.4.2 Changelog*
+    > 2022-03-12
+    Provides options for how copied chats are displayed.
+
+
 ## *1.4.0 Changelog*
     > 2022-03-10
     Release Twitch Badge Collector Web (WTBC).
