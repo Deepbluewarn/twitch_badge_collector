@@ -120,6 +120,7 @@ select{
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	font-size: 0.9rem;
     gap: 1.4rem;
 	margin: .5rem;
 }
@@ -127,6 +128,7 @@ select{
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	font-size: 0.9rem;
 	align-items: center;
 	margin: .5rem;
 }

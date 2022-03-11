@@ -16,13 +16,20 @@ chrome.runtime.onInstalled.addListener(function (reason: any) {
             }
         });
     }
-    chrome.storage.local.get(['position', 'theme', 'font_size', 'language'], (res) => {
+    chrome.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod'], (res) => {
         const language = res.language ? res.language : chrome.i18n.getMessage('language');
         const theme = res.theme ? res.theme : 'light';
         const font_size = res.font_size ? res.font_size : 'default';
         const position = res.position ? res.position : 'position-down';
+        const method = res.chatDisplayMethod ? res.chatDisplayMethod : 'method-twitchui';
 
-        chrome.storage.local.set({language : language, theme : theme, font_size : font_size, position : position});
+        chrome.storage.local.set({
+            language : language,
+            theme : theme,
+            font_size : font_size, 
+            position : position,
+            chatDisplayMethod : method
+        });
     });
 
     chrome.tabs.create({ url: 'https://tbc.bluewarn.dev/' });

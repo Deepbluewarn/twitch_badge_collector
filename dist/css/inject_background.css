@@ -1,4 +1,6 @@
 #wtbc-mini{
+    width: 100%;
+    height: 100%;
     margin-bottom: 8px;
 }
 #handle_container{
@@ -14,7 +16,7 @@
 .handle_reverse{
     order: 2;
 }
-.wtbc_reverse{
+.clone_reverse{
     order: 1;
 }
 .freeze{

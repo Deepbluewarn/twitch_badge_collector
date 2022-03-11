@@ -72,6 +72,18 @@
   "chatPositionDown" : {
     "message" : "아래쪽"
   },
+  "dispCopiedChatmethod" : {
+    "message" : "복사된 채팅 표시 방법"
+  },
+  "dispCopiedChatmethod__desc" : {
+    "message" : "* 새로고침 후 적용됩니다."
+  },
+  "method_twitchui" : {
+    "message" : "트위치 UI 직접 복사 (권장)"
+  },
+  "method_mini" : {
+    "message" : "트위치 채팅 클라이언트 삽입"
+  },
 
   "filter_desc_link" : {
     "message" : "https://tbc.bluewarn.dev/doc/filter/ko/filter_manual.html"
