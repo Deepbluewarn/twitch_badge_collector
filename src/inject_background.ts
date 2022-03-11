@@ -458,6 +458,7 @@
         if(chatDisplayMethod === 'method-mini' && frame){
             frame.classList.remove('freeze');
         }
+        chrome.storage.local.set({container_ratio});
         window.removeEventListener('mousemove', doDrag);
         window.removeEventListener('touchmove', doDrag);
         window.removeEventListener('mouseup', endDrag);
