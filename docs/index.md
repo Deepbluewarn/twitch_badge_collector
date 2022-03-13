@@ -4,6 +4,14 @@ layout: default
 
 # Twitch Badge Collector
 
+v1.4.0 버전에 일부 사용자 중 채팅 필터 기능이 제대로 동작하지 않는 문제가 발생하고 있습니다. 현재 업데이트를 준비하고 있으나 조금 늦어질 예정입니다. 다음은 버그를 해결할 수 있는 임시 조치 방법입니다.
+
+1. 크롬 쿠키 설정 (주소창에 chrome://settings/cookies) 에서 아래 쪽 "쿠키를 언제든지 사용할 수 있는 사이트" 에 추가 버튼을 누르고 wtbc.bluewarn.dev 를 추가합니다.
+
+2. 트위치 웹사이트를 새로고침 한 다음 필터 기능이 동작하는지 확인합니다.
+
+가능한 빨리 업데이트를 배포하도록 하겠습니다. 불편을 끼쳐드려 죄송합니다.
+
 > Extension that makes Twitch Chat easier to view.
 > 
 > Collect Twitch Chat what you want!
