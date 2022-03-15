@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "strict": true,
     "moduleResolution": "node",
-    "types": ["chrome", "node"],
+    "types": ["chrome", "webextension-polyfill", "node"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
