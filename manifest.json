@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
   "default_locale": "en",
@@ -15,6 +15,7 @@
   ],
   "background": {
     "scripts": [
+      "dist/js/browser-polyfill.min.js",
       "dist/js/extension_background.js"
     ],
     "persistent": false
@@ -29,6 +30,7 @@
         "dist/css/inject_background.css"
       ],
       "js": [
+        "dist/js/browser-polyfill.min.js",
         "dist/js/inject_background.js"
       ]
     },
@@ -37,7 +39,8 @@
         "https://wtbc.bluewarn.dev/*"
       ],
       "js": [
-        "dist/js/filterSetting.js"
+        "dist/js/browser-polyfill.min.js",
+        "dist/js/filterBridge.js"
       ]
     }
   ],

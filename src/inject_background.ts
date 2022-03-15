@@ -1,3 +1,5 @@
+import browser from "webextension-polyfill";
+
 (function () {
     type displayMethod = 'method-twitchui' | 'method-mini';
     let stream_page_observer: MutationObserver | undefined;
@@ -35,15 +37,12 @@
         }
     })();
 
-    chrome.storage.sync.get(['filter'], function (result) {
-        filter = new Map(result.filter);
+    browser.storage.sync.get('filter').then(res => {
+        filter = new Map(res.filter);
     });
 
-    chrome.storage.local.get(['container_ratio'], (result) => {
-        container_ratio = parseInt(result.container_ratio);
-    });
-
-    chrome.storage.local.get('chatDisplayMethod', res => {
+    browser.storage.local.get(['container_ratio', 'chatDisplayMethod']).then(res => {
+        container_ratio = parseInt(res.container_ratio);
         chatDisplayMethod = res.chatDisplayMethod;
     });
 
@@ -95,9 +94,9 @@
 
         chat_room.firstChild?.appendChild(handle_container);
         chat_room.firstChild?.appendChild(clone_container);
-        
-        chrome.storage.local.get('position', (result) =>{
-            reverseChatContainer(result.position);
+
+        browser.storage.local.get('position').then(res => {
+            reverseChatContainer(res.position);
         });
 
         change_container_ratio(container_ratio);
@@ -132,7 +131,8 @@
         }
 
         messageId = Math.random().toString(36).substring(2,12);
-        chrome.storage.local.get(['position', 'theme', 'font_size', 'language'], (res) => {
+
+        browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
             const params = new URLSearchParams();
             params.set('channel', channel);
             params.set('theme', res.theme);
@@ -152,8 +152,8 @@
             frame = _frame;
 
             frame.onload = () => {
-                chrome.storage.sync.get('filter', result => {
-                    const filter = result.filter;
+                browser.storage.sync.get('filter').then(res => {
+                    const filter = res.filter;
                     const messageObj = {
                         messageId : messageId,
                         type : 'filter',
@@ -458,7 +458,7 @@
         if(chatDisplayMethod === 'method-mini' && frame){
             frame.classList.remove('freeze');
         }
-        chrome.storage.local.set({container_ratio});
+        browser.storage.local.set({container_ratio});
         window.removeEventListener('mousemove', doDrag);
         window.removeEventListener('touchmove', doDrag);
         window.removeEventListener('mouseup', endDrag);
@@ -466,7 +466,7 @@
     }
     observeStreamPage();
 
-    chrome.storage.onChanged.addListener(function (changes) {
+    browser.storage.onChanged.addListener(function (changes) {
         for (var key in changes) {
             let newValue = changes[key].newValue;
 
@@ -495,11 +495,9 @@
         }
     });
 
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        if (request.action === "onHistoryStateUpdated") {
+    browser.runtime.onMessage.addListener((message, sender) => {
+        if (message.action === "onHistoryStateUpdated") {
             observeStreamPage();
         }
-        sendResponse({ status: true })
-        return true;
     });
 })();
