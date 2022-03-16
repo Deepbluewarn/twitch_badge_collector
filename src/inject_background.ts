@@ -121,6 +121,12 @@ import browser from "webextension-polyfill";
         let message_container = twitchClone.getElementsByClassName('chat-scrollable-area__message-container')[0];
         message_container.textContent = '';//remove all chat lines.
 
+        const extVersion = browser.runtime.getManifest().version;
+        const extInfoMsg = document.createElement('span');
+        extInfoMsg.classList.add('tbc_info', 'chat-line__status');
+
+        extInfoMsg.textContent = `Twitch Badge Collector v${extVersion}`;
+        message_container.appendChild(extInfoMsg);
         clone_container.appendChild(twitchClone);
 
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
