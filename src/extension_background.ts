@@ -20,7 +20,7 @@ browser.runtime.onInstalled.addListener(function (reason: any) {
     }
 
     browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod']).then(res => {
-        const language = res.language ? res.language : browser.i18n.getMessage('language');
+        const language = res.language ? res.language : navigator.language;
         const theme = res.theme ? res.theme : 'light';
         const font_size = res.font_size ? res.font_size : 'default';
         const position = res.position ? res.position : 'position-down';
@@ -39,7 +39,7 @@ browser.runtime.onInstalled.addListener(function (reason: any) {
 });
 
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    browser.pageAction.show(tabId);
+    browser.action.enable(tabId);
 });
 
 browser.webNavigation.onHistoryStateUpdated.addListener(function (details) {
