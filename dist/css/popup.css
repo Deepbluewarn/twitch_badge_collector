@@ -67,7 +67,7 @@ img {
 span{
 	font-size: inherit;
 }
-select{
+select, option{
 	font-size: inherit;
 }
 
@@ -131,6 +131,10 @@ select{
 	font-size: 0.9rem;
 	align-items: center;
 	margin: .5rem;
+}
+.flex-start-4{
+	align-items: flex-start;
+    gap: 4px;
 }
 
 .badge_filter_option {
@@ -235,4 +239,7 @@ select{
 #links {
 	margin: 0 .7rem 0 .7rem;
 	padding: 0 0 .3rem 0;
+}
+.bold{
+	font-weight: bold;
 }
