@@ -103,10 +103,6 @@ import browser from "webextension-polyfill";
     }
 
     function cloneChatByTwitchUi() {
-        while (clone_container.firstChild) {
-            clone_container.removeChild(clone_container.lastChild!);
-        }
-
         const twitchClone = <HTMLDivElement>original_container.cloneNode(true);
         twitchClone.setAttribute('style', '');
         twitchClone.classList.remove('tbc-origin');
@@ -132,10 +128,6 @@ import browser from "webextension-polyfill";
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
     }
     function cloneChatByMini(channel: string){
-        while (clone_container.firstChild) {
-            clone_container.removeChild(clone_container.lastChild!);
-        }
-
         messageId = Math.random().toString(36).substring(2,12);
 
         browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
@@ -197,6 +189,12 @@ import browser from "webextension-polyfill";
 
         if (!stream_chat) return;
         createCloneContainer();
+
+        const child = clone_container.firstChild;
+        if(child){
+            if((child as HTMLIFrameElement).id === 'wtbc-mini') return;
+            if((child as HTMLDivElement).classList.contains('tbc-clone')) return;
+        }
 
         if(chatDisplayMethod === 'method-mini'){
             const paths = window.location.pathname.split('/');
