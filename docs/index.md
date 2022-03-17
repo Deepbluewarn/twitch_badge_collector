@@ -4,10 +4,6 @@ layout: default
 
 # Twitch Badge Collector
 
-v1.4.0 버전에 일부 사용자 중 채팅 필터 기능이 제대로 동작하지 않는 문제가 발생하고 있습니다.
-
-v1.4.2 버전에서 해당 버그를 해결했습니다. 기능이 제대로 동작하지 않는 경우 업데이트가 되어 있는지 확인해주세요.
-
 > Extension that makes Twitch Chat easier to view.
 > 
 > Collect Twitch Chat what you want!
@@ -28,16 +24,9 @@ Try the web version of TBC, which allows you to use chat filters on mobile witho
 * [한국어](https://tbc.bluewarn.dev/doc/main/ko/manual.html)
 * [русский](https://tbc.bluewarn.dev/doc/main/ru/manual.html) (Translated by [Blueberryy](https://github.com/Blueberryy))
 
-## *v1.4.2 Changelog*
-    > 2022-03-12
-    Provides options for how copied chats are displayed.
-
-
-## *1.4.0 Changelog*
-    > 2022-03-10
-    Release Twitch Badge Collector Web (WTBC).
-    Renewal Filter Setting page.
-    Copied chat window changed to an iframe for compatibility with FFZ extension.
+## *v1.4.3 Changelog*
+    > 2022-03-15
+    Bug fixed, chat window ratio reset.
 
 ## Changelogs
 * [Korean Only](https://tbc.bluewarn.dev/versions.html)
