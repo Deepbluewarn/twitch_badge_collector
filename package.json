@@ -16,7 +16,7 @@
     "webpack-cli": "^4.9.2"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npx webpack",
     "zip": "node dist/js/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
