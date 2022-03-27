@@ -12,7 +12,7 @@ const msg = {
 }
 messageIdChannel.postMessage(msg);
 
-browser.storage.sync.get('filter').then(result => {
+browser.storage.local.get('filter').then(result => {
     const msg = {
         filter : result.filter,
         from : 'tbc',
@@ -28,6 +28,6 @@ browser.storage.sync.get('filter').then(result => {
 filterChannel.addEventListener('message', event => {
     if(event.data.from === 'wtbc-filter' && event.data.to.includes('tbc')){
         if(event.data.msg_id !== msg_id) return;
-        browser.storage.sync.set({filter : Array.from(event.data.filter)});
+        browser.storage.local.set({filter : Array.from(event.data.filter)});
     }
 });

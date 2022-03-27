@@ -37,7 +37,7 @@ import browser from "webextension-polyfill";
         }
     })();
 
-    browser.storage.sync.get('filter').then(res => {
+    browser.storage.local.get('filter').then(res => {
         filter = new Map(res.filter);
     });
 
@@ -118,12 +118,8 @@ import browser from "webextension-polyfill";
         message_container.textContent = '';//remove all chat lines.
 
         const extVersion = browser.runtime.getManifest().version;
-        const extInfoMsg = document.createElement('span');
-        extInfoMsg.classList.add('tbc_info', 'chat-line__status');
-
-        extInfoMsg.textContent = `Twitch Badge Collector v${extVersion}`;
-        message_container.appendChild(extInfoMsg);
         clone_container.appendChild(twitchClone);
+        addSystemMessage(`Twitch Badge Collector v${extVersion}`);
 
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
     }
@@ -150,7 +146,7 @@ import browser from "webextension-polyfill";
             frame = _frame;
 
             frame.onload = () => {
-                browser.storage.sync.get('filter').then(res => {
+                browser.storage.local.get('filter').then(res => {
                     const filter = res.filter;
                     const messageObj = {
                         messageId : messageId,
@@ -179,6 +175,22 @@ import browser from "webextension-polyfill";
         if (message_container.childElementCount > CLONE_CHAT_COUNT) {
             message_container.removeChild(<Element>message_container.firstElementChild);
         }
+
+        if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
+    }
+    function addSystemMessage(message: string){
+        const room_clone = document.getElementsByClassName('tbc-clone')[0];
+        const message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
+        const scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
+
+        const msg_container = document.createElement('div');
+        const msg = document.createElement('span');
+        msg_container.classList.add('tbc_info__container');
+        msg.classList.add('tbc_info', 'chat-line__status');
+
+        msg.textContent = message;
+        msg_container.appendChild(msg);
+        message_container.appendChild(msg_container);
 
         if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
     }
@@ -473,15 +485,16 @@ import browser from "webextension-polyfill";
     browser.storage.onChanged.addListener(function (changes) {
         for (var key in changes) {
             let newValue = changes[key].newValue;
+            const is_mini = chatDisplayMethod === 'method-mini' && frame;
 
-            if(key === 'container_ratio') {
-                change_container_ratio(parseInt(newValue));
-                return;
-            }else if(key === 'position'){
+            if(key === 'position'){
                 reverseChatContainer(newValue);
                 return;
             }else if(key === 'filter'){
                 filter = new Map(newValue);
+                if(!is_mini){
+                    addSystemMessage(`필터가 업데이트 되었습니다.`);
+                }
                 return;
             }else if(key === 'chatDisplayMethod'){
                 chatDisplayMethod = newValue;
@@ -493,7 +506,7 @@ import browser from "webextension-polyfill";
                 type : key,
                 value : newValue
             }
-            if(chatDisplayMethod === 'method-mini' && frame){
+            if(is_mini){
                 frame.contentWindow?.postMessage(messageObj, 'https://wtbc.bluewarn.dev');
             }
         }

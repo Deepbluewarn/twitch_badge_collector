@@ -12,9 +12,9 @@ function get_new_filter() {
 
 browser.runtime.onInstalled.addListener(function (reason: any) {
     if(reason.reason === 'install'){
-        browser.storage.sync.get('filter').then(res => {
+        browser.storage.local.get('filter').then(res => {
             if(!res.filter){
-                browser.storage.sync.set({filter : Array.from(get_new_filter())});
+                browser.storage.local.set({filter : Array.from(get_new_filter())});
             }
         });
     }
@@ -34,8 +34,6 @@ browser.runtime.onInstalled.addListener(function (reason: any) {
             chatDisplayMethod : method
         });
     });
-
-    browser.tabs.create({ url: 'https://tbc.bluewarn.dev/' });
 });
 
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {

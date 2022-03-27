@@ -37,3 +37,6 @@
 .tbc_highlight_keyword{
     border-left: 5px solid #1e97ff;
 }
+.tbc_info__container{
+    margin: 4px 0 4px 0;
+}
