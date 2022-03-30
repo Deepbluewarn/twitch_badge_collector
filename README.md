@@ -15,10 +15,10 @@ Helpful when you have a chat you don't want to miss.
 
 See [Docs](https://tbc.bluewarn.dev/) for more details!
 
-## *1.4.0 Changelog*
-    > 2022-03-10
-    Renewal Filter Setting page.
-    Copied chat window changed to an iframe for compatibility with FFZ extension.
+## *1.4.5 Changelog*
+    > 2022-03-29
+    - Fixed a bug where chat window size (ratio) was applied to chat windows in all browsers at once.
+    - Fixed a bug where additional filters could not be added due to insufficient storage capacity.
     
     
     
