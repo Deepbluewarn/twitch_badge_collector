@@ -4,6 +4,7 @@ import browser from "webextension-polyfill";
     type displayMethod = 'method-twitchui' | 'method-mini';
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
+    let pointBoxObserver: MutationObserver | undefined;
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let original_container: HTMLDivElement;
@@ -18,6 +19,11 @@ import browser from "webextension-polyfill";
     let filter = new Map();
     let chatIsAtBottom = true;
     let chatDisplayMethod: displayMethod = 'method-twitchui';
+
+    let streamChatFound = false;
+    let pointSummaryFound = false;
+
+    let StreamPagetimer: number;
 
     const CLONE_CHAT_COUNT = 144;
 
@@ -39,11 +45,6 @@ import browser from "webextension-polyfill";
 
     browser.storage.local.get('filter').then(res => {
         filter = new Map(res.filter);
-    });
-
-    browser.storage.local.get(['container_ratio', 'chatDisplayMethod']).then(res => {
-        container_ratio = parseInt(res.container_ratio);
-        chatDisplayMethod = res.chatDisplayMethod;
     });
 
     function get_chat_room(){
@@ -68,7 +69,7 @@ import browser from "webextension-polyfill";
         }
     }
 
-    function createCloneContainer(){
+    async function createCloneContainer(){
         const chat_room = get_chat_room();
         if (!chat_room) return false;
 
@@ -95,10 +96,12 @@ import browser from "webextension-polyfill";
         chat_room.firstChild?.appendChild(handle_container);
         chat_room.firstChild?.appendChild(clone_container);
 
-        browser.storage.local.get('position').then(res => {
-            reverseChatContainer(res.position);
-        });
+        const ps_res = await browser.storage.local.get('position');
+        const cr_res = await (browser.storage.local.get('container_ratio'));
 
+        container_ratio = cr_res.container_ratio;
+
+        reverseChatContainer(ps_res.position);
         change_container_ratio(container_ratio);
     }
 
@@ -195,52 +198,92 @@ import browser from "webextension-polyfill";
         if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
     }
 
-    let StreamPageCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
-
+    let StreamPageCallback: MutationCallback = async function (mutationRecord: MutationRecord[]) {
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
+        let pointSummary: Element = document.getElementsByClassName('community-points-summary')[0];
 
-        if (!stream_chat) return;
-        createCloneContainer();
+        if (stream_chat && !streamChatFound) {
+            streamChatFound = true;
 
-        const child = clone_container.firstChild;
-        if(child){
-            if((child as HTMLIFrameElement).id === 'wtbc-mini') return;
-            if((child as HTMLDivElement).classList.contains('tbc-clone')) return;
-        }
+            const res = await (browser.storage.local.get('chatDisplayMethod'));
+            chatDisplayMethod = res.chatDisplayMethod;
 
-        if(chatDisplayMethod === 'method-mini'){
-            const paths = window.location.pathname.split('/');
-            let channel = paths[1];
-    
-            if(paths.length > 2){
-                if(channel === 'popout'){
-                    channel = paths[2];
-                }else if(channel === 'moderator'){
-                    channel = paths[2];
-                }else if(channel === 'embed'){
-                    channel = paths[2];
-                }
+            createCloneContainer();
+
+            const child = clone_container.firstChild;
+            if (child) {
+                if ((child as HTMLIFrameElement).id === 'wtbc-mini') return;
+                if ((child as HTMLDivElement).classList.contains('tbc-clone')) return;
             }
-            cloneChatByMini(channel);
-        }else{
-            cloneChatByTwitchUi();
+
+            if (chatDisplayMethod === 'method-mini') {
+                const paths = window.location.pathname.split('/');
+                let channel = paths[1];
+
+                if (paths.length > 2) {
+                    if (channel === 'popout') {
+                        channel = paths[2];
+                    } else if (channel === 'moderator') {
+                        channel = paths[2];
+                    } else if (channel === 'embed') {
+                        channel = paths[2];
+                    }
+                }
+                cloneChatByMini(channel);
+            } else {
+                cloneChatByTwitchUi();
+            }
         }
 
-        if (stream_page_observer) {
+        if(pointSummary && !pointSummaryFound){
+            pointSummaryFound = true;
+
+            let point_button = pointSummary.children[1].getElementsByTagName('button')[0];
+
+            if (point_button) {
+                point_button.click();
+            }
+
+            observePointBox(pointSummary);
+        }
+
+        if(streamChatFound && pointSummaryFound && stream_page_observer){
             stream_page_observer.disconnect();
         }
     }
 
-    let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+    let pointBoxCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+        const point_summary_className = 'community-points-summary';
 
+        for(let mr of Array.from(mutationRecord)){
+            let addedNodes = mr.addedNodes;
+            if (!addedNodes) return;
+
+            for(let node of addedNodes){
+                let nodeElement = <HTMLElement>node;
+                if (!nodeElement || nodeElement.nodeType !== 1) return;
+
+                let point_summary = <HTMLDivElement>(nodeElement.getElementsByClassName(point_summary_className)[0] || nodeElement.closest('.' + point_summary_className));
+
+                if (point_summary) {
+                    let point_button = point_summary.children[1].getElementsByTagName('button')[0];
+        
+                    if (point_button) {
+                        console.debug('포인트 박스 클릭됨.');
+                        point_button.click();
+                    }
+                }
+            }
+        }
+    }
+
+    let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
         let room_clone: Element;
         let chat_clone: Element;
         let badges: HTMLCollection;
         let text_contents: HTMLCollection;
         let scroll_area: Element;
         let message_container: Element;
-
-        const point_summary_className = 'community-points-summary';
 
         Array.from(mutationRecord).forEach(mr => {
             let addedNodes = mr.addedNodes;
@@ -251,15 +294,6 @@ import browser from "webextension-polyfill";
                 if (!nodeElement || nodeElement.nodeType !== 1) return;
 
                 const is_chat = nodeElement.closest('.chat-scrollable-area__message-container');
-                let point_summary = <HTMLDivElement>(nodeElement.getElementsByClassName(point_summary_className)[0] || nodeElement.closest('.' + point_summary_className));
-
-                if (point_summary) {
-                    let point_button = point_summary.children[1].getElementsByTagName('button')[0];
-            
-                    if (point_button) {
-                        point_button.click();
-                    }
-                }
 
                 if (is_chat) {
                     let room_clone_parent = <Element>nodeElement.closest('.scrollable-area.tbc-origin')?.parentNode;
@@ -402,11 +436,22 @@ import browser from "webextension-polyfill";
      * 
      */
     let observeStreamPage = function (target: Element = document.body) {
+        streamChatFound = false;
+        pointSummaryFound = false;
+
         if (stream_page_observer) {
             stream_page_observer.observe(target, default_config);
         } else {
             stream_page_observer = observeDOM(target, default_config, StreamPageCallback);
         }
+
+        clearTimeout(StreamPagetimer);
+        StreamPagetimer = window.setTimeout(() => {
+            console.log('stream_page_observer disconnect.');
+            if(stream_page_observer){
+                stream_page_observer.disconnect();
+            }
+        }, 60 * 1000);
     }
 
     let observeChatRoom = function (target: Element) {
@@ -415,6 +460,15 @@ import browser from "webextension-polyfill";
             chat_room_observer.observe(target, default_config);
         } else {
             chat_room_observer = observeDOM(target, default_config, newChatCallback);
+        }
+    }
+
+    let observePointBox = function (target: Element) {
+        console.debug('observePointBox target : ', target);
+        if (pointBoxObserver) {
+            pointBoxObserver.observe(target, default_config);
+        } else {
+            pointBoxObserver = observeDOM(target, default_config, pointBoxCallback);
         }
     }
 
