@@ -1,5 +1,7 @@
 import browser from "webextension-polyfill";
 
+// const version_history = ["1.3.2", "1.4.0", "1.4.2", "1.4.3", "1.4.4", "1.4.5", "1.4.6"];
+
 function get_new_filter() {
     const filter = new Map();
     filter.set('streamer', { filter_id: 'streamer', category: 'badge_uuid', filter_type: 'include', value: '5527c58c-fb7d-422d-b71b-f309dcb85cc1', note: 'Streamer' });
@@ -10,15 +12,21 @@ function get_new_filter() {
     return filter;
 }
 
-browser.runtime.onInstalled.addListener(function (reason: any) {
-    if(reason.reason === 'install'){
-        browser.storage.local.get('filter').then(res => {
-            if(!res.filter){
-                browser.storage.local.set({filter : Array.from(get_new_filter())});
-            }
-        });
+browser.runtime.onInstalled.addListener(function (details: any) {
+    if(details.reason === 'install'){
+        browser.storage.local.set({filter : Array.from(get_new_filter())});
     }
+    // else if(details.reason === 'update'){
+        
+    //     const currentVersion = browser.runtime.getManifest().version;
+    //     const prev_version = details.previousVersion;
 
+    //     if(prev_version !== currentVersion && version_history.includes(prev_version)){
+    //         browser.storage.local.get('filter').then(res => {
+    //             browser.storage.local.set({filter : Object.fromEntries(res.filter)});
+    //         });
+    //     }
+    // }
     browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod']).then(res => {
         const language = res.language ? res.language : navigator.language;
         const theme = res.theme ? res.theme : 'light';
@@ -36,12 +44,10 @@ browser.runtime.onInstalled.addListener(function (reason: any) {
     });
 });
 
-browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    browser.action.enable(tabId);
-});
-
 browser.webNavigation.onHistoryStateUpdated.addListener(function (details) {
     browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+        if (tabs.length === 0) return;
+
         let id = tabs[0].id;
         let url = tabs[0].url;
         if (!(id && url)) return;
