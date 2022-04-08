@@ -40,3 +40,45 @@
 .tbc_info__container{
     margin: 4px 0 4px 0;
 }
+.tbc-save_chat{
+    position: absolute;
+    left: calc(100% - 100px);
+    padding: 0px 8px;
+    background-color: #fbe05b;
+    color: black;
+    font-weight: bold;
+    outline: none;
+    border-radius: 4px;
+}
+.tbc-save_chat:hover{
+    background-color: #fbd000;
+}
+
+#tbc_alert_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: azure;
+    background-color: #27272c;
+    padding: 4px;
+    margin: 8px;
+    border-radius: 10px;
+}
+#tbc_message_container{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0px 8px 0px;
+}
+.tbc_alert_message{
+    padding: 4px 4px 4px 16px;
+    background-color: inherit;
+}
+.tbc_alert_message:nth-child(1){
+    font-size: 1.6rem;
+}
+#tbc_x_btn{
+    padding-right: 16px;
+    cursor: pointer;
+}

@@ -96,6 +96,43 @@ import browser from "webextension-polyfill";
         chat_room.firstChild?.appendChild(handle_container);
         chat_room.firstChild?.appendChild(clone_container);
 
+        // 업데이트 메시지 생성
+        const message_checked = (await browser.storage.local.get('message_checked')).message_checked;
+        if(!message_checked){
+
+            const alert_container = document.createElement('div');
+            const message_container = document.createElement('div');
+            const x = document.createElement('span');
+    
+            const messageList = [
+                'Twitch Badge Collector 업데이트', 
+                ' - 채팅 이미지 저장 기능이 추가되었습니다.'
+            ];
+    
+            for(let msg of messageList){
+                const alertMessage = document.createElement('span');
+                alertMessage.classList.add('tbc_alert_message');
+                alertMessage.textContent = msg;
+                message_container.appendChild(alertMessage);
+            }
+    
+            alert_container.id = 'tbc_alert_container';
+            message_container.id = 'tbc_message_container';
+            
+            x.id = 'tbc_x_btn';
+            x.textContent = 'X';
+    
+            x.addEventListener('click', e=> {
+                document.getElementById('tbc_alert_container')?.remove();
+                browser.storage.local.set({message_checked : true});
+            });
+    
+            alert_container.appendChild(message_container);
+            alert_container.appendChild(x);
+            chat_room.firstChild?.appendChild(alert_container);
+        }
+        
+
         const ps_res = await browser.storage.local.get('position');
         const cr_res = await (browser.storage.local.get('container_ratio'));
 
@@ -109,7 +146,7 @@ import browser from "webextension-polyfill";
         const twitchClone = <HTMLDivElement>original_container.cloneNode(true);
         twitchClone.setAttribute('style', '');
         twitchClone.classList.remove('tbc-origin');
-        twitchClone.classList.add('tbc-clone');
+        twitchClone.id = 'tbc-clone__twitchui';
 
         let scroll_area = twitchClone.getElementsByClassName('simplebar-scroll-content')[0];
 
@@ -136,6 +173,7 @@ import browser from "webextension-polyfill";
             params.set('language', res.language);
             params.set('font_size', res.font_size);
             params.set('messageId', messageId);
+            params.set('ext_version', browser.runtime.getManifest().version);
 
             const src = `https://wtbc.bluewarn.dev/mini?${params}`;
 
@@ -182,7 +220,7 @@ import browser from "webextension-polyfill";
         if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
     }
     function addSystemMessage(message: string){
-        const room_clone = document.getElementsByClassName('tbc-clone')[0];
+        const room_clone = <HTMLDivElement>document.getElementById('tbc-clone__twitchui');
         const message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
         const scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
@@ -213,7 +251,7 @@ import browser from "webextension-polyfill";
             const child = clone_container.firstChild;
             if (child) {
                 if ((child as HTMLIFrameElement).id === 'wtbc-mini') return;
-                if ((child as HTMLDivElement).classList.contains('tbc-clone')) return;
+                if ((child as HTMLDivElement).id === 'tbc-clone__twitchui') return;
             }
 
             if (chatDisplayMethod === 'method-mini') {
@@ -296,10 +334,10 @@ import browser from "webextension-polyfill";
                 const is_chat = nodeElement.closest('.chat-scrollable-area__message-container');
 
                 if (is_chat) {
-                    let room_clone_parent = <Element>nodeElement.closest('.scrollable-area.tbc-origin')?.parentNode;
+                    let room_clone_parent = <HTMLDivElement>nodeElement.closest('.scrollable-area.tbc-origin')?.parentNode;
                     if (!room_clone_parent) return false; // nodeElement 가 .scrollable-area.origin 의 자식 요소가 아니면 return.
                     
-                    room_clone = room_clone_parent.getElementsByClassName('scrollable-area tbc-clone')[0];
+                    room_clone = <HTMLDivElement>document.getElementById('tbc-clone__twitchui');
                     if (!room_clone) return false;
 
                     message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
@@ -394,11 +432,11 @@ import browser from "webextension-polyfill";
         let include, exclude;
 
         if(match){
-            include = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'include'));
-            exclude = filter_arr.filter(el => (el.value === value) && (el.filter_type === 'exclude'));
+            include = filter_arr.filter(el => (el.value.toLowerCase() === value.toLowerCase()) && (el.filter_type === 'include'));
+            exclude = filter_arr.filter(el => (el.value.toLowerCase() === value.toLowerCase()) && (el.filter_type === 'exclude'));
         }else{
-            include = filter_arr.filter(el => value.toLowerCase().includes(el.value.toLowerCase()) && el.filter_type === 'include');
-            exclude = filter_arr.filter(el => value.toLowerCase().includes(el.value.toLowerCase()) && el.filter_type === 'exclude');
+            include = filter_arr.filter(el => value.includes(el.value) && el.filter_type === 'include');
+            exclude = filter_arr.filter(el => value.includes(el.value) && el.filter_type === 'exclude');
         }
 
         let i_len = include.length;
