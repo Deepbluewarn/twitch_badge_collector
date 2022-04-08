@@ -79,20 +79,21 @@
                     <option id="i18n-position__down" value="position-down">아래쪽</option>
                 </select>
             </div>
-            <hr>
-            <div class="bg_flex_cols flex-start-4">
-                <span class='bold' id="i18n-method">복사된 채팅 표시 방법</span>
-                <span id="i18n-method__desc">* 새로고침 후 적용됩니다.</span>
-                <select name="select_disp-chat-method" id="select_disp-chat-method">
-                    <option id="i18n-method__twitchui" value="method-twitchui">트위치 채팅을 직접 복사하기. (추천)</option>
-                    <option id="i18n-method__mini" value="method-mini">트위치 채팅 클라이언트를 삽입.</option>
+
+            <div class="container">
+                <span id="i18n-chat-display-method">채팅 표시 방법</span>
+                <select name="select_disp-method" id="select_disp-method">
+                    <option id="i18n-disp-method_ui" value="method-twitchui">트위치 UI 복사</option>
+                    <option id="i18n-disp-method_client" value="method-mini">채팅 클라이언트</option>
                 </select>
             </div>
             <hr>
-
         </div>
         <div class='container'>
-            <button id='add_filter_btn'>필터 설정</button>
+            <button class="long-btn" id='add_filter_btn'>필터 설정</button>
+        </div>
+        <div class='container'>
+            <button class="long-btn" id='save-chat'>채팅을 사진으로 저장</button>
         </div>
     </div>
 </body>
