@@ -73,16 +73,16 @@
     "message" : "아래쪽"
   },
   "dispCopiedChatmethod" : {
-    "message" : "복사된 채팅 표시 방법"
+    "message" : "채팅 표시 방법"
   },
   "dispCopiedChatmethod__desc" : {
     "message" : "* 새로고침 후 적용됩니다."
   },
   "method_twitchui" : {
-    "message" : "트위치 UI 직접 복사 (권장)"
+    "message" : "트위치 UI 복사"
   },
   "method_mini" : {
-    "message" : "트위치 채팅 클라이언트 삽입"
+    "message" : "채팅 클라이언트"
   },
 
   "filter_desc_link" : {
@@ -94,6 +94,9 @@
   },
   "p_filter_btn" : {
     "message" : "필터 설정"
+  },
+  "p_save_chat_btn" : {
+    "message" : "채팅을 이미지로 저장"
   },
   "f_add_desc" : {
     "message" : "필터 기능으로 특정 배지나 유저의 채팅을 추가하거나 제외할 수 있습니다. 자세한 사용방법은 "

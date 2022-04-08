@@ -74,16 +74,16 @@
   },
 
   "dispCopiedChatmethod" : {
-    "message" : "Display copied chats method"
+    "message" : "show chats with"
   },
   "dispCopiedChatmethod__desc" : {
     "message" : "* Applied after refresh."
   },
   "method_twitchui" : {
-    "message" : "Copy chats from UI (Recommended)"
+    "message" : "Copy from Twitch UI"
   },
   "method_mini" : {
-    "message" : "Insert Chat Client"
+    "message" : "Chat client"
   },
 
   "filter_desc_link" : {
@@ -95,6 +95,9 @@
   },
   "p_filter_btn" : {
     "message" : "Добавить фильтр"
+  },
+  "p_save_chat_btn" : {
+    "message" : "Save chat as Image"
   },
   "f_add_desc" : {
     "message" : "С помощью функции фильтрации можно добавлять или исключать из чата определённые значки или пользователей. Подробнее о том, как её использовать, "
