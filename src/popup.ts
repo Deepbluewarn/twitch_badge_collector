@@ -1,13 +1,15 @@
 import browser from "webextension-polyfill";
 
 (function () {
+    const version = chrome.runtime.getManifest().version;
     type displayMethod = 'method-twitchui' | 'method-mini';
-    let add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
+    const add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
+    const save_chat_btn = <HTMLButtonElement>document.getElementById('save-chat');
 
     function localizeHtmlPage() {
-        let review_link = <HTMLDivElement>document.getElementById('review_link');
-        let support_link = <HTMLDivElement>document.getElementById('support_link');
-        let homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
+        const review_link = <HTMLDivElement>document.getElementById('review_link');
+        const support_link = <HTMLDivElement>document.getElementById('support_link');
+        const homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
 
         (document.getElementById('i18n-language') as HTMLSpanElement).textContent = browser.i18n.getMessage('language_text');
         (document.getElementById('i18n-theme') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatTheme');
@@ -22,12 +24,13 @@ import browser from "webextension-polyfill";
         (document.getElementById('i18n-position') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatPosition');
         (document.getElementById('i18n-position__up') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionUp');
         (document.getElementById('i18n-position__down') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionDown');
-        (document.getElementById('i18n-method') as HTMLSpanElement).textContent = browser.i18n.getMessage('dispCopiedChatmethod');
-        (document.getElementById('i18n-method__desc') as HTMLSpanElement).textContent = browser.i18n.getMessage('dispCopiedChatmethod__desc');
-        (document.getElementById('i18n-method__twitchui') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_twitchui');
-        (document.getElementById('i18n-method__mini') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_mini');
+
+        (document.getElementById('i18n-chat-display-method') as HTMLSpanElement).textContent = browser.i18n.getMessage('dispCopiedChatmethod');
+        (document.getElementById('i18n-disp-method_ui') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_twitchui');
+        (document.getElementById('i18n-disp-method_client') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_mini');
 
         add_filter_btn.textContent = browser.i18n.getMessage('p_filter_btn');
+        save_chat_btn.textContent = browser.i18n.getMessage('p_save_chat_btn');
         review_link.textContent = browser.i18n.getMessage('review');
         support_link.textContent = browser.i18n.getMessage('support');
         homepage_link.textContent = browser.i18n.getMessage('homepage');
@@ -41,7 +44,7 @@ import browser from "webextension-polyfill";
         (document.getElementById('select_theme') as HTMLSelectElement).value = `theme__${res.theme}`;
         (document.getElementById('select_font-size') as HTMLSelectElement).value = res.font_size;
         (document.getElementById('select_chat-position') as HTMLSelectElement).value = res.position;
-        (document.getElementById('select_disp-chat-method') as HTMLSelectElement).value = res.chatDisplayMethod;
+        (document.getElementById('select_disp-method') as HTMLSelectElement).value = res.chatDisplayMethod;
         initOptionStatus(res.chatDisplayMethod);
     });
 
@@ -62,7 +65,7 @@ import browser from "webextension-polyfill";
             browser.storage.local.set({font_size : changed});
         }else if(target.id === 'select_chat-position'){
             browser.storage.local.set({position : changed});
-        }else if(target.id === 'select_disp-chat-method'){
+        }else if(target.id === 'select_disp-method'){
             const method: displayMethod = <displayMethod>changed;
             initOptionStatus(method);
 
@@ -76,8 +79,12 @@ import browser from "webextension-polyfill";
         (document.getElementById('select_language') as HTMLSelectElement).disabled = disabled;
         (document.getElementById('select_theme') as HTMLSelectElement).disabled = disabled;
         (document.getElementById('select_font-size') as HTMLSelectElement).disabled = disabled;
+        (document.getElementById('save-chat') as HTMLButtonElement).disabled = disabled;
     }
     add_filter_btn.addEventListener('click', e => {
-        browser.tabs.create({ url: 'https://wtbc.bluewarn.dev/setting/filter' });
+        browser.tabs.create({ url: `https://wtbc.bluewarn.dev/setting/filter?ext_version=${version}` });
+    });
+    save_chat_btn.addEventListener('click', e=> {
+        browser.tabs.create({ url: `https://wtbc.bluewarn.dev/chat?ext_version=${version}` });
     });
 })();
