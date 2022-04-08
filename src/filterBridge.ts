@@ -1,4 +1,5 @@
 import browser from "webextension-polyfill";
+import { BroadcastChannel } from 'broadcast-channel';
 
 const msg_id = Math.random().toString(36).substring(2,12);
 const messageIdChannel = new BroadcastChannel('MessageId');
@@ -25,9 +26,9 @@ browser.storage.local.get('filter').then(result => {
     }
 });
 
-filterChannel.addEventListener('message', event => {
-    if(event.data.from === 'wtbc-filter' && event.data.to.includes('tbc')){
-        if(event.data.msg_id !== msg_id) return;
-        browser.storage.local.set({filter : Array.from(event.data.filter)});
+filterChannel.onmessage = (msg) => {
+    if(msg.from === 'wtbc-filter' && msg.to.includes('tbc')){
+        if(msg.msg_id !== msg_id) return;
+        browser.storage.local.set({filter : msg.filter});
     }
-});
+}
