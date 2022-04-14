@@ -15,6 +15,7 @@ import browser from "webextension-polyfill";
     let messageId = '';
     let container_ratio: number;
     let reversed = false;
+    let dev = false;
     
     let filter = new Map();
     let chatIsAtBottom = true;
@@ -45,6 +46,10 @@ import browser from "webextension-polyfill";
 
     browser.storage.local.get('filter').then(res => {
         filter = new Map(res.filter);
+    });
+
+    browser.storage.local.get('dev').then(res => {
+        dev = res.dev;
     });
 
     function get_chat_room(){
@@ -97,40 +102,40 @@ import browser from "webextension-polyfill";
         chat_room.firstChild?.appendChild(clone_container);
 
         // 업데이트 메시지 생성
-        const message_checked = (await browser.storage.local.get('message_checked')).message_checked;
-        if(!message_checked){
+        // const message_checked = (await browser.storage.local.get('message_checked')).message_checked;
+        // if(!message_checked){
 
-            const alert_container = document.createElement('div');
-            const message_container = document.createElement('div');
-            const x = document.createElement('span');
+        //     const alert_container = document.createElement('div');
+        //     const message_container = document.createElement('div');
+        //     const x = document.createElement('span');
     
-            const messageList = [
-                'Twitch Badge Collector 업데이트', 
-                ' - 채팅 이미지 저장 기능이 추가되었습니다.'
-            ];
+        //     const messageList = [
+        //         'Twitch Badge Collector 업데이트', 
+        //         ' - 채팅 이미지 저장 기능이 추가되었습니다.'
+        //     ];
     
-            for(let msg of messageList){
-                const alertMessage = document.createElement('span');
-                alertMessage.classList.add('tbc_alert_message');
-                alertMessage.textContent = msg;
-                message_container.appendChild(alertMessage);
-            }
+        //     for(let msg of messageList){
+        //         const alertMessage = document.createElement('span');
+        //         alertMessage.classList.add('tbc_alert_message');
+        //         alertMessage.textContent = msg;
+        //         message_container.appendChild(alertMessage);
+        //     }
     
-            alert_container.id = 'tbc_alert_container';
-            message_container.id = 'tbc_message_container';
+        //     alert_container.id = 'tbc_alert_container';
+        //     message_container.id = 'tbc_message_container';
             
-            x.id = 'tbc_x_btn';
-            x.textContent = 'X';
+        //     x.id = 'tbc_x_btn';
+        //     x.textContent = 'X';
     
-            x.addEventListener('click', e=> {
-                document.getElementById('tbc_alert_container')?.remove();
-                browser.storage.local.set({message_checked : true});
-            });
+        //     x.addEventListener('click', e=> {
+        //         document.getElementById('tbc_alert_container')?.remove();
+        //         browser.storage.local.set({message_checked : true});
+        //     });
     
-            alert_container.appendChild(message_container);
-            alert_container.appendChild(x);
-            chat_room.firstChild?.appendChild(alert_container);
-        }
+        //     alert_container.appendChild(message_container);
+        //     alert_container.appendChild(x);
+        //     chat_room.firstChild?.appendChild(alert_container);
+        // }
         
 
         const ps_res = await browser.storage.local.get('position');
@@ -169,11 +174,11 @@ import browser from "webextension-polyfill";
         browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
             const params = new URLSearchParams();
             params.set('channel', channel);
-            params.set('theme', res.theme);
-            params.set('language', res.language);
-            params.set('font_size', res.font_size);
-            params.set('messageId', messageId);
             params.set('ext_version', browser.runtime.getManifest().version);
+
+            if(dev){
+                params.set('dev', 'true');
+            }
 
             const src = `https://wtbc.bluewarn.dev/mini?${params}`;
 
@@ -187,14 +192,30 @@ import browser from "webextension-polyfill";
             frame = _frame;
 
             frame.onload = () => {
+                const msgObj = [];
+                const msgLists = [
+                    ['messageId', messageId],
+                    ['language', res.lenguage],
+                    ['font_size', res.font_size],
+                    ['theme', res.theme],
+                ]
+                for(let msg of msgLists){
+                    msgObj.push({
+                        messageId: messageId,
+                        type: msg[0],
+                        value: msg[1]
+                    });
+                }
+                frame.contentWindow?.postMessage(msgObj, 'https://wtbc.bluewarn.dev');
+
                 browser.storage.local.get('filter').then(res => {
                     const filter = res.filter;
-                    const messageObj = {
+                    const filterMessageObj = [{
                         messageId : messageId,
                         type : 'filter',
                         value : filter
-                    }
-                    frame.contentWindow?.postMessage(messageObj, 'https://wtbc.bluewarn.dev');
+                    }]
+                    frame.contentWindow?.postMessage(filterMessageObj, 'https://wtbc.bluewarn.dev');
                 });
             }
         });
@@ -307,7 +328,6 @@ import browser from "webextension-polyfill";
                     let point_button = point_summary.children[1].getElementsByTagName('button')[0];
         
                     if (point_button) {
-                        console.debug('포인트 박스 클릭됨.');
                         point_button.click();
                     }
                 }
@@ -485,7 +505,6 @@ import browser from "webextension-polyfill";
 
         clearTimeout(StreamPagetimer);
         StreamPagetimer = window.setTimeout(() => {
-            console.log('stream_page_observer disconnect.');
             if(stream_page_observer){
                 stream_page_observer.disconnect();
             }
@@ -502,7 +521,6 @@ import browser from "webextension-polyfill";
     }
 
     let observePointBox = function (target: Element) {
-        console.debug('observePointBox target : ', target);
         if (pointBoxObserver) {
             pointBoxObserver.observe(target, default_config);
         } else {
@@ -592,14 +610,12 @@ import browser from "webextension-polyfill";
                 chatDisplayMethod = newValue;
                 return;
             }
-
-            const messageObj = {
-                messageId : messageId,
-                type : key,
-                value : newValue
-            }
             if(is_mini){
-                frame.contentWindow?.postMessage(messageObj, 'https://wtbc.bluewarn.dev');
+                frame.contentWindow?.postMessage([{
+                    messageId : messageId,
+                    type : key,
+                    value : newValue
+                }], 'https://wtbc.bluewarn.dev');
             }
         }
     });

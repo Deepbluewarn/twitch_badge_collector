@@ -24,13 +24,13 @@
     "message": "Verified"
   },
   "review" : {
-    "message" : "REVIEW"
+    "message" : "Review"
   },
   "support" : {
-    "message" : "SUPPORT"
+    "message" : "Support"
   },
   "homepage" : {
-    "message" : "HOMEPAGE"
+    "message" : "Discord"
   },
   "p_topDisplay" : {
     "message" : "Show copied chats at the top"
