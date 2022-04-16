@@ -5,6 +5,7 @@ type displayMethod = 'method-twitchui' | 'method-mini';
 const dev_checkbox = <HTMLInputElement>document.getElementById('dev-checkbox');
 const add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
 const save_chat_btn = <HTMLButtonElement>document.getElementById('save-chat');
+const web_version_btn = <HTMLButtonElement>document.getElementById('web-version');
 
 let dev = false;
 const params = new URLSearchParams();
@@ -35,6 +36,7 @@ function localizeHtmlPage() {
 
     add_filter_btn.textContent = browser.i18n.getMessage('p_filter_btn');
     save_chat_btn.textContent = browser.i18n.getMessage('p_save_chat_btn');
+    web_version_btn.textContent = browser.i18n.getMessage('p_web_version_btn');
     review_link.textContent = browser.i18n.getMessage('review');
     support_link.textContent = browser.i18n.getMessage('support');
     homepage_link.textContent = browser.i18n.getMessage('homepage');
@@ -100,4 +102,7 @@ add_filter_btn.addEventListener('click', e => {
 save_chat_btn.addEventListener('click', e => {
     if (dev) params.set('dev', 'true');
     browser.tabs.create({ url: `https://wtbc.bluewarn.dev/chat?${params}` });
+});
+web_version_btn.addEventListener('click', e=> {
+    browser.tabs.create({ url: `https://wtbc.bluewarn.dev?from=ext_popup` });
 });
