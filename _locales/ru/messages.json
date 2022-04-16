@@ -99,6 +99,9 @@
   "p_save_chat_btn" : {
     "message" : "Save chat as Image"
   },
+  "p_web_version_btn" : {
+    "message" : "TBC for web"
+  },
   "f_add_desc" : {
     "message" : "С помощью функции фильтрации можно добавлять или исключать из чата определённые значки или пользователей. Подробнее о том, как её использовать, "
   },

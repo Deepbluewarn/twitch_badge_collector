@@ -98,6 +98,9 @@
   "p_save_chat_btn" : {
     "message" : "채팅을 이미지로 저장"
   },
+  "p_web_version_btn" : {
+    "message" : "TBC 웹 버전"
+  },
   "f_add_desc" : {
     "message" : "필터 기능으로 특정 배지나 유저의 채팅을 추가하거나 제외할 수 있습니다. 자세한 사용방법은 "
   },

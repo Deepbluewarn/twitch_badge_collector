@@ -99,6 +99,9 @@
   "p_save_chat_btn" : {
     "message" : "Save chat as Image"
   },
+  "p_web_version_btn" : {
+    "message" : "TBC for web"
+  },
   "f_add_desc" : {
     "message" : "You can add or exclude chat from specific badges or users with the filter feature. For details on how to use it, "
     
