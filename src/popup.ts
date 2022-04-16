@@ -85,7 +85,7 @@ function initOptionStatus(method: displayMethod) {
     (document.getElementById('select_language') as HTMLSelectElement).disabled = disabled;
     (document.getElementById('select_theme') as HTMLSelectElement).disabled = disabled;
     (document.getElementById('select_font-size') as HTMLSelectElement).disabled = disabled;
-    (document.getElementById('save-chat') as HTMLButtonElement).disabled = disabled;
+    // (document.getElementById('save-chat') as HTMLButtonElement).disabled = disabled;
 }
 dev_checkbox.addEventListener('change', e=> {
     const target = <HTMLInputElement>e.target;
