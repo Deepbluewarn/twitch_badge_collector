@@ -27,19 +27,23 @@ browser.runtime.onInstalled.addListener(function (details: any) {
     //         });
     //     }
     // }
-    browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod']).then(res => {
+    browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', 'replayChatSize']).then(res => {
         const language = res.language ? res.language : navigator.language;
         const theme = res.theme ? res.theme : 'light';
         const font_size = res.font_size ? res.font_size : 'default';
         const position = res.position ? res.position : 'position-down';
         const method = res.chatDisplayMethod ? res.chatDisplayMethod : 'method-twitchui';
+        const pointBoxAuto = res.pointBox_auto ? res.pointBox_auto : 'pointBox-method-on';
+        const replayChatSize = res.replayChatSize ? res.replayChatSize : '30';
 
         browser.storage.local.set({
             language : language,
             theme : theme,
             font_size : font_size, 
             position : position,
-            chatDisplayMethod : method
+            chatDisplayMethod : method,
+            pointBox_auto : pointBoxAuto,
+            replayChatSize : replayChatSize
         });
     });
 });

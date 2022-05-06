@@ -1,24 +1,28 @@
 import browser from "webextension-polyfill";
+import { base_url } from "./const";
 
 const version = chrome.runtime.getManifest().version;
 type displayMethod = 'method-twitchui' | 'method-mini';
 const dev_checkbox = <HTMLInputElement>document.getElementById('dev-checkbox');
-const add_filter_btn = <HTMLButtonElement>document.getElementById('add_filter_btn');
-const save_chat_btn = <HTMLButtonElement>document.getElementById('save-chat');
-const web_version_btn = <HTMLButtonElement>document.getElementById('web-version');
+const add_filter_btn = <HTMLSpanElement>document.getElementById('add_filter_btn');
+const save_chat_btn = <HTMLSpanElement>document.getElementById('save-chat');
 
 let dev = false;
 const params = new URLSearchParams();
 params.set('ext_version', version);
 
 function localizeHtmlPage() {
-    const review_link = <HTMLDivElement>document.getElementById('review_link');
-    const support_link = <HTMLDivElement>document.getElementById('support_link');
-    const homepage_link = <HTMLDivElement>document.getElementById('homepage_link');
+    const review_link = <HTMLAnchorElement>document.getElementById('review_link');
+    const discord_link = <HTMLAnchorElement>document.getElementById('discord_link');
+
+    (document.getElementById('i18n-general-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('generalSetting');
+    (document.getElementById('i18n-chat-client-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatClientSetting');
+    (document.getElementById('i18n-etc-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('extraSetting');
 
     (document.getElementById('i18n-language') as HTMLSpanElement).textContent = browser.i18n.getMessage('language_text');
     (document.getElementById('i18n-theme') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatTheme');
 
+    (document.getElementById('i18n-theme__auto') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme_auto');
     (document.getElementById('i18n-theme__dark') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme__dark');
     (document.getElementById('i18n-theme__light') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme__light');
     (document.getElementById('i18n-fontSize') as HTMLSpanElement).textContent = browser.i18n.getMessage('fontSize');
@@ -30,38 +34,51 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-position__up') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionUp');
     (document.getElementById('i18n-position__down') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionDown');
 
+    (document.getElementById('i18n-point-auto-click') as HTMLSpanElement).textContent = browser.i18n.getMessage('pointBoxAutoClick');
+    (document.getElementById('i18n-pointBox-method_on') as HTMLSpanElement).textContent = browser.i18n.getMessage('on');
+    (document.getElementById('i18n-pointBox-method_off') as HTMLSpanElement).textContent = browser.i18n.getMessage('off');
+
     (document.getElementById('i18n-chat-display-method') as HTMLSpanElement).textContent = browser.i18n.getMessage('dispCopiedChatmethod');
     (document.getElementById('i18n-disp-method_ui') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_twitchui');
     (document.getElementById('i18n-disp-method_client') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_mini');
 
+    (document.getElementById('i18n-replay-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('replay_chat_settings');
+    (document.getElementById('i18n-replay-chat-size-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chat_window_size_setting');
+
     add_filter_btn.textContent = browser.i18n.getMessage('p_filter_btn');
     save_chat_btn.textContent = browser.i18n.getMessage('p_save_chat_btn');
-    web_version_btn.textContent = browser.i18n.getMessage('p_web_version_btn');
     review_link.textContent = browser.i18n.getMessage('review');
-    support_link.textContent = browser.i18n.getMessage('support');
-    homepage_link.textContent = browser.i18n.getMessage('homepage');
+    discord_link.textContent = browser.i18n.getMessage('discord');
 }
 
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
-browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'dev']).then(res => {
+browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', 'replayChatSize', 'dev']).then(res => {
     (document.getElementById('select_language') as HTMLSelectElement).value = `language__${res.language}`;
     (document.getElementById('select_theme') as HTMLSelectElement).value = `theme__${res.theme}`;
     (document.getElementById('select_font-size') as HTMLSelectElement).value = res.font_size;
     (document.getElementById('select_chat-position') as HTMLSelectElement).value = res.position;
     (document.getElementById('select_disp-method') as HTMLSelectElement).value = res.chatDisplayMethod;
-    dev = res.dev
+    (document.getElementById('select_pointBox-method') as HTMLSelectElement).value = res.pointBox_auto;
+    (document.getElementById('input_replay-chat-size') as HTMLInputElement).value = res.replayChatSize;
+
+    dev = res.dev;
     dev_checkbox.checked = res.dev;
     initOptionStatus(res.chatDisplayMethod);
 });
 
 document.getElementById('setting_container')?.addEventListener('change', e => {
     const target = <HTMLSelectElement>e.target;
+    let changed = target.value;
+
+    if(target.tagName === 'INPUT'){
+        if(target.id === 'input_replay-chat-size'){
+            browser.storage.local.set({ replayChatSize: changed });
+        }
+    }
 
     if (target.tagName !== 'SELECT') return;
-
-    let changed = target.value;
 
     if (target.id === 'select_language') {
         changed = changed.substring(changed.lastIndexOf('_') + 1);
@@ -74,10 +91,10 @@ document.getElementById('setting_container')?.addEventListener('change', e => {
     } else if (target.id === 'select_chat-position') {
         browser.storage.local.set({ position: changed });
     } else if (target.id === 'select_disp-method') {
-        const method: displayMethod = <displayMethod>changed;
-        initOptionStatus(method);
-
+        initOptionStatus(changed as displayMethod);
         browser.storage.local.set({ chatDisplayMethod: changed });
+    } else if (target.id === 'select_pointBox-method') {
+        browser.storage.local.set({ pointBox_auto : changed });
     }
 });
 
@@ -87,7 +104,6 @@ function initOptionStatus(method: displayMethod) {
     (document.getElementById('select_language') as HTMLSelectElement).disabled = disabled;
     (document.getElementById('select_theme') as HTMLSelectElement).disabled = disabled;
     (document.getElementById('select_font-size') as HTMLSelectElement).disabled = disabled;
-    // (document.getElementById('save-chat') as HTMLButtonElement).disabled = disabled;
 }
 dev_checkbox.addEventListener('change', e=> {
     const target = <HTMLInputElement>e.target;
@@ -97,12 +113,9 @@ dev_checkbox.addEventListener('change', e=> {
 });
 add_filter_btn.addEventListener('click', e => {
     if (dev) params.set('dev', 'true');
-    browser.tabs.create({ url: `https://wtbc.bluewarn.dev/setting/filter?${params}` });
+    browser.tabs.create({ url: `${base_url}setting/filter?${params}` });
 });
 save_chat_btn.addEventListener('click', e => {
     if (dev) params.set('dev', 'true');
-    browser.tabs.create({ url: `https://wtbc.bluewarn.dev/chat?${params}` });
-});
-web_version_btn.addEventListener('click', e=> {
-    browser.tabs.create({ url: `https://wtbc.bluewarn.dev?from=ext_popup` });
+    browser.tabs.create({ url: `${base_url}chat?${params}` });
 });
