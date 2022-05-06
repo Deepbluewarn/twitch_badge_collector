@@ -40,6 +40,10 @@
       ]
     }
   ],
+  "web_accessible_resources": [{
+    "resources": ["dist/js/mock_fetch.js"],
+    "matches": ["*://*.twitch.tv/*"]
+  }],
   "action" : {
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
