@@ -1,18 +1,22 @@
 import browser from "webextension-polyfill";
+import { base_url } from "./const";
 
 (function () {
     type displayMethod = 'method-twitchui' | 'method-mini';
     let stream_page_observer: MutationObserver | undefined;
     let chat_room_observer: MutationObserver | undefined;
     let pointBoxObserver: MutationObserver | undefined;
+    let replayChatObserver: MutationObserver | undefined;
+    let themeObserver: MutationObserver | undefined;
+
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let original_container: HTMLDivElement;
     let clone_container: HTMLDivElement;
-    let handle_container: HTMLDivElement;
-    let frame: HTMLIFrameElement;
 
-    let messageId = '';
+    let replayChatClone: HTMLDivElement;
+    let replayChatOrig: HTMLDivElement;
+    
     let container_ratio: number;
     let reversed = false;
     let dev = false;
@@ -23,6 +27,8 @@ import browser from "webextension-polyfill";
 
     let streamChatFound = false;
     let pointSummaryFound = false;
+    let pointBox_auto = true;
+    let mock_loaded = false;
 
     let StreamPagetimer: number;
 
@@ -44,13 +50,32 @@ import browser from "webextension-polyfill";
         }
     })();
 
-    browser.storage.local.get('filter').then(res => {
-        filter = new Map(res.filter);
+    browser.storage.local.get(['filter', 'pointBox_auto', 'dev']).then(res => {
+        if(res.filter){
+            filter = new Map(res.filter);
+        }
+        if(res.pointBox_auto){
+            pointBox_auto = res.pointBox_auto === 'pointBox-method-on' ? true : false;
+        }
+        if(res.dev){
+            dev = res.dev;
+        }
     });
+    let tbc_messageId = Math.random().toString(36).substring(2, 12);
 
-    browser.storage.local.get('dev').then(res => {
-        dev = res.dev;
-    });
+    function injectMockFetch(){
+        if(isReplayPage() && !mock_loaded){
+            mock_loaded = true;
+            var s = document.createElement('script');
+            s.src = browser.runtime.getURL('dist/js/mock_fetch.js');
+            s.onload = function () {
+                s.remove();
+            };
+            (document.head || document.documentElement).appendChild(s);
+        }
+    }
+    injectMockFetch();
+    
 
     function get_chat_room(){
         const chat_room_default: Element | null = document.querySelector('.chat-room__content .chat-list--default');
@@ -63,6 +88,8 @@ import browser from "webextension-polyfill";
     function reverseChatContainer(position: position){
         reversed = position === 'position-up';
 
+        const handle_container = document.getElementsByClassName('handle_container')[0];
+
         if(reversed){
             original_container.classList.add('orig_reverse');
             handle_container.classList.add('handle_reverse');
@@ -74,23 +101,8 @@ import browser from "webextension-polyfill";
         }
     }
 
-    async function createCloneContainer(){
-        const chat_room = get_chat_room();
-        if (!chat_room) return false;
-
-        let clone = chat_room.getElementsByClassName('tbc-clone')[0];
-        if (chat_room.contains(clone)){
-            return false;
-        }
-
-        original_container = <HTMLDivElement>chat_room.getElementsByClassName('scrollable-area')[0];
-        clone_container = document.createElement('div');
-
-        original_container.classList.add('tbc-origin');
-        clone_container.classList.add('tbc-clone');
-
-        // resize handle (drag bar)
-        handle_container = document.createElement('div');
+    function createContainerHandler(){
+        const handle_container = document.createElement('div');
         const resize_handle = document.createElement('div');
         handle_container.classList.add('handle_container');
         resize_handle.classList.add('tbc_resize_handle');
@@ -98,45 +110,27 @@ import browser from "webextension-polyfill";
         handle_container.addEventListener('touchstart', startDrag);
         handle_container.appendChild(resize_handle);
 
-        chat_room.firstChild?.appendChild(handle_container);
+        return handle_container;
+    }
+
+    function isReplayPage(){
+        const regex = /\/videos\/[0-9]*/g;
+        const url = new URL(location.href);
+        return regex.test(url.pathname);
+    }
+
+    async function createCloneContainer(){
+        const chat_room = get_chat_room();
+        if (!chat_room) return false;
+
+        original_container = <HTMLDivElement>chat_room.getElementsByClassName('scrollable-area')[0];
+        clone_container = document.createElement('div');
+
+        original_container.classList.add('tbc-origin');
+        clone_container.id = 'tbc-clone';
+
+        chat_room.firstChild?.appendChild(createContainerHandler());
         chat_room.firstChild?.appendChild(clone_container);
-
-        // 업데이트 메시지 생성
-        // const message_checked = (await browser.storage.local.get('message_checked')).message_checked;
-        // if(!message_checked){
-
-        //     const alert_container = document.createElement('div');
-        //     const message_container = document.createElement('div');
-        //     const x = document.createElement('span');
-    
-        //     const messageList = [
-        //         'Twitch Badge Collector 업데이트', 
-        //         ' - 채팅 이미지 저장 기능이 추가되었습니다.'
-        //     ];
-    
-        //     for(let msg of messageList){
-        //         const alertMessage = document.createElement('span');
-        //         alertMessage.classList.add('tbc_alert_message');
-        //         alertMessage.textContent = msg;
-        //         message_container.appendChild(alertMessage);
-        //     }
-    
-        //     alert_container.id = 'tbc_alert_container';
-        //     message_container.id = 'tbc_message_container';
-            
-        //     x.id = 'tbc_x_btn';
-        //     x.textContent = 'X';
-    
-        //     x.addEventListener('click', e=> {
-        //         document.getElementById('tbc_alert_container')?.remove();
-        //         browser.storage.local.set({message_checked : true});
-        //     });
-    
-        //     alert_container.appendChild(message_container);
-        //     alert_container.appendChild(x);
-        //     chat_room.firstChild?.appendChild(alert_container);
-        // }
-        
 
         const ps_res = await browser.storage.local.get('position');
         const cr_res = await (browser.storage.local.get('container_ratio'));
@@ -145,6 +139,76 @@ import browser from "webextension-polyfill";
 
         reverseChatContainer(ps_res.position);
         change_container_ratio(container_ratio);
+    }
+
+    async function createReplayContainer(video_chat: HTMLDivElement, video_player: HTMLVideoElement){
+        if (document.getElementById('tbc-replay')) return false;
+
+        const replayContainer = document.createElement('div');
+        replayContainer.id = 'tbc-replay';
+
+        const frame = getFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay');
+    
+        replayContainer.appendChild(frame);
+
+        video_chat.parentElement?.appendChild(replayContainer);
+        replayChatClone = replayContainer;
+        replayChatOrig = video_chat;
+        video_chat.style.height = '50%';
+
+        const res = await (browser.storage.local.get('replayChatSize'));
+        change_container_ratio(res.replayChatSize);
+
+        video_player.onpause = (e) => {
+            const wtbcReplayFrame = getReplayFrame();
+            
+            if(wtbcReplayFrame){
+                wtbcReplayFrame.contentWindow?.postMessage({sender: 'tbc', body : [{
+                    tbc_messageId: 'omitted',
+                    type: 'wtbc-player-paused',
+                    value: video_player.currentTime
+                }]}, base_url);
+            }
+        }
+
+        video_player.onplaying = (e) => {
+            const wtbcReplayFrame = getReplayFrame();
+            
+            if(wtbcReplayFrame){
+                wtbcReplayFrame.contentWindow?.postMessage({sender: 'tbc', body : [{
+                    tbc_messageId: 'omitted',
+                    type: 'wtbc-player-playing',
+                    value: video_player.currentTime
+                }]}, base_url);
+            }
+        }
+
+        frame.onload = () => {
+            const msgObj = [];
+            const msgLists = [
+                ['tbc_messageId', tbc_messageId],
+                ['wtbc-replay-init', true]
+            ]
+            for(let msg of msgLists){
+                msgObj.push({
+                    tbc_messageId: tbc_messageId,
+                    type: msg[0],
+                    url: location.href,
+                    value: msg[1]
+                });
+            }
+            frame.contentWindow?.postMessage({sender: 'tbc', body: msgObj}, base_url);
+
+            browser.storage.local.get('filter').then(res => {
+                const filter = res.filter;
+                const filterMessageObj = [{
+                    tbc_messageId : tbc_messageId,
+                    type : 'filter',
+                    value : filter
+                }]
+                frame.contentWindow?.postMessage({sender: 'tbc', body: filterMessageObj}, base_url);
+            });
+        }
     }
 
     function cloneChatByTwitchUi() {
@@ -164,61 +228,77 @@ import browser from "webextension-polyfill";
 
         const extVersion = browser.runtime.getManifest().version;
         clone_container.appendChild(twitchClone);
+
         addSystemMessage(`Twitch Badge Collector v${extVersion}`);
 
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
     }
+
+    function getFrame(title: string, id: string, channel: string, path: string){
+        const params = new URLSearchParams();
+        params.set('channel', channel);
+        params.set('ext_version', browser.runtime.getManifest().version);
+        if(dev){
+            params.set('dev', 'true');
+        }
+
+        const src = `${base_url}${path}?${params}`;
+
+        const _frame = document.createElement('iframe');
+        _frame.id = id;
+        _frame.title = title;
+        _frame.src = src;
+
+        return _frame;
+    }
     function cloneChatByMini(channel: string){
-        messageId = Math.random().toString(36).substring(2,12);
 
         browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
-            const params = new URLSearchParams();
-            params.set('channel', channel);
-            params.set('ext_version', browser.runtime.getManifest().version);
-
-            if(dev){
-                params.set('dev', 'true');
+            const frame = getFrame('Twitch Badge Collector :: Mini', 'wtbc-mini', channel, 'mini');
+            clone_container.appendChild(frame);
+            let theme = res.theme;
+            if(theme === 'auto'){
+                theme = getTwitchTheme();
             }
-
-            const src = `https://wtbc.bluewarn.dev/mini?${params}`;
-
-            const _frame = document.createElement('iframe');
-            _frame.id = 'wtbc-mini';
-            _frame.title = 'Twitch Badge Collector :: Mini';
-            _frame.src = src;
-
-            clone_container.appendChild(_frame);
-
-            frame = _frame;
 
             frame.onload = () => {
                 const msgObj = [];
                 const msgLists = [
-                    ['messageId', messageId],
+                    ['tbc_messageId', tbc_messageId],
                     ['language', res.lenguage],
                     ['font_size', res.font_size],
-                    ['theme', res.theme],
+                    ['theme', theme],
                 ]
                 for(let msg of msgLists){
                     msgObj.push({
-                        messageId: messageId,
+                        tbc_messageId: tbc_messageId,
                         type: msg[0],
                         value: msg[1]
                     });
                 }
-                frame.contentWindow?.postMessage(msgObj, 'https://wtbc.bluewarn.dev');
+                frame.contentWindow?.postMessage({sender: 'tbc', body: msgObj}, base_url);
 
                 browser.storage.local.get('filter').then(res => {
                     const filter = res.filter;
                     const filterMessageObj = [{
-                        messageId : messageId,
+                        tbc_messageId : tbc_messageId,
                         type : 'filter',
                         value : filter
                     }]
-                    frame.contentWindow?.postMessage(filterMessageObj, 'https://wtbc.bluewarn.dev');
+                    frame.contentWindow?.postMessage({sender: 'tbc', body: filterMessageObj}, base_url);
                 });
             }
         });
+    }
+    function getTwitchTheme() {
+        return document.documentElement.classList.contains('tw-root--theme-light') ? 'light' : 'dark';
+    }
+
+    function getMiniFrame(){
+        return <HTMLIFrameElement>document.getElementById('wtbc-mini');
+    }
+    function getReplayFrame(){
+        return <HTMLIFrameElement>document.getElementById('wtbc-replay');
     }
 
     function add_chat(origNodeElement: HTMLElement, chat_clone: Element, scroll_area: Element, message_container: Element, filter_category: string) {
@@ -242,6 +322,8 @@ import browser from "webextension-polyfill";
     }
     function addSystemMessage(message: string){
         const room_clone = <HTMLDivElement>document.getElementById('tbc-clone__twitchui');
+        if(!room_clone) return;
+
         const message_container = room_clone.getElementsByClassName('chat-scrollable-area__message-container')[0];
         const scroll_area = room_clone.getElementsByClassName('simplebar-scroll-content')[0];
 
@@ -257,7 +339,31 @@ import browser from "webextension-polyfill";
         if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
     }
 
+    function replayCloneAvailable(){
+        return document.getElementById('tbc-replay');
+    }
+
     let StreamPageCallback: MutationCallback = async function (mutationRecord: MutationRecord[]) {
+        if(isReplayPage()){
+            const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
+            const video_player: HTMLVideoElement | undefined = document.getElementsByClassName('video-ref')[0].getElementsByTagName('video')[0];
+            
+            if(video_chat && video_player && !replayCloneAvailable()){
+                observeReplayChatContainer(video_chat);
+                createReplayContainer(video_chat, video_player);
+            }
+            if(replayCloneAvailable() && stream_page_observer){
+                stream_page_observer.disconnect();
+            }
+            return;
+        }
+
+        const replayClone = document.getElementById('tbc-replay');
+        const replayOrig = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
+
+        if (replayClone) replayClone.remove();
+        if (replayOrig) replayOrig.style.removeProperty('height');
+
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
         let pointSummary: Element = document.getElementsByClassName('community-points-summary')[0];
 
@@ -267,33 +373,24 @@ import browser from "webextension-polyfill";
             const res = await (browser.storage.local.get('chatDisplayMethod'));
             chatDisplayMethod = res.chatDisplayMethod;
 
+            if (document.getElementById('tbc-clone')) return false;
+
             createCloneContainer();
 
             const child = clone_container.firstChild;
+
             if (child) {
                 if ((child as HTMLIFrameElement).id === 'wtbc-mini') return;
                 if ((child as HTMLDivElement).id === 'tbc-clone__twitchui') return;
             }
+            const channel = getChannelFromPath();
 
-            if (chatDisplayMethod === 'method-mini') {
-                const paths = window.location.pathname.split('/');
-                let channel = paths[1];
-
-                if (paths.length > 2) {
-                    if (channel === 'popout') {
-                        channel = paths[2];
-                    } else if (channel === 'moderator') {
-                        channel = paths[2];
-                    } else if (channel === 'embed') {
-                        channel = paths[2];
-                    }
-                }
+            if (res.chatDisplayMethod === 'method-mini') {
                 cloneChatByMini(channel);
             } else {
                 cloneChatByTwitchUi();
             }
         }
-
         if(pointSummary && !pointSummaryFound){
             pointSummaryFound = true;
 
@@ -305,13 +402,35 @@ import browser from "webextension-polyfill";
 
             observePointBox(pointSummary);
         }
-
         if(streamChatFound && pointSummaryFound && stream_page_observer){
             stream_page_observer.disconnect();
         }
     }
 
+    function getChannelFromPath() {
+        const paths = window.location.pathname.split('/');
+        const regex = /\/videos\/[0-9]*/g;
+        let channel = paths[1];
+
+        if(regex.test(location.pathname)){
+            return paths[2];
+        }
+
+        if (paths.length > 2) {
+            if (channel === 'popout') {
+                channel = paths[2];
+            } else if (channel === 'moderator') {
+                channel = paths[2];
+            } else if (channel === 'embed') {
+                channel = paths[2];
+            }
+        }
+        return channel;
+    }
+
     let pointBoxCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
+        if(!pointBox_auto) return;
+
         const point_summary_className = 'community-points-summary';
 
         for(let mr of Array.from(mutationRecord)){
@@ -333,6 +452,27 @@ import browser from "webextension-polyfill";
                 }
             }
         }
+    }
+
+    let replayChatContainerCallback = function (MutationRecord: MutationRecord[]){
+        const record = MutationRecord[0];
+
+        if(record.attributeName !== 'class') return;
+
+        if((record.target as HTMLDivElement).classList.contains('channel-root__right-column--expanded')){
+            // 극장 모드 아님.
+            replayChatClone.classList.remove('chat-player-theater');
+        }else{
+            // 극장 모드.
+            replayChatClone.classList.add('chat-player-theater');
+        }
+    }
+
+    let themeCallback: MutationCallback = function (mutationRecord: MutationRecord[]){
+        const record = mutationRecord[0];
+        if(record.attributeName !== 'class' && (record.target as HTMLElement).tagName !== 'HTML') return;
+
+        postMessageToFrame('theme', getTwitchTheme());
     }
 
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
@@ -528,16 +668,39 @@ import browser from "webextension-polyfill";
         }
     }
 
+    let observeReplayChatContainer = function(target: Element){
+        const option = {attributes: true};
+
+        if(replayChatObserver){
+            replayChatObserver.observe(target, option);
+        } else {
+            replayChatObserver = observeDOM(target, option, replayChatContainerCallback);
+        }
+    }
+
+    let observeTheme = function (){
+        const option = {attributes: true};
+        if(themeObserver){
+            themeObserver.observe(document.documentElement, option);
+        } else {
+            themeObserver = observeDOM(document.documentElement, option, themeCallback);
+        }
+    }
+
     /**
      * 
      * @param ratio 0 부터 100 사이의 값, 복제된 채팅창의 크기 비율입니다.
      * @returns 
      */
     let change_container_ratio = function (ratio: number) {
+        if(!isReplayPage()){
+            if (!original_container || !clone_container) return;
+        }else{
+            if(!replayChatOrig || !replayChatClone) return;
+        }
+        
         if (ratio != 0) ratio = ratio ? ratio : 30;
         container_ratio = ratio;
-
-        if (!original_container || !clone_container) return;
 
         let orig_size = ratio === 0 ? 1 : (ratio === 10 ? 0 : 1);
         let clone_size = ratio === 0 ? 0 : (ratio === 10 ? 1 : 0);
@@ -547,19 +710,33 @@ import browser from "webextension-polyfill";
             orig_size = parseFloat((1 - clone_size).toFixed(2));
         }
 
-        if(reversed){
-            [orig_size, clone_size] = [clone_size, orig_size];
+        let orig, clone;
+
+        if(isReplayPage()){
+            orig = replayChatOrig;
+            clone = replayChatClone;
+
+            clone.style.top = `${orig_size * 100}%`;
+        }else{
+            if(reversed){
+                [orig_size, clone_size] = [clone_size, orig_size];
+            }
+            orig = original_container;
+            clone = clone_container;
         }
 
-        original_container.style.height = `${orig_size * 100}%`;
-        clone_container.style.height = `${clone_size * 100}%`;
+        orig.style.height = `${orig_size * 100}%`;
+        clone.style.height = `${clone_size * 100}%`;
     }
 
     let startDrag = function (e: MouseEvent | TouchEvent) {
         e.preventDefault();
 
-        if(chatDisplayMethod === 'method-mini' && frame){
-            frame.classList.add('freeze');
+        if(!isReplayPage()){
+            const miniFrame = getMiniFrame();
+            if(chatDisplayMethod === 'method-mini' && miniFrame){
+                miniFrame.classList.add('freeze');
+            }
         }
         
         window.addEventListener('mousemove', doDrag);
@@ -569,8 +746,14 @@ import browser from "webextension-polyfill";
     }
 
     let doDrag = function (e: MouseEvent | TouchEvent) {
+        let chat_room;
 
-        const chat_room = get_chat_room();
+        if(isReplayPage()){
+            chat_room = replayChatOrig;
+        }else{
+            chat_room = get_chat_room();
+        }
+        
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
         if (chat_room) {
             const rect = chat_room.getBoundingClientRect();
@@ -581,9 +764,13 @@ import browser from "webextension-polyfill";
     }
 
     let endDrag = function () {
-        if(chatDisplayMethod === 'method-mini' && frame){
-            frame.classList.remove('freeze');
+        if (!isReplayPage()) {
+            const miniFrame = getMiniFrame();
+            if (chatDisplayMethod === 'method-mini' && miniFrame) {
+                miniFrame.classList.remove('freeze');
+            }
         }
+       
         browser.storage.local.set({container_ratio});
         window.removeEventListener('mousemove', doDrag);
         window.removeEventListener('touchmove', doDrag);
@@ -591,37 +778,54 @@ import browser from "webextension-polyfill";
         window.removeEventListener('touchend', endDrag);
     }
     observeStreamPage();
+    observeTheme();
+
+    function postMessageToFrame(key: string, value: any) {
+        let frame: HTMLIFrameElement | undefined = undefined;
+
+        if(chatDisplayMethod === 'method-mini'){
+            frame = getMiniFrame();
+        }else if(isReplayPage()){
+            frame = getReplayFrame();
+        }
+
+        if(!frame) return;
+
+        frame.contentWindow?.postMessage({
+            sender: 'tbc', body: [{
+                tbc_messageId: tbc_messageId,
+                type: key,
+                value: value
+            }]
+        }, base_url);
+    }
 
     browser.storage.onChanged.addListener(function (changes) {
         for (var key in changes) {
             let newValue = changes[key].newValue;
-            const is_mini = chatDisplayMethod === 'method-mini' && frame;
 
             if(key === 'position'){
                 reverseChatContainer(newValue);
                 return;
             }else if(key === 'filter'){
                 filter = new Map(newValue);
-                if(!is_mini){
-                    addSystemMessage(`필터가 업데이트 되었습니다.`);
-                }
+                addSystemMessage(`필터가 업데이트 되었습니다.`);
                 return;
             }else if(key === 'chatDisplayMethod'){
                 chatDisplayMethod = newValue;
                 return;
+            }else if(key === 'replayChatSize'){
+                change_container_ratio(newValue);
+                return;
             }
-            if(is_mini){
-                frame.contentWindow?.postMessage([{
-                    messageId : messageId,
-                    type : key,
-                    value : newValue
-                }], 'https://wtbc.bluewarn.dev');
-            }
+
+            postMessageToFrame(key, newValue);
         }
     });
 
     browser.runtime.onMessage.addListener((message, sender) => {
         if (message.action === "onHistoryStateUpdated") {
+            injectMockFetch();
             observeStreamPage();
         }
     });

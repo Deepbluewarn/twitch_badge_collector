@@ -1,212 +1,98 @@
 {
-  "ExtensionName" : {
-    "message" : "Twitch Badge Collector - Фильтр чата Twitch"
+  "ExtensionName": {
+    "message": "Twitch Badge Collector - Фильтр чата Twitch"
   },
-  "language" : {
-    "message" : "ru"
+  "language": {
+    "message": "ru"
   },
-  "ExtensionDesc" : {
-    "message" : "Собирерите в чате Twitch тех, кто вам нужен!"
+  "ExtensionDesc": {
+    "message": "Собирерите в чате Twitch тех, кто вам нужен!"
   },
   "popup_title": {
     "message": "Twitch Badge Collector"
   },
-  "Broadcaster": {
-    "message": "Владелец канала"
+  "generalSetting": {
+    "message": "General Settings"
   },
-  "Moderator": {
-    "message": "Модератор"
+  "chatClientSetting": {
+    "message": "Chat Client Settings"
   },
-  "VIP": {
-    "message": "VIP"
+  "extraSetting": {
+    "message": "Etc"
   },
-  "Verified": {
-    "message": "Подтверждённый"
+  "review": {
+    "message": "ОБЗОР"
   },
-  "review" : {
-    "message" : "ОБЗОР"
+  "discord": {
+    "message": "Discord"
   },
-  "support" : {
-    "message" : "ПОДДЕРЖКА"
+  "replay_chat_settings" : {
+    "message" : "VOD Chat Setting"
   },
-  "homepage" : {
-    "message" : "Discord"
+  "chat_window_size_setting" : {
+    "message" : "Chat window size"
   },
-  "p_topDisplay" : {
-    "message" : "Show copied chats at the top"
+  "language_text": {
+    "message": "Language"
   },
-
-  "language_text" : {
-    "message" : "Language"
+  "chatTheme": {
+    "message": "Chat Theme"
   },
-  "chatTheme" : {
-    "message" : "Chat Theme"
+  "i18n_theme_auto" : {
+    "message" : "Auto"
   },
-  "i18n-theme__dark" : {
-    "message" : "Dark Theme"
+  "i18n-theme__dark": {
+    "message": "Dark Theme"
   },
-  "i18n-theme__light" : {
-    "message" : "Light Theme"
+  "i18n-theme__light": {
+    "message": "Light Theme"
   },
-  "fontSize" : {
-    "message" : "Font size"
+  "fontSize": {
+    "message": "Font size"
   },
-  "fontSize_small" : {
-    "message" : "Small"
+  "fontSize_small": {
+    "message": "Small"
   },
-  "fontSize_default" : {
-    "message" : "Default"
+  "fontSize_default": {
+    "message": "Default"
   },
-  "fontSize_big" : {
-    "message" : "Big"
+  "fontSize_big": {
+    "message": "Big"
   },
-  "fontSize_bigger" : {
-    "message" : "Bigger"
+  "fontSize_bigger": {
+    "message": "Bigger"
   },
-  "chatPosition" : {
-    "message" : "Chat Position"
+  "chatPosition": {
+    "message": "Chat Position"
   },
-  "chatPositionUp" : {
-    "message" : "Up"
+  "chatPositionUp": {
+    "message": "Up"
   },
-  "chatPositionDown" : {
-    "message" : "Down"
+  "chatPositionDown": {
+    "message": "Down"
   },
-
-  "dispCopiedChatmethod" : {
-    "message" : "show chats with"
+  "dispCopiedChatmethod": {
+    "message": "show chats with"
   },
-  "dispCopiedChatmethod__desc" : {
-    "message" : "* Applied after refresh."
+  "method_twitchui": {
+    "message": "Copy from Twitch UI"
   },
-  "method_twitchui" : {
-    "message" : "Copy from Twitch UI"
+  "method_mini": {
+    "message": "Chat client"
   },
-  "method_mini" : {
-    "message" : "Chat client"
+  "pointBoxAutoClick": {
+    "message": "Point Box Auto Click"
   },
-
-  "filter_desc_link" : {
-    "message" : "https://tbc.bluewarn.dev/doc/filter/ru/filter_manual.html"
+  "on": {
+    "message": "On"
   },
-
-  "f_title" : {
-    "message" : "Настройка фильтра"
+  "off": {
+    "message": "Off"
   },
-  "p_filter_btn" : {
-    "message" : "Добавить фильтр"
+  "p_filter_btn": {
+    "message": "Добавить фильтр"
   },
-  "p_save_chat_btn" : {
-    "message" : "Save chat as Image"
-  },
-  "p_web_version_btn" : {
-    "message" : "TBC for web"
-  },
-  "f_add_desc" : {
-    "message" : "С помощью функции фильтрации можно добавлять или исключать из чата определённые значки или пользователей. Подробнее о том, как её использовать, "
-  },
-  "f_desc_link" : {
-    "message" : "см. здесь."
-  },
-  "f_nickname" : {
-    "message" : "никнейм"
-  },
-  "f_badge" : {
-    "message" : "значок"
-  },
-  "f_badge_link" : {
-    "message" : "ссылка на значок"
-  },
-  "f_keyword" : {
-    "message" : "Keyword"
-  },
-  "f_nickname_ph" : {
-    "message" : "ID логина в систему или никнейм"
-  },
-  "f_badge_ph" : {
-    "message" : "Ссылка на изображение значка"
-  },
-  "f_keyword_ph" : {
-    "message" : "Enter a keyword"
-  },
-  "f_note_ph" : {
-    "message" : "Please type a note (optional)"
-  },
-  "f_include" : {
-    "message" : "Включено"
-  },
-  "f_exclude" : {
-    "message" : "Отключено"
-  },
-  "f_sleep" : {
-    "message" : "Спящий режим"
-  },
-  "f_add" : {
-    "message" : "Добавить"
-  },
-  "f_search_ph" : {
-    "message" : "Поиск"
-  },
-  "f_category" : {
-    "message" : "Категория"
-  },
-  "f_cond" : {
-    "message" : "Сост."
-  },
-  "f_contents" : {
-    "message" : "Содержание"
-  },
-
-  "f_btn_rm_sel" : {
-    "message" : "Удалить"
-  },
-  "f_btn_rm_all" : {
-    "message" : "Удалить все"
-  },
-  "f_btn_bk" : {
-    "message" : "Рез. копия"
-  },
-  "f_btn_up" : {
-    "message" : "Загрузить"
-  },
-
-  "f_msg_already" : {
-    "message" : "Фильтр уже добавлен."
-  },
-  "f_no_value" : {
-    "message" : "Пожалуйста, введите содержание."
-  },
-  "f_added" : {
-    "message" : "Фильтр успешно добавлен."
-  },
-  "f_upload_error" : {
-    "message" : "При загрузке файла произошла ошибка. (Информация о фильтре не найдена)"
-  },
-  "f_upload_done" : {
-    "message" : "Успешно применён файл резервной копии."
-  },
-  "f_link_invalid" : {
-    "message" : "Ссылка на значок недействительна."
-  },
-  "f_rm_default" : {
-    "message" : "Вы не можете удалить значок по умолчанию."
-  },
-  "f_rm_selected" : {
-    "message" : "Delete the selected filter?"
-  },
-  "f_ask_rm_all" : {
-    "message" : "Удалить все?"
-  },
-  "f_done" : {
-    "message" : "Готово."
-  },
-  "f_all_rm" : {
-    "message" : "Все фильтры были удалены."
-  },
-  "f_rm_proceed" : {
-    "message" : "Все данные будут удалены и заменены. Приступить?"
-  },
-  "f_introduce" : {
-    "message" : "[1.3.17 Update]\nAdd Keyword Filter."
+  "p_save_chat_btn": {
+    "message": "Save chats as Image"
   }
 }
