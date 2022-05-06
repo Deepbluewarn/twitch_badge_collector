@@ -19,10 +19,12 @@ Helpful when you have a chat you don't want to miss.
 
 See [Docs](https://tbc.bluewarn.dev/) for more details!
 
-## *1.4.5 Changelog*
-    > 2022-03-29
-    - Fixed a bug where chat window size (ratio) was applied to chat windows in all browsers at once.
-    - Fixed a bug where additional filters could not be added due to insufficient storage capacity.
+## *1.4.8 Changelog*
+    > 2022-05-06
+    - Update design extension setting page.
+    - Add option auto point box click on/off.
+    - Support Twitch VOD replay chat.
+
     
     
     
