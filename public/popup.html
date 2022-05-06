@@ -15,65 +15,28 @@
 </head>
 
 <body class='default'>
-    <div id='screenshot'>
-
-        <div id='title_container'>
-            <h1 id='title_text'>Twitch Badge Collector</h1>
+    <div id='setting_container'>
+        <div class="container hidden">
+            <span>dev</span>
+            <input type="checkbox" name="dev" id="dev-checkbox">
         </div>
 
-        <div id='link_container'>
-            <div class="container" id='links'>
-                <div class='bg_flex_row foot_element'>
-                    <div>
-                        <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
-                            target='_blank' class='text link' id='review_link'>
-                            Review
-                        </a>
-                    </div>
-                    <div>
-                        <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
-                            target='_blank' class='text link' id='support_link'>
-                            Support
-                        </a>
-                    </div>
-                    <div>
-                        <a href="https://discord.gg/ZM6Eazpz5V" target='_blank' class='text link' id='homepage_link'>
-                            Discord
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div class="menu_title">
+            <span class="text" id="i18n-general-setting">일반 설정</span>
         </div>
 
-        <div id='setting_container'>
-            <div class="container hidden">
-                <span>dev</span>
-                <input type="checkbox" name="dev" id="dev-checkbox">
-            </div>
-
+        <div class="select-lists container_col">
             <div class="container">
-                <span id="i18n-language">언어</span>
-                <select name="select_language" id="select_language">
-                    <option value="language__ko">한국어</option>
-                    <option value="language__en">English</option>
-                </select>
+                <span class='button-like' id='add_filter_btn'>필터 설정</span>
             </div>
-
             <div class="container">
-                <span id="i18n-theme">채팅창 테마</span>
-                <select name="select_theme" id="select_theme">
-                    <option id='i18n-theme__dark' value="theme__dark">어두운 테마</option>
-                    <option id='i18n-theme__light' value="theme__light">밝은 테마</option>
-                </select>
+                <span class='button-like' id='save-chat'>채팅을 이미지로 저장</span>
             </div>
-
             <div class="container">
-                <span id="i18n-fontSize">폰트 크기</span>
-                <select name="select_font-size" id="select_font-size">
-                    <option id="i18n-fontSize__small" value="small">작게</option>
-                    <option id="i18n-fontSize__default" value="default">기본값</option>
-                    <option id="i18n-fontSize__big" value="big">크게</option>
-                    <option id="i18n-fontSize__bigger" value="bigger">더 크게</option>
+                <span id="i18n-chat-display-method">채팅 표시 방법</span>
+                <select name="select_disp-method" id="select_disp-method">
+                    <option id="i18n-disp-method_ui" value="method-twitchui">트위치 UI 복사</option>
+                    <option id="i18n-disp-method_client" value="method-mini">채팅 클라이언트</option>
                 </select>
             </div>
 
@@ -86,25 +49,79 @@
             </div>
 
             <div class="container">
-                <span id="i18n-chat-display-method">채팅 표시 방법</span>
-                <select name="select_disp-method" id="select_disp-method">
-                    <option id="i18n-disp-method_ui" value="method-twitchui">트위치 UI 복사</option>
-                    <option id="i18n-disp-method_client" value="method-mini">채팅 클라이언트</option>
+                <span id="i18n-point-auto-click">포인트 상자 자동 클릭</span>
+                <select name="select_pointBox-method" id="select_pointBox-method">
+                    <option id="i18n-pointBox-method_on" value="pointBox-method-on">켜기</option>
+                    <option id="i18n-pointBox-method_off" value="pointBox-method-off">끄기</option>
                 </select>
             </div>
-            <hr>
-        </div>
-        <div class='container'>
-            <button class="long-btn" id='add_filter_btn'>필터 설정</button>
-        </div>
-        <div class='container'>
-            <button class="long-btn" id='save-chat'>채팅을 사진으로 저장</button>
         </div>
 
-        <!-- <span>모바일에서도 이용할 수 있는 웹 버전 Twitch Badge Collector 입니다.</span> -->
+        
 
-        <div class='container'>
-            <button class="long-btn" id='web-version'>TBC 웹 버전</button>
+        <div class="menu_title">
+            <span class="text" id="i18n-chat-client-setting">채팅 클라이언트 설정</span>
+        </div>
+
+        <div class="select-lists container_col">
+            <div class="container">
+                <span id="i18n-theme">채팅창 테마</span>
+                <select name="select_theme" id="select_theme">
+                    <option id='i18n-theme__auto' value="theme__auto">자동</option>
+                    <option id='i18n-theme__dark' value="theme__dark">어두운 테마</option>
+                    <option id='i18n-theme__light' value="theme__light">밝은 테마</option>
+                </select>
+            </div>
+
+            <div class="container">
+                <span id="i18n-language">언어</span>
+                <select name="select_language" id="select_language">
+                    <option value="language__ko">한국어</option>
+                    <option value="language__en">English</option>
+                </select>
+            </div>
+
+            <div class="container">
+                <span id="i18n-fontSize">폰트 크기</span>
+                <select name="select_font-size" id="select_font-size">
+                    <option id="i18n-fontSize__small" value="small">작게</option>
+                    <option id="i18n-fontSize__default" value="default">기본값</option>
+                    <option id="i18n-fontSize__big" value="big">크게</option>
+                    <option id="i18n-fontSize__bigger" value="bigger">더 크게</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="menu_title">
+            <span class="text" id="i18n-replay-setting">다시보기 채팅창 설정</span>
+        </div>
+
+        <div class="select-lists container_col">
+            <div class="container">
+                <span id="i18n-replay-chat-size-setting">채팅창 크기 설정</span>
+                <input type="range" name="input_replay-chat-size" id="input_replay-chat-size" min="0" max="100">
+            </div>
+        </div>
+
+
+
+        <div class="menu_title">
+            <span class="text" id="i18n-etc-setting">기타</span>
+        </div>
+
+        <div class="select-lists container_col">
+            <div class="container">
+                <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
+                        target='_blank' class='text' id="review_link">
+                        확장 프로그램 평가
+                    </a>
+            </div>
+
+            <div class="container">
+                <a href="https://discord.gg/ZM6Eazpz5V" target='_blank' class='text' id="discord_link">
+                    디스코드
+                </a>
+            </div>
         </div>
     </div>
 </body>
