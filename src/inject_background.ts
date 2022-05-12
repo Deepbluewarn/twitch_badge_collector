@@ -114,9 +114,15 @@ import { base_url } from "./const";
     }
 
     function isReplayPage(){
-        const regex = /\/videos\/[0-9]*/g;
+        const replay_regex = /\/videos\/[0-9]*/g;
         const url = new URL(location.href);
-        return regex.test(url.pathname);
+
+        if(replay_regex.test(url.pathname)){
+            return 'replay';
+        }else if(url.pathname.split('/')[2] === 'clip'){
+            return 'clip';
+        }
+        return false;
     }
 
     async function createCloneContainer(){
@@ -141,13 +147,33 @@ import { base_url } from "./const";
         change_container_ratio(container_ratio);
     }
 
+    function sendMessageReplayFrame(msg_type: string, value: any) {
+        const wtbcReplayFrame = getReplayFrame();
+
+        if (wtbcReplayFrame) {
+            wtbcReplayFrame.contentWindow?.postMessage({
+                sender: 'tbc', body: [{
+                    tbc_messageId: 'omitted',
+                    type: msg_type,
+                    value: value
+                }]
+            }, base_url);
+        }
+    }
+
+    function getVideoInfo(video_player: HTMLVideoElement){
+        return {
+            time: video_player.currentTime
+        }
+    }
+
     async function createReplayContainer(video_chat: HTMLDivElement, video_player: HTMLVideoElement){
         if (document.getElementById('tbc-replay')) return false;
 
         const replayContainer = document.createElement('div');
         replayContainer.id = 'tbc-replay';
 
-        const frame = getFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay');
+        const frame = createFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay');
     
         replayContainer.appendChild(frame);
 
@@ -159,35 +185,15 @@ import { base_url } from "./const";
         const res = await (browser.storage.local.get('replayChatSize'));
         change_container_ratio(res.replayChatSize);
 
-        video_player.onpause = (e) => {
-            const wtbcReplayFrame = getReplayFrame();
-            
-            if(wtbcReplayFrame){
-                wtbcReplayFrame.contentWindow?.postMessage({sender: 'tbc', body : [{
-                    tbc_messageId: 'omitted',
-                    type: 'wtbc-player-paused',
-                    value: video_player.currentTime
-                }]}, base_url);
-            }
-        }
-
-        video_player.onplaying = (e) => {
-            const wtbcReplayFrame = getReplayFrame();
-            
-            if(wtbcReplayFrame){
-                wtbcReplayFrame.contentWindow?.postMessage({sender: 'tbc', body : [{
-                    tbc_messageId: 'omitted',
-                    type: 'wtbc-player-playing',
-                    value: video_player.currentTime
-                }]}, base_url);
-            }
-        }
+        video_player.ontimeupdate =  e => {
+            sendMessageReplayFrame('wtbc-player-time', getVideoInfo(video_player));
+        };
 
         frame.onload = () => {
             const msgObj = [];
             const msgLists = [
                 ['tbc_messageId', tbc_messageId],
-                ['wtbc-replay-init', true]
+                ['wtbc-replay-init', { type : isReplayPage(), time : video_player.currentTime }]
             ]
             for(let msg of msgLists){
                 msgObj.push({
@@ -234,7 +240,7 @@ import { base_url } from "./const";
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
     }
 
-    function getFrame(title: string, id: string, channel: string, path: string){
+    function createFrame(title: string, id: string, channel: string, path: string){
         const params = new URLSearchParams();
         params.set('channel', channel);
         params.set('ext_version', browser.runtime.getManifest().version);
@@ -254,7 +260,7 @@ import { base_url } from "./const";
     function cloneChatByMini(channel: string){
 
         browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
-            const frame = getFrame('Twitch Badge Collector :: Mini', 'wtbc-mini', channel, 'mini');
+            const frame = createFrame('Twitch Badge Collector :: Mini', 'wtbc-mini', channel, 'mini');
             clone_container.appendChild(frame);
             let theme = res.theme;
             if(theme === 'auto'){
@@ -817,6 +823,10 @@ import { base_url } from "./const";
             }else if(key === 'replayChatSize'){
                 change_container_ratio(newValue);
                 return;
+            }else if(key === 'theme'){
+                if(newValue === 'auto'){
+                    newValue = getTwitchTheme();
+                }
             }
 
             postMessageToFrame(key, newValue);
