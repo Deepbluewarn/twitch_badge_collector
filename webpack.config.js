@@ -18,7 +18,6 @@ module.exports = {
     entry: {
         extension_background: './src/extension_background.ts',
         inject_background: './src/inject_background.ts',
-        video_script: '/src/video_script.ts',
         filterBridge: './src/filterBridge.ts',
         mock_fetch: './src/mock_fetch.ts',
         popup: './src/popup.ts'
