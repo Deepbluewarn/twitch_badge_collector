@@ -1,9 +1,10 @@
 .default {
-	--text-color: #f9f9f9;
-	--text-color-inverted : #000000;
-	--title-background-color: #203b5e;
-    --background-color: #13243a;
-	--select-bgcolor: #203b5e;
+	--text-color: #000000;
+	--text-color-inverted : #f9f9f9;
+	--title-background-color: #9ac4e7;
+	--ttile-color : #003e6c;
+    --background-color: #ffffff;
+	--select-bgcolor: #ffffff;
 	--scrollbar-color: #e5e5e5;
 }
 
@@ -13,7 +14,7 @@
 }
 
 *::-webkit-scrollbar{
-    width: 4px;
+    width: 6px;
     background-color: rgba(255, 255, 255, 0);
 }
 *::-webkit-scrollbar-thumb{
@@ -31,16 +32,20 @@ body {
 }
 select{
 	background-color: var(--select-bgcolor);
-    color: var(--text-color-1);
 	height: 1.7rem;
     font-family: inherit;
-    border-radius: 4px;
     padding-left: 4px;
-    border: none;
+	border: 1px solid #cfcfcf;
 }
 
 a{
 	text-decoration: none;
+}
+a:visited{
+	color: inherit;
+}
+a:link{
+	color: inherit;
 }
 
 p{
@@ -80,7 +85,7 @@ button:disabled{
 }
 
 #setting_container {
-	height: 20rem;
+	height: 21rem;
     overflow: auto;
 }
 
@@ -98,18 +103,32 @@ button:disabled{
 	display: flex;
     flex-direction: column;
     justify-content: space-between;
-	gap: 8px;
+    gap: 8px;
     font-size: 0.9rem;
-    padding: 0px 8px 0px 8px;
+    padding: 8px;
+    border-bottom: 1px solid #00000029;
 }
-.select-lists{
-	gap: 8px;
-    margin: 8px 0 8px 0;
+.container:nth-last-child(1){
+	border: none;
+}
+.button-container{
+    font-size: 0.9rem;
+	cursor: pointer;
+	flex-direction: row;
+    align-items: center;
+}
+.button-container:hover{
+	background-color: whitesmoke;
 }
 
 .menu_title{
-    padding: 8px 8px 8px 8px;
+	display: flex;
+    align-items: center;
+	height: 1.4rem;
+    padding: 8px 8px 8px 10px;
     background-color: var(--title-background-color);
+	color: var(--ttile-color);
+	font-weight: bold;
 }
 .bg_flex {
 	display: flex;
@@ -162,21 +181,9 @@ button:disabled{
 	padding: .4rem 0 .4rem 0;
 }
 
-.button-like{
-	background-color: #2f5e9d;
-    border-radius: 4px;
-    padding: 4px 24px 4px 24px;
-	cursor: pointer;
-}
-.button-like:hover{
-	font-weight: bold;
-}
-
 .text {
 	font-size: .9rem;
-	/* align-self: center; */
 	white-space: nowrap;
-	color: var(--text-color);
 }
 
 .link{

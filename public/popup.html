@@ -8,6 +8,9 @@
 
     <link href="../dist/css/popup.css" rel="stylesheet" type="text/css" />
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="preload" as="style">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
     <link rel="preload" as="style" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" />
 
@@ -26,11 +29,13 @@
         </div>
 
         <div class="select-lists container_col">
-            <div class="container">
-                <span class='button-like' id='add_filter_btn'>필터 설정</span>
+            <div class="container button-container" id='add_filter_btn'>
+                <span id='add_filter_btn_text'>필터 설정</span>
+                <span class="material-icons-round">chevron_right</span>
             </div>
-            <div class="container">
-                <span class='button-like' id='save-chat'>채팅을 이미지로 저장</span>
+            <div class="container button-container" id='save-chat'>
+                <span id='save-chat_text'>채팅을 이미지로 저장</span>
+                <span class="material-icons-round">chevron_right</span>
             </div>
             <div class="container">
                 <span id="i18n-chat-display-method">채팅 표시 방법</span>
@@ -114,7 +119,14 @@
                 <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/reviews"
                         target='_blank' class='text' id="review_link">
                         확장 프로그램 평가
-                    </a>
+                </a>
+            </div>
+
+            <div class="container">
+                <a href="https://chrome.google.com/webstore/detail/twitch-badge-collector/gnkpenemgdhdckabddlbcjlhplmhlhoj/support"
+                        target='_blank' class='text' id="support_link">
+                        지원
+                </a>
             </div>
 
             <div class="container">

@@ -13,6 +13,7 @@ params.set('ext_version', version);
 
 function localizeHtmlPage() {
     const review_link = <HTMLAnchorElement>document.getElementById('review_link');
+    const support_link = <HTMLAnchorElement>document.getElementById('support_link');
     const discord_link = <HTMLAnchorElement>document.getElementById('discord_link');
 
     (document.getElementById('i18n-general-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('generalSetting');
@@ -45,9 +46,11 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-replay-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('replay_chat_settings');
     (document.getElementById('i18n-replay-chat-size-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chat_window_size_setting');
 
-    add_filter_btn.textContent = browser.i18n.getMessage('p_filter_btn');
-    save_chat_btn.textContent = browser.i18n.getMessage('p_save_chat_btn');
+    (document.getElementById('add_filter_btn_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_filter_btn');
+    (document.getElementById('save-chat_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_save_chat_btn');
+    
     review_link.textContent = browser.i18n.getMessage('review');
+    support_link.textContent = browser.i18n.getMessage('support');
     discord_link.textContent = browser.i18n.getMessage('discord');
 }
 
