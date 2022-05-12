@@ -23,6 +23,9 @@
   "review" : {
     "message" : "Review"
   },
+  "support" : {
+    "message" : "Support"
+  },
   "discord" : {
     "message" : "Discord"
   },

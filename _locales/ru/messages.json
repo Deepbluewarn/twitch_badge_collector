@@ -23,6 +23,9 @@
   "review": {
     "message": "ОБЗОР"
   },
+  "support" : {
+    "message" : "Support"
+  },
   "discord": {
     "message": "Discord"
   },
