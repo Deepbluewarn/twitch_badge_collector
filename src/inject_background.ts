@@ -30,7 +30,8 @@ import { base_url } from "./const";
     let pointBox_auto = true;
     let mock_loaded = false;
 
-    let StreamPagetimer: number;
+    let StreamPageTimer: number;
+    let replayFrameLoaded: boolean = false;
 
     const CLONE_CHAT_COUNT = 144;
 
@@ -150,7 +151,7 @@ import { base_url } from "./const";
     function sendMessageReplayFrame(msg_type: string, value: any) {
         const wtbcReplayFrame = getReplayFrame();
 
-        if (wtbcReplayFrame) {
+        if (wtbcReplayFrame && replayFrameLoaded) {
             wtbcReplayFrame.contentWindow?.postMessage({
                 sender: 'tbc', body: [{
                     tbc_messageId: 'omitted',
@@ -193,8 +194,11 @@ import { base_url } from "./const";
             const msgObj = [];
             const msgLists = [
                 ['tbc_messageId', tbc_messageId],
-                ['wtbc-replay-init', { type : isReplayPage(), time : video_player.currentTime }]
+                ['wtbc-replay-init', { type : isReplayPage() }]
             ]
+
+            replayFrameLoaded = true;
+
             for(let msg of msgLists){
                 msgObj.push({
                     tbc_messageId: tbc_messageId,
@@ -349,8 +353,20 @@ import { base_url } from "./const";
         return document.getElementById('tbc-replay');
     }
 
+    function removeReplayContainer(){
+        const replayClone = document.getElementById('tbc-replay');
+        const replayOrig = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
+
+        replayFrameLoaded = false;
+        
+        if (replayClone) replayClone.remove();
+        if (replayOrig) replayOrig.style.removeProperty('height');
+    }
+
     let StreamPageCallback: MutationCallback = async function (mutationRecord: MutationRecord[]) {
         if(isReplayPage()){
+            removeReplayContainer();
+
             const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
             const video_player: HTMLVideoElement | undefined = document.getElementsByClassName('video-ref')[0].getElementsByTagName('video')[0];
             
@@ -364,11 +380,7 @@ import { base_url } from "./const";
             return;
         }
 
-        const replayClone = document.getElementById('tbc-replay');
-        const replayOrig = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
-
-        if (replayClone) replayClone.remove();
-        if (replayOrig) replayOrig.style.removeProperty('height');
+        removeReplayContainer();
 
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
         let pointSummary: Element = document.getElementsByClassName('community-points-summary')[0];
@@ -649,8 +661,8 @@ import { base_url } from "./const";
             stream_page_observer = observeDOM(target, default_config, StreamPageCallback);
         }
 
-        clearTimeout(StreamPagetimer);
-        StreamPagetimer = window.setTimeout(() => {
+        clearTimeout(StreamPageTimer);
+        StreamPageTimer = window.setTimeout(() => {
             if(stream_page_observer){
                 stream_page_observer.disconnect();
             }
