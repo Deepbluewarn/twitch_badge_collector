@@ -1,7 +1,5 @@
 import browser from "webextension-polyfill";
 
-// const version_history = ["1.3.2", "1.4.0", "1.4.2", "1.4.3", "1.4.4", "1.4.5", "1.4.6"];
-
 function get_new_filter() {
     const filter = new Map();
     filter.set('streamer', { filter_id: 'streamer', category: 'badge_uuid', filter_type: 'include', value: '5527c58c-fb7d-422d-b71b-f309dcb85cc1', note: 'Streamer' });
@@ -16,25 +14,13 @@ browser.runtime.onInstalled.addListener(function (details: any) {
     if(details.reason === 'install'){
         browser.storage.local.set({filter : Array.from(get_new_filter())});
     }
-    // else if(details.reason === 'update'){
-        
-    //     const currentVersion = browser.runtime.getManifest().version;
-    //     const prev_version = details.previousVersion;
-
-    //     if(prev_version !== currentVersion && version_history.includes(prev_version)){
-    //         browser.storage.local.get('filter').then(res => {
-    //             browser.storage.local.set({filter : Object.fromEntries(res.filter)});
-    //         });
-    //     }
-    // }
-    browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', 'replayChatSize']).then(res => {
+    browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto']).then(res => {
         const language = res.language ? res.language : navigator.language;
         const theme = res.theme ? res.theme : 'auto';
         const font_size = res.font_size ? res.font_size : 'default';
         const position = res.position ? res.position : 'position-down';
         const method = res.chatDisplayMethod ? res.chatDisplayMethod : 'method-twitchui';
         const pointBoxAuto = res.pointBox_auto ? res.pointBox_auto : 'pointBox-method-on';
-        const replayChatSize = res.replayChatSize ? res.replayChatSize : '30';
 
         browser.storage.local.set({
             language : language,
@@ -42,8 +28,7 @@ browser.runtime.onInstalled.addListener(function (details: any) {
             font_size : font_size, 
             position : position,
             chatDisplayMethod : method,
-            pointBox_auto : pointBoxAuto,
-            replayChatSize : replayChatSize
+            pointBox_auto : pointBoxAuto
         });
     });
 });
