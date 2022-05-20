@@ -12,10 +12,7 @@ import { base_url } from "./const";
     let default_config: MutationObserverInit = { childList: true, subtree: true, attributeFilter: ["class"] };
 
     let original_container: HTMLDivElement;
-    let clone_container: HTMLDivElement;
-
-    let replayChatClone: HTMLDivElement;
-    let replayChatOrig: HTMLDivElement;
+    let tbc_container: HTMLDivElement;
     
     let container_ratio: number;
     let reversed = false;
@@ -26,11 +23,13 @@ import { base_url } from "./const";
     let chatDisplayMethod: displayMethod = 'method-twitchui';
 
     let streamChatFound = false;
+    let replayChatFound = false;
     let pointSummaryFound = false;
     let pointBox_auto = true;
     let mock_loaded = false;
 
     let StreamPageTimer: number;
+    let miniFrameLoaded: boolean = false;
     let replayFrameLoaded: boolean = false;
 
     const CLONE_CHAT_COUNT = 144;
@@ -89,16 +88,16 @@ import { base_url } from "./const";
     function reverseChatContainer(position: position){
         reversed = position === 'position-up';
 
-        const handle_container = document.getElementsByClassName('handle_container')[0];
+        const handle_container = <HTMLDivElement>document.getElementsByClassName('handle_container')[0];
 
         if(reversed){
-            original_container.classList.add('orig_reverse');
-            handle_container.classList.add('handle_reverse');
-            clone_container.classList.add('clone_reverse');
+            original_container.style.order = '3';
+            handle_container.style.order = '2';
+            tbc_container.style.order = '1';
         }else{
-            original_container.classList.remove('orig_reverse');
-            handle_container.classList.remove('handle_reverse');
-            clone_container.classList.remove('clone_reverse');
+            original_container.style.order = '1';
+            handle_container.style.order = '2';
+            tbc_container.style.order = '3';
         }
     }
 
@@ -131,13 +130,13 @@ import { base_url } from "./const";
         if (!chat_room) return false;
 
         original_container = <HTMLDivElement>chat_room.getElementsByClassName('scrollable-area')[0];
-        clone_container = document.createElement('div');
+        tbc_container = document.createElement('div');
 
         original_container.classList.add('tbc-origin');
-        clone_container.id = 'tbc-clone';
+        tbc_container.id = 'tbc-container';
 
         chat_room.firstChild?.appendChild(createContainerHandler());
-        chat_room.firstChild?.appendChild(clone_container);
+        chat_room.firstChild?.appendChild(tbc_container);
 
         const ps_res = await browser.storage.local.get('position');
         const cr_res = await (browser.storage.local.get('container_ratio'));
@@ -148,20 +147,6 @@ import { base_url } from "./const";
         change_container_ratio(container_ratio);
     }
 
-    function sendMessageReplayFrame(msg_type: string, value: any) {
-        const wtbcReplayFrame = getReplayFrame();
-
-        if (wtbcReplayFrame && replayFrameLoaded) {
-            wtbcReplayFrame.contentWindow?.postMessage({
-                sender: 'tbc', body: [{
-                    tbc_messageId: 'omitted',
-                    type: msg_type,
-                    value: value
-                }]
-            }, base_url);
-        }
-    }
-
     function getVideoInfo(video_player: HTMLVideoElement){
         return {
             time: video_player.currentTime
@@ -169,25 +154,33 @@ import { base_url } from "./const";
     }
 
     async function createReplayContainer(video_chat: HTMLDivElement, video_player: HTMLVideoElement){
-        if (document.getElementById('tbc-replay')) return false;
+        if (document.getElementById('wtbc-replay')) return false;
 
         const replayContainer = document.createElement('div');
-        replayContainer.id = 'tbc-replay';
+        replayContainer.id = 'tbc-container';
 
         const frame = createFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay');
-    
+
+        replayContainer.classList.add('tbc-replay');
         replayContainer.appendChild(frame);
 
+        video_chat.parentElement?.classList.add('flex_column');
+        video_chat.parentElement?.appendChild(createContainerHandler());
         video_chat.parentElement?.appendChild(replayContainer);
-        replayChatClone = replayContainer;
-        replayChatOrig = video_chat;
-        video_chat.style.height = '50%';
 
-        const res = await (browser.storage.local.get('replayChatSize'));
-        change_container_ratio(res.replayChatSize);
+        original_container = video_chat;
+        tbc_container = replayContainer;
+
+        const ps_res = await browser.storage.local.get('position');
+        const cr_res = await (browser.storage.local.get('container_ratio'));
+
+        container_ratio = cr_res.container_ratio;
+
+        reverseChatContainer(ps_res.position);
+        change_container_ratio(container_ratio);
 
         video_player.ontimeupdate =  e => {
-            sendMessageReplayFrame('wtbc-player-time', getVideoInfo(video_player));
+            sendMessageToFrame('wtbc-player-time', getVideoInfo(video_player));
         };
 
         frame.onload = () => {
@@ -237,7 +230,7 @@ import { base_url } from "./const";
         message_container.textContent = '';//remove all chat lines.
 
         const extVersion = browser.runtime.getManifest().version;
-        clone_container.appendChild(twitchClone);
+        tbc_container.appendChild(twitchClone);
 
         addSystemMessage(`Twitch Badge Collector v${extVersion}`);
 
@@ -265,13 +258,15 @@ import { base_url } from "./const";
 
         browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
             const frame = createFrame('Twitch Badge Collector :: Mini', 'wtbc-mini', channel, 'mini');
-            clone_container.appendChild(frame);
+            tbc_container.appendChild(frame);
             let theme = res.theme;
             if(theme === 'auto'){
                 theme = getTwitchTheme();
             }
 
             frame.onload = () => {
+                miniFrameLoaded = true; 
+
                 const msgObj = [];
                 const msgLists = [
                     ['tbc_messageId', tbc_messageId],
@@ -349,38 +344,39 @@ import { base_url } from "./const";
         if (chatIsAtBottom) scroll_area.scrollTop = scroll_area.scrollHeight;
     }
 
-    function replayCloneAvailable(){
-        return document.getElementById('tbc-replay');
+    function getTBCContainer(){
+        return document.getElementById('tbc-container');
     }
 
-    function removeReplayContainer(){
-        const replayClone = document.getElementById('tbc-replay');
-        const replayOrig = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
+    function removeContainer(){
+        const container = document.getElementById('tbc-container');
+        const handles = document.getElementsByClassName('handle_container');
 
         replayFrameLoaded = false;
+        miniFrameLoaded = false;
+
+        if(container) container.remove();
         
-        if (replayClone) replayClone.remove();
-        if (replayOrig) replayOrig.style.removeProperty('height');
+        for(let handle of Array.from(handles)){
+            handle.remove();
+        }
     }
 
     let StreamPageCallback: MutationCallback = async function (mutationRecord: MutationRecord[]) {
         if(isReplayPage()){
-            removeReplayContainer();
-
-            const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('channel-root__right-column')[0];
+            const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('video-chat__message-list-wrapper')[0];
             const video_player: HTMLVideoElement | undefined = document.getElementsByClassName('video-ref')[0].getElementsByTagName('video')[0];
             
-            if(video_chat && video_player && !replayCloneAvailable()){
-                observeReplayChatContainer(video_chat);
+            if(video_chat && video_player && !getReplayFrame() && !replayChatFound){
+                replayChatFound = true;
+                removeContainer();
                 createReplayContainer(video_chat, video_player);
             }
-            if(replayCloneAvailable() && stream_page_observer){
+            if(getReplayFrame() && stream_page_observer){
                 stream_page_observer.disconnect();
             }
             return;
         }
-
-        removeReplayContainer();
 
         let stream_chat: Element | undefined = document.getElementsByClassName('stream-chat')[0];
         let pointSummary: Element = document.getElementsByClassName('community-points-summary')[0];
@@ -388,14 +384,16 @@ import { base_url } from "./const";
         if (stream_chat && !streamChatFound) {
             streamChatFound = true;
 
+            removeContainer();
+
             const res = await (browser.storage.local.get('chatDisplayMethod'));
             chatDisplayMethod = res.chatDisplayMethod;
 
-            if (document.getElementById('tbc-clone')) return false;
+            if (document.getElementById('tbc-container')) return false;
 
             createCloneContainer();
 
-            const child = clone_container.firstChild;
+            const child = tbc_container.firstChild;
 
             if (child) {
                 if ((child as HTMLIFrameElement).id === 'wtbc-mini') return;
@@ -472,25 +470,11 @@ import { base_url } from "./const";
         }
     }
 
-    let replayChatContainerCallback = function (MutationRecord: MutationRecord[]){
-        const record = MutationRecord[0];
-
-        if(record.attributeName !== 'class') return;
-
-        if((record.target as HTMLDivElement).classList.contains('channel-root__right-column--expanded')){
-            // 극장 모드 아님.
-            replayChatClone.classList.remove('chat-player-theater');
-        }else{
-            // 극장 모드.
-            replayChatClone.classList.add('chat-player-theater');
-        }
-    }
-
     let themeCallback: MutationCallback = function (mutationRecord: MutationRecord[]){
         const record = mutationRecord[0];
         if(record.attributeName !== 'class' && (record.target as HTMLElement).tagName !== 'HTML') return;
 
-        postMessageToFrame('theme', getTwitchTheme());
+        sendMessageToFrame('theme', getTwitchTheme());
     }
 
     let newChatCallback: MutationCallback = function (mutationRecord: MutationRecord[]) {
@@ -653,6 +637,7 @@ import { base_url } from "./const";
      */
     let observeStreamPage = function (target: Element = document.body) {
         streamChatFound = false;
+        replayChatFound = false;
         pointSummaryFound = false;
 
         if (stream_page_observer) {
@@ -686,16 +671,6 @@ import { base_url } from "./const";
         }
     }
 
-    let observeReplayChatContainer = function(target: Element){
-        const option = {attributes: true};
-
-        if(replayChatObserver){
-            replayChatObserver.observe(target, option);
-        } else {
-            replayChatObserver = observeDOM(target, option, replayChatContainerCallback);
-        }
-    }
-
     let observeTheme = function (){
         const option = {attributes: true};
         if(themeObserver){
@@ -711,10 +686,9 @@ import { base_url } from "./const";
      * @returns 
      */
     let change_container_ratio = function (ratio: number) {
+
         if(!isReplayPage()){
-            if (!original_container || !clone_container) return;
-        }else{
-            if(!replayChatOrig || !replayChatClone) return;
+            if (!original_container || !tbc_container) return;
         }
         
         if (ratio != 0) ratio = ratio ? ratio : 30;
@@ -730,18 +704,11 @@ import { base_url } from "./const";
 
         let orig, clone;
 
-        if(isReplayPage()){
-            orig = replayChatOrig;
-            clone = replayChatClone;
-
-            clone.style.top = `${orig_size * 100}%`;
-        }else{
-            if(reversed){
-                [orig_size, clone_size] = [clone_size, orig_size];
-            }
-            orig = original_container;
-            clone = clone_container;
+        if(reversed){
+            [orig_size, clone_size] = [clone_size, orig_size];
         }
+        orig = original_container;
+        clone = tbc_container;
 
         orig.style.height = `${orig_size * 100}%`;
         clone.style.height = `${clone_size * 100}%`;
@@ -750,12 +717,7 @@ import { base_url } from "./const";
     let startDrag = function (e: MouseEvent | TouchEvent) {
         e.preventDefault();
 
-        if(!isReplayPage()){
-            const miniFrame = getMiniFrame();
-            if(chatDisplayMethod === 'method-mini' && miniFrame){
-                miniFrame.classList.add('freeze');
-            }
-        }
+        getTBCContainer()?.classList.add('freeze');
         
         window.addEventListener('mousemove', doDrag);
         window.addEventListener('touchmove', doDrag);
@@ -767,12 +729,13 @@ import { base_url } from "./const";
         let chat_room;
 
         if(isReplayPage()){
-            chat_room = replayChatOrig;
+            chat_room = original_container.parentElement;
         }else{
             chat_room = get_chat_room();
         }
         
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
         if (chat_room) {
             const rect = chat_room.getBoundingClientRect();
             let container_ratio = (1 - (clientY - rect.y) / rect.height) * 100;
@@ -782,12 +745,7 @@ import { base_url } from "./const";
     }
 
     let endDrag = function () {
-        if (!isReplayPage()) {
-            const miniFrame = getMiniFrame();
-            if (chatDisplayMethod === 'method-mini' && miniFrame) {
-                miniFrame.classList.remove('freeze');
-            }
-        }
+        getTBCContainer()?.classList.remove('freeze');
        
         browser.storage.local.set({container_ratio});
         window.removeEventListener('mousemove', doDrag);
@@ -798,24 +756,28 @@ import { base_url } from "./const";
     observeStreamPage();
     observeTheme();
 
-    function postMessageToFrame(key: string, value: any) {
-        let frame: HTMLIFrameElement | undefined = undefined;
+    function sendMessageToFrame(msg_type: string, value: any){
+        let frameLoaded: boolean = false;
 
-        if(chatDisplayMethod === 'method-mini'){
-            frame = getMiniFrame();
-        }else if(isReplayPage()){
-            frame = getReplayFrame();
-        }
+        let frame: HTMLIFrameElement | undefined = document.getElementById('tbc-container')?.getElementsByTagName('iframe')[0];
 
         if(!frame) return;
 
-        frame.contentWindow?.postMessage({
-            sender: 'tbc', body: [{
-                tbc_messageId: tbc_messageId,
-                type: key,
-                value: value
-            }]
-        }, base_url);
+        if(frame.id === 'wtbc-mini'){
+            frameLoaded = miniFrameLoaded;
+        }else if(frame.id === 'wtbc-replay'){
+            frameLoaded = replayFrameLoaded;
+        }
+
+        if(frame && frameLoaded){
+            frame.contentWindow?.postMessage({
+                sender: 'tbc', body: [{
+                    tbc_messageId: tbc_messageId,
+                    type: msg_type,
+                    value: value
+                }]
+            }, base_url);
+        }
     }
 
     browser.storage.onChanged.addListener(function (changes) {
@@ -832,16 +794,13 @@ import { base_url } from "./const";
             }else if(key === 'chatDisplayMethod'){
                 chatDisplayMethod = newValue;
                 return;
-            }else if(key === 'replayChatSize'){
-                change_container_ratio(newValue);
-                return;
             }else if(key === 'theme'){
                 if(newValue === 'auto'){
                     newValue = getTwitchTheme();
                 }
             }
 
-            postMessageToFrame(key, newValue);
+            sendMessageToFrame(key, newValue);
         }
     });
 
