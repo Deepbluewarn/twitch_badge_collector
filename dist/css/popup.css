@@ -264,6 +264,10 @@ button:disabled{
 	font-weight: bold;
 }
 
+#donation_img{
+	width: 100%;
+}
+
 #links {
 	margin: 0 .7rem 0 .7rem;
 	padding: 0 0 .3rem 0;
