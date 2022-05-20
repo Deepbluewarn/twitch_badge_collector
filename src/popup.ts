@@ -2,7 +2,6 @@ import browser from "webextension-polyfill";
 import { base_url } from "./const";
 
 const version = chrome.runtime.getManifest().version;
-type displayMethod = 'method-twitchui' | 'method-mini';
 const dev_checkbox = <HTMLInputElement>document.getElementById('dev-checkbox');
 const add_filter_btn = <HTMLSpanElement>document.getElementById('add_filter_btn');
 const save_chat_btn = <HTMLSpanElement>document.getElementById('save-chat');
@@ -43,8 +42,8 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-disp-method_ui') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_twitchui');
     (document.getElementById('i18n-disp-method_client') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_mini');
 
-    (document.getElementById('i18n-replay-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('replay_chat_settings');
-    (document.getElementById('i18n-replay-chat-size-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chat_window_size_setting');
+    // (document.getElementById('i18n-replay-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('replay_chat_settings');
+    // (document.getElementById('i18n-replay-chat-size-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chat_window_size_setting');
 
     (document.getElementById('add_filter_btn_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_filter_btn');
     (document.getElementById('save-chat_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_save_chat_btn');
@@ -57,29 +56,21 @@ function localizeHtmlPage() {
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
-browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', 'replayChatSize', 'dev']).then(res => {
+browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', /*'replayChatSize'*/ 'dev']).then(res => {
     (document.getElementById('select_language') as HTMLSelectElement).value = `language__${res.language}`;
     (document.getElementById('select_theme') as HTMLSelectElement).value = `theme__${res.theme}`;
     (document.getElementById('select_font-size') as HTMLSelectElement).value = res.font_size;
     (document.getElementById('select_chat-position') as HTMLSelectElement).value = res.position;
     (document.getElementById('select_disp-method') as HTMLSelectElement).value = res.chatDisplayMethod;
     (document.getElementById('select_pointBox-method') as HTMLSelectElement).value = res.pointBox_auto;
-    (document.getElementById('input_replay-chat-size') as HTMLInputElement).value = res.replayChatSize;
 
     dev = res.dev;
     dev_checkbox.checked = res.dev;
-    initOptionStatus(res.chatDisplayMethod);
 });
 
 document.getElementById('setting_container')?.addEventListener('change', e => {
     const target = <HTMLSelectElement>e.target;
     let changed = target.value;
-
-    if(target.tagName === 'INPUT'){
-        if(target.id === 'input_replay-chat-size'){
-            browser.storage.local.set({ replayChatSize: changed });
-        }
-    }
 
     if (target.tagName !== 'SELECT') return;
 
@@ -94,20 +85,12 @@ document.getElementById('setting_container')?.addEventListener('change', e => {
     } else if (target.id === 'select_chat-position') {
         browser.storage.local.set({ position: changed });
     } else if (target.id === 'select_disp-method') {
-        initOptionStatus(changed as displayMethod);
+        // initOptionStatus(changed as displayMethod);
         browser.storage.local.set({ chatDisplayMethod: changed });
     } else if (target.id === 'select_pointBox-method') {
         browser.storage.local.set({ pointBox_auto : changed });
     }
 });
-
-function initOptionStatus(method: displayMethod) {
-    const disabled = method === 'method-twitchui';
-
-    (document.getElementById('select_language') as HTMLSelectElement).disabled = disabled;
-    (document.getElementById('select_theme') as HTMLSelectElement).disabled = disabled;
-    (document.getElementById('select_font-size') as HTMLSelectElement).disabled = disabled;
-}
 dev_checkbox.addEventListener('change', e=> {
     const target = <HTMLInputElement>e.target;
 
