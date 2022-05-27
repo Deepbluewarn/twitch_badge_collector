@@ -369,7 +369,9 @@ import { base_url } from "./const";
             
             if(video_chat && video_player && !getReplayFrame() && !replayChatFound){
                 replayChatFound = true;
-                removeContainer();
+
+                if (document.getElementById('tbc-container')) return false;
+
                 createReplayContainer(video_chat, video_player);
             }
             if(getReplayFrame() && stream_page_observer){
@@ -384,12 +386,10 @@ import { base_url } from "./const";
         if (stream_chat && !streamChatFound) {
             streamChatFound = true;
 
-            removeContainer();
+            if (document.getElementById('tbc-container')) return false;
 
             const res = await (browser.storage.local.get('chatDisplayMethod'));
             chatDisplayMethod = res.chatDisplayMethod;
-
-            if (document.getElementById('tbc-container')) return false;
 
             createCloneContainer();
 
