@@ -183,11 +183,14 @@ import { base_url } from "./const";
             sendMessageToFrame('wtbc-player-time', getVideoInfo(video_player));
         };
 
-        frame.onload = () => {
+        frame.onload = async () => {
             const msgObj = [];
+            const res = await browser.storage.local.get('theme');
+            const theme = res.theme === 'auto' ? getTwitchTheme() : res.theme;
             const msgLists = [
                 ['tbc_messageId', tbc_messageId],
-                ['wtbc-replay-init', { type : isReplayPage() }]
+                ['wtbc-replay-init', { type : isReplayPage() }],
+                ['theme', theme]
             ]
 
             replayFrameLoaded = true;
