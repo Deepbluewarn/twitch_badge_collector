@@ -19,15 +19,6 @@ Helpful when you have a chat you don't want to miss.
 
 See [Docs](https://tbc.bluewarn.dev/) for more details!
 
-## *1.4.8 Changelog*
-    > 2022-05-06
-    - Update design extension setting page.
-    - Add option auto point box click on/off.
-    - Support Twitch VOD replay chat.
-
-    
-    
-    
-    
-
-
+## *1.4.10 Changelog*
+    > 2022-05-20
+    - Improved usability of the replay chat window.
