@@ -153,13 +153,26 @@ import { base_url } from "./const";
         }
     }
 
-    async function createReplayContainer(video_chat: HTMLDivElement, video_player: HTMLVideoElement){
-        if (document.getElementById('wtbc-replay')) return false;
+    async function createReplayContainer(){
+        const replay_container = document.getElementById('wtbc-replay');
+        if (replay_container) replay_container.remove();
+
+        const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('video-chat__message-list-wrapper')[0];
+        const video_player: HTMLVideoElement | undefined = document.getElementsByClassName('video-ref')[0].getElementsByTagName('video')[0];
 
         const replayContainer = document.createElement('div');
         replayContainer.id = 'tbc-container';
 
-        const frame = createFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay');
+
+        const url = new URL(location.href);
+
+        let clip_id;
+        
+        if(url.pathname.split('/')[2] === 'clip'){
+            clip_id = url.pathname.split('/')[3];
+        }
+
+        const frame = createFrame('Twitch Badge Collector :: Replay', 'wtbc-replay', getChannelFromPath(), 'replay', clip_id);
 
         replayContainer.classList.add('tbc-replay');
         replayContainer.appendChild(frame);
@@ -240,10 +253,13 @@ import { base_url } from "./const";
         observeChatRoom(document.getElementsByClassName('stream-chat')[0]);
     }
 
-    function createFrame(title: string, id: string, channel: string, path: string){
+    function createFrame(title: string, id: string, channel: string, path: string, clip_id?: string){
         const params = new URLSearchParams();
         params.set('channel', channel);
         params.set('ext_version', browser.runtime.getManifest().version);
+        if(clip_id){
+            params.set('clip_id', clip_id);
+        }
         if(dev){
             params.set('dev', 'true');
         }
@@ -259,7 +275,7 @@ import { base_url } from "./const";
     }
     function cloneChatByMini(channel: string){
 
-        browser.storage.local.get(['position', 'theme', 'font_size', 'language']).then(res => {
+        browser.storage.local.get(['position', 'theme', 'font_size', 'chatTime', 'language']).then(res => {
             const frame = createFrame('Twitch Badge Collector :: Mini', 'wtbc-mini', channel, 'mini');
             tbc_container.appendChild(frame);
             let theme = res.theme;
@@ -276,6 +292,7 @@ import { base_url } from "./const";
                     ['language', res.lenguage],
                     ['font_size', res.font_size],
                     ['theme', theme],
+                    ['chatTime', res.chatTime],
                 ]
                 for(let msg of msgLists){
                     msgObj.push({
@@ -351,31 +368,18 @@ import { base_url } from "./const";
         return document.getElementById('tbc-container');
     }
 
-    function removeContainer(){
-        const container = document.getElementById('tbc-container');
-        const handles = document.getElementsByClassName('handle_container');
-
-        replayFrameLoaded = false;
-        miniFrameLoaded = false;
-
-        if(container) container.remove();
-        
-        for(let handle of Array.from(handles)){
-            handle.remove();
-        }
-    }
-
     let StreamPageCallback: MutationCallback = async function (mutationRecord: MutationRecord[]) {
+        
         if(isReplayPage()){
             const video_chat: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName('video-chat__message-list-wrapper')[0];
             const video_player: HTMLVideoElement | undefined = document.getElementsByClassName('video-ref')[0].getElementsByTagName('video')[0];
             
-            if(video_chat && video_player && !getReplayFrame() && !replayChatFound){
-                replayChatFound = true;
+            if(video_chat && video_player){
+                const tbc_container = document.getElementById('tbc-container');
 
-                if (document.getElementById('tbc-container')) return false;
+                if (tbc_container) tbc_container.remove();
 
-                createReplayContainer(video_chat, video_player);
+                createReplayContainer();
             }
             if(getReplayFrame() && stream_page_observer){
                 stream_page_observer.disconnect();
@@ -576,10 +580,6 @@ import { base_url } from "./const";
                         break;
                     }
                 }
-                if (nodeElement.classList.contains('chat-line__status') && nodeElement.getAttribute('data-a-target') === 'chat-welcome-message') {
-                    //채팅방 재접속. (when re-connected to chat room)
-                    // Mirror_of_Erised();
-                }
             });
         });
     }
@@ -658,7 +658,6 @@ import { base_url } from "./const";
     }
 
     let observeChatRoom = function (target: Element) {
-        //observer 가 중복 할당 되는것을 방지. 두번 할당되면 채팅이 두번씩 올라오는 끔찍한 일이 벌어진다.
         if (chat_room_observer) {
             chat_room_observer.observe(target, default_config);
         } else {
@@ -809,6 +808,10 @@ import { base_url } from "./const";
 
     browser.runtime.onMessage.addListener((message, sender) => {
         if (message.action === "onHistoryStateUpdated") {
+
+            miniFrameLoaded = false;
+            replayFrameLoaded = false;
+            
             injectMockFetch();
             observeStreamPage();
         }

@@ -1,32 +1,60 @@
 import { base_url } from "./const";
 
 const { fetch: origFetch } = window;
+
+let bodyBuffer: any[] = [];
+let onFrameLoaded = false;
+
 window.fetch = async (...args) => {
     const response = await origFetch(...args);
-    const regex = /^(https:\/\/api\.twitch\.tv\/v5\/videos\/)[0-9]*\/comments/;
 
-    if (regex.test(response.url)) {
-        const url = new URL(response.url);
-
-        url.searchParams.get('content_offset_seconds'); // 채팅창 리셋 후 추가.
-        url.searchParams.get('cursor'); // 저장된 cursor 와 같으면 채팅 추가.
-
+    if(response.url === 'https://gql.twitch.tv/gql'){
         response.clone().json().then(body => {
-            const frame = <HTMLIFrameElement>document.getElementById('wtbc-replay');
-            
-            if (frame) {
-                frame.contentWindow?.postMessage({
-                    sender: 'tbc', body: [{
-                        tbc_messageId: 'omitted',
-                        type: 'wtbc-replay',
-                        body: body,
-                        url: response.url
-                    }]
-                }, base_url);
+            if(!Array.isArray(body)) return;
+            for(let b of body){
+                if(b.extensions.operationName === 'VideoCommentsByOffsetOrCursor'){
+                    bodyBuffer.push(b);
+                }
             }
-        })
-        .catch(err => console.error(err));
+            
+            postBodyMessage(bodyBuffer);
+        });
     }
     
     return response;
 };
+
+window.onmessage = (e) => {
+    if(e.origin !== 'https://wtbc.bluewarn.dev') return;
+    if(onFrameLoaded) return;
+    if(e.data.sender !== 'wtbc') return;
+    if(e.data.body !== 'READY') return;
+
+    onFrameLoaded = true;
+
+    if(bodyBuffer.length > 0){
+        postBodyMessage(bodyBuffer);
+    }
+}
+
+const postBodyMessage = (body: any) => {
+    const frame = <HTMLIFrameElement>document.getElementById('wtbc-replay');
+
+    if(!frame) return;
+
+    for(let b of body){
+        if(b.extensions.operationName === 'VideoCommentsByOffsetOrCursor'){
+            if(!onFrameLoaded) return;
+
+            frame.contentWindow?.postMessage({
+                sender: 'tbc', body: [{
+                    tbc_messageId: 'omitted',
+                    type: 'wtbc-replay',
+                    value: b,
+                }]
+            }, base_url);
+
+            bodyBuffer = [];
+        }
+    }
+}
