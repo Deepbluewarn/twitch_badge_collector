@@ -18,10 +18,8 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-general-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('generalSetting');
     (document.getElementById('i18n-chat-client-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatClientSetting');
     (document.getElementById('i18n-etc-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('extraSetting');
-
     (document.getElementById('i18n-language') as HTMLSpanElement).textContent = browser.i18n.getMessage('language_text');
     (document.getElementById('i18n-theme') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatTheme');
-
     (document.getElementById('i18n-theme__auto') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme_auto');
     (document.getElementById('i18n-theme__dark') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme__dark');
     (document.getElementById('i18n-theme__light') as HTMLOptionElement).textContent = browser.i18n.getMessage('i18n_theme__light');
@@ -33,20 +31,17 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-position') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatPosition');
     (document.getElementById('i18n-position__up') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionUp');
     (document.getElementById('i18n-position__down') as HTMLOptionElement).textContent = browser.i18n.getMessage('chatPositionDown');
-
     (document.getElementById('i18n-point-auto-click') as HTMLSpanElement).textContent = browser.i18n.getMessage('pointBoxAutoClick');
     (document.getElementById('i18n-pointBox-method_on') as HTMLSpanElement).textContent = browser.i18n.getMessage('on');
     (document.getElementById('i18n-pointBox-method_off') as HTMLSpanElement).textContent = browser.i18n.getMessage('off');
-
     (document.getElementById('i18n-chat-display-method') as HTMLSpanElement).textContent = browser.i18n.getMessage('dispCopiedChatmethod');
     (document.getElementById('i18n-disp-method_ui') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_twitchui');
     (document.getElementById('i18n-disp-method_client') as HTMLOptionElement).textContent = browser.i18n.getMessage('method_mini');
-
-    // (document.getElementById('i18n-replay-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('replay_chat_settings');
-    // (document.getElementById('i18n-replay-chat-size-setting') as HTMLSpanElement).textContent = browser.i18n.getMessage('chat_window_size_setting');
-
     (document.getElementById('add_filter_btn_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_filter_btn');
     (document.getElementById('save-chat_text') as HTMLSpanElement).textContent = browser.i18n.getMessage('p_save_chat_btn');
+    (document.getElementById('i18n-chatTime') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatTime');
+    (document.getElementById('i18n-chatTime_on') as HTMLOptionElement).textContent = browser.i18n.getMessage('on');
+    (document.getElementById('i18n-chatTime_off') as HTMLOptionElement).textContent = browser.i18n.getMessage('off');
     
     review_link.textContent = browser.i18n.getMessage('review');
     support_link.textContent = browser.i18n.getMessage('support');
@@ -56,10 +51,11 @@ function localizeHtmlPage() {
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
-browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto', /*'replayChatSize'*/ 'dev']).then(res => {
+browser.storage.local.get(['position', 'theme', 'font_size', 'chatTime', 'language', 'chatDisplayMethod', 'pointBox_auto', /*'replayChatSize'*/ 'dev']).then(res => {
     (document.getElementById('select_language') as HTMLSelectElement).value = `language__${res.language}`;
     (document.getElementById('select_theme') as HTMLSelectElement).value = `theme__${res.theme}`;
     (document.getElementById('select_font-size') as HTMLSelectElement).value = res.font_size;
+    (document.getElementById('select_chat-time') as HTMLSelectElement).value = res.chatTime;
     (document.getElementById('select_chat-position') as HTMLSelectElement).value = res.position;
     (document.getElementById('select_disp-method') as HTMLSelectElement).value = res.chatDisplayMethod;
     (document.getElementById('select_pointBox-method') as HTMLSelectElement).value = res.pointBox_auto;
@@ -82,10 +78,11 @@ document.getElementById('setting_container')?.addEventListener('change', e => {
         browser.storage.local.set({ theme: changed });
     } else if (target.id === 'select_font-size') {
         browser.storage.local.set({ font_size: changed });
-    } else if (target.id === 'select_chat-position') {
+    } else if (target.id === 'select_chat-time'){
+        browser.storage.local.set({ chatTime : changed });
+    }else if (target.id === 'select_chat-position') {
         browser.storage.local.set({ position: changed });
     } else if (target.id === 'select_disp-method') {
-        // initOptionStatus(changed as displayMethod);
         browser.storage.local.set({ chatDisplayMethod: changed });
     } else if (target.id === 'select_pointBox-method') {
         browser.storage.local.set({ pointBox_auto : changed });

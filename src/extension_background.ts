@@ -14,10 +14,11 @@ browser.runtime.onInstalled.addListener(function (details: any) {
     if(details.reason === 'install'){
         browser.storage.local.set({filter : Array.from(get_new_filter())});
     }
-    browser.storage.local.get(['position', 'theme', 'font_size', 'language', 'chatDisplayMethod', 'pointBox_auto']).then(res => {
+    browser.storage.local.get(['position', 'theme', 'font_size', 'chatSize', 'language', 'chatDisplayMethod', 'pointBox_auto']).then(res => {
         const language = res.language ? res.language : navigator.language;
         const theme = res.theme ? res.theme : 'auto';
         const font_size = res.font_size ? res.font_size : 'default';
+        const chatTime = res.chatTime ? res.chatTime : 'on';
         const position = res.position ? res.position : 'position-down';
         const method = res.chatDisplayMethod ? res.chatDisplayMethod : 'method-twitchui';
         const pointBoxAuto = res.pointBox_auto ? res.pointBox_auto : 'pointBox-method-on';
@@ -26,6 +27,7 @@ browser.runtime.onInstalled.addListener(function (details: any) {
             language : language,
             theme : theme,
             font_size : font_size, 
+            chatTime : chatTime,
             position : position,
             chatDisplayMethod : method,
             pointBox_auto : pointBoxAuto
