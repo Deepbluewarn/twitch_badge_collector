@@ -65,6 +65,9 @@
   "fontSize_bigger": {
     "message": "Bigger"
   },
+  "chatTime" : {
+    "message" : "Show chat time"
+  },
   "chatPosition": {
     "message": "Chat Position"
   },

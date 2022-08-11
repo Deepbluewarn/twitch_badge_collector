@@ -65,6 +65,9 @@
   "fontSize_bigger" : {
     "message" : "더 크게"
   },
+  "chatTime" : {
+    "message" : "채팅 시간 표시"
+  },
   "chatPosition" : {
     "message" : "채팅 위치"
   },
