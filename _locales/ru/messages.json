@@ -100,5 +100,11 @@
   },
   "p_save_chat_btn": {
     "message": "Save chats as Image"
+  },
+  "newVersionAlertMessage" : {
+    "message" : "Twitch Badge Collector version 2 beta has been released."
+  },
+  "discontinueWarningMessage" : {
+    "message" : "Support and service for the current version will be discontinued after January 31, 2023."
   }
 }

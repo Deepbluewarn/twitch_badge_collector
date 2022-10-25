@@ -42,6 +42,9 @@ function localizeHtmlPage() {
     (document.getElementById('i18n-chatTime') as HTMLSpanElement).textContent = browser.i18n.getMessage('chatTime');
     (document.getElementById('i18n-chatTime_on') as HTMLOptionElement).textContent = browser.i18n.getMessage('on');
     (document.getElementById('i18n-chatTime_off') as HTMLOptionElement).textContent = browser.i18n.getMessage('off');
+
+    (document.getElementById('newVersionAlertMessage') as HTMLSpanElement).textContent = browser.i18n.getMessage('newVersionAlertMessage');
+    (document.getElementById('discontinueWarningMessage') as HTMLSpanElement).textContent = browser.i18n.getMessage('discontinueWarningMessage');
     
     review_link.textContent = browser.i18n.getMessage('review');
     support_link.textContent = browser.i18n.getMessage('support');
