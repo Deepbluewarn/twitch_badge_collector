@@ -102,9 +102,12 @@
     "message" : "채팅을 이미지로 저장"
   },
   "newVersionAlertMessage" : {
-    "message" : "Twitch Badge Collector 버전 2 베타가 출시되었습니다."
+    "message" : "Twitch Badge Collector 버전 2가 출시되었습니다."
   },
   "discontinueWarningMessage" : {
     "message" : "현재 버전은 2023년 01월 31일 이후 지원 밎 서비스가 중단될 예정입니다."
+  },
+  "close": {
+    "message": "닫기"
   }
 }

@@ -1,5 +1,5 @@
 import browser from "webextension-polyfill";
-import { base_url } from "./const";
+// import { base_url } from "./const";
 
 const version = chrome.runtime.getManifest().version;
 const dev_checkbox = <HTMLInputElement>document.getElementById('dev-checkbox');
@@ -51,6 +51,31 @@ function localizeHtmlPage() {
     discord_link.textContent = browser.i18n.getMessage('discord');
 }
 
+const downloadFile = (filter: string, fileName: string, fileType: string) => {
+    const mapFilter = new Map<any, any>(JSON.parse(filter).filter);
+    let _filter = Array.from(mapFilter.values());
+
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = ('0' + (today.getMonth() + 1)).slice(-2);
+    let day = ('0' + today.getDate()).slice(-2);
+    let dateString = year + '-' + month + '-' + day;
+
+    _filter.unshift({
+        version: 'wtbc_0.0.1',
+        date: new Date().getTime()
+    });
+    let serialized = JSON.stringify(_filter, null, 4);
+
+    let vLink = document.createElement('a'),
+        vBlob = new Blob([serialized], { type: "octet/stream" }),
+        vName = dateString + '_filter_backup.tbc',
+        vUrl = window.URL.createObjectURL(vBlob);
+    vLink.setAttribute('href', vUrl);
+    vLink.setAttribute('download', vName);
+    vLink.click();
+}
+
 window.addEventListener('load', e => {
     localizeHtmlPage();
 });
@@ -67,6 +92,17 @@ browser.storage.local.get(['position', 'theme', 'font_size', 'chatTime', 'langua
     dev_checkbox.checked = res.dev;
 });
 
+document.getElementById('filter_backup')?.addEventListener('click', e => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+    const dateString = year + '-' + month + '-' + day;
+
+    browser.storage.local.get('filter').then(filter=> {
+        downloadFile(JSON.stringify(filter), `${dateString}_filter_backup.tbc`, 'text/json');
+    });
+});
 document.getElementById('setting_container')?.addEventListener('change', e => {
     const target = <HTMLSelectElement>e.target;
     let changed = target.value;
@@ -97,11 +133,11 @@ dev_checkbox.addEventListener('change', e=> {
     dev = target.checked;
     browser.storage.local.set({dev: target.checked});
 });
-add_filter_btn.addEventListener('click', e => {
-    if (dev) params.set('dev', 'true');
-    browser.tabs.create({ url: `${base_url}setting/filter?${params}` });
-});
-save_chat_btn.addEventListener('click', e => {
-    if (dev) params.set('dev', 'true');
-    browser.tabs.create({ url: `${base_url}chat?${params}` });
-});
+// add_filter_btn.addEventListener('click', e => {
+//     if (dev) params.set('dev', 'true');
+//     browser.tabs.create({ url: `${base_url}setting/filter?${params}` });
+// });
+// save_chat_btn.addEventListener('click', e => {
+//     if (dev) params.set('dev', 'true');
+//     browser.tabs.create({ url: `${base_url}chat?${params}` });
+// });

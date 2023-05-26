@@ -278,3 +278,8 @@ button:disabled{
 .hidden{
 	display: none;
 }
+
+#filter_backup {
+	width: 100%;
+	height: 4.4rem;
+}

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_ExtensionName__",
-  "version": "1.4.14",
+  "version": "4.0.0",
   "description": "__MSG_ExtensionDesc__",
   "short_name": "TBC",
   "default_locale": "en",
@@ -9,41 +9,11 @@
     "128": "public/icons/cc_icon128.png"
   },
   "permissions": [
-    "webNavigation",
     "storage"
-  ],
-  "host_permissions": [
-    "*://*.twitch.tv/*"
   ],
   "background": {
     "service_worker": "dist/js/extension_background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "*://*.twitch.tv/*"
-      ],
-      "all_frames" : true,
-      "css": [
-        "dist/css/inject_background.css"
-      ],
-      "js": [
-        "dist/js/inject_background.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://wtbc.bluewarn.dev/setting/filter*"
-      ],
-      "js": [
-        "dist/js/filterBridge.js"
-      ]
-    }
-  ],
-  "web_accessible_resources": [{
-    "resources": ["dist/js/mock_fetch.js"],
-    "matches": ["*://*.twitch.tv/*"]
-  }],
   "action" : {
     "default_title": "Twitch Badge Collector",
     "default_popup": "public/popup.html",
